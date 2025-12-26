@@ -1,0 +1,884 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The 11th Mile | Foundation Builder</title>
+    <style>
+        /* --- STYLE.CSS THEME VARIABLES --- */
+        :root {
+            --primary: #2D3436;
+            --accent: #55E6C1; /* Mint Green */
+            --bg: #F8FAFB;
+            --white: #FFFFFF;
+            --track-red: #e74c3c;
+            --warmup: #27ae60;
+            --gold: #f1c40f;
+            --long-blue: #2980b9;
+        }
+
+        * { box-sizing: border-box; }
+
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background-color: var(--bg); 
+            color: var(--primary); 
+            margin: 0; 
+            line-height: 1.5;
+        }
+
+        /* HEADER */
+        header { 
+            background: var(--white); 
+            padding: 40px 20px 60px 20px; 
+            text-align: center; 
+            border-bottom: 1px solid #eee;
+        }
+
+        .logo { font-size: 2.5rem; font-weight: 900; letter-spacing: -2px; margin: 10px 0 0 0; line-height: 1; text-decoration: none; color: var(--primary); display:block;}
+        .sub-logo { color: #636e72; text-transform: uppercase; letter-spacing: 3px; font-size: 0.8rem; margin-top: 10px; }
+        
+        .home-btn { 
+            text-decoration: none; font-weight: 800; font-size: 0.8rem; color: #b2bec3; 
+            display: inline-block; text-transform: uppercase; letter-spacing: 1px;
+            transition: 0.3s; margin-bottom: 5px;
+        }
+        .home-btn:hover { color: var(--primary); }
+
+        /* CONTAINERS */
+        .container { max-width: 1000px; margin: -50px auto 50px auto; padding: 0 25px; }
+        .dashboard { display: grid; grid-template-columns: 2fr 1fr; gap: 30px; }
+        @media(max-width: 768px) { .dashboard { grid-template-columns: 1fr; } }
+
+        /* STICKY BAR */
+        .sticky-bar { 
+            background: var(--primary); color: white; padding: 20px 25px; border-radius: 16px; 
+            box-shadow: 0 15px 40px rgba(0,0,0,0.15); margin-bottom: 40px;
+            position: sticky; top: 20px; z-index: 100;
+            display: flex; flex-direction: column; gap: 15px;
+        }
+
+        .bar-top { 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            width: 100%; 
+            gap: 20px; 
+        }
+
+        .bar-left {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            flex: 1;
+            flex-wrap: wrap;
+        }
+
+        .bar-right {
+            display: flex;
+            gap: 10px;
+            flex-shrink: 0; 
+        }
+
+        .input-group { display: flex; align-items: center; gap: 10px; }
+        .input-group label { font-size: 0.7rem; text-transform: uppercase; opacity: 0.7; font-weight: bold; letter-spacing: 1px; white-space: nowrap;}
+
+        .calc-input {
+            padding: 8px 12px; border-radius: 8px; border: 2px solid rgba(255,255,255,0.2); 
+            background: rgba(255,255,255,0.1); color: white; font-weight: bold; width: 100px; 
+            font-size: 1rem; text-align: center; transition: 0.3s;
+        }
+        .calc-input:focus { outline: none; border-color: var(--accent); background: rgba(0,0,0,0.2); }
+
+        /* Date Picker Visibility Logic */
+        #datePickerContainer { transition: opacity 0.3s; }
+
+        .unit-btn {
+            padding: 8px 16px; border-radius: 30px; font-size: 0.75rem; font-weight: 800; 
+            text-transform: uppercase; letter-spacing: 1px; cursor: pointer; transition: 0.2s; white-space: nowrap;
+        }
+        .unit-btn.miles { background: transparent; border: 2px solid var(--accent); color: var(--accent); }
+        .unit-btn.km { background: var(--white); border: 2px solid var(--white); color: var(--primary); }
+
+        .view-btn {
+            background: rgba(255,255,255,0.15); border: none; color: white;
+            padding: 8px 16px; border-radius: 30px; font-size: 0.75rem; font-weight: 800;
+            text-transform: uppercase; letter-spacing: 1px; cursor: pointer; transition: 0.2s; white-space: nowrap;
+        }
+        .view-btn:hover { background: var(--accent); color: var(--primary); }
+
+        /* PROGRESS BAR & RESET */
+        .progress-wrapper { width: 100%; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 15px;}
+        .progress-meta { display: flex; justify-content: space-between; align-items: flex-end; font-size: 0.7rem; font-weight: bold; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; color: rgba(255,255,255,0.6); }
+        .progress-track { width: 100%; height: 8px; background: rgba(255,255,255,0.1); border-radius: 10px; overflow: hidden; }
+        .progress-fill { height: 100%; background: var(--accent); width: 0%; transition: width 0.5s ease; box-shadow: 0 0 10px var(--accent); }
+
+        .reset-btn {
+            background: none; border: none; color: rgba(255,255,255,0.4); 
+            font-size: 0.65rem; font-weight: 800; text-transform: uppercase; 
+            cursor: pointer; padding: 0; text-decoration: underline; transition: 0.2s;
+        }
+        .reset-btn:hover { color: var(--track-red); }
+
+        /* INTRO & TEXT BOXES */
+        .intro-box {
+            background: var(--white); border-radius: 16px; padding: 30px; 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.06); margin-bottom: 30px;
+            border-left: 8px solid var(--primary);
+        }
+        .intro-box h3 { margin-top: 0; color: var(--primary); font-size: 1.2rem; }
+        .intro-box p { font-size: 0.95rem; color: #636e72; margin-bottom: 10px; }
+        .intro-box strong { color: var(--primary); }
+
+        /* LIST VIEW STYLES */
+        .week-card {
+            background: var(--white); border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.06); 
+            margin-bottom: 30px; overflow: hidden;
+            border: 1px solid rgba(0,0,0,0.02);
+            border-left: 8px solid var(--accent);
+            transition: transform 0.3s ease;
+        }
+        .week-card:hover { transform: translateY(-3px); }
+        .week-card.is-open { border-color: var(--accent); box-shadow: 0 15px 40px rgba(85, 230, 193, 0.2); transform: translateY(-5px); }
+        .week-card.week-complete { background-color: rgba(85, 230, 193, 0.08); border-color: var(--accent); }
+        .week-card.week-complete .week-title { color: #218c74; }
+        .week-header { padding: 25px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; }
+        .week-title { font-size: 1.25rem; font-weight: 900; color: var(--primary); margin: 0; }
+        .week-meta { font-size: 0.9rem; font-weight: bold; color: #b2bec3; text-transform: uppercase; letter-spacing: 1px; }
+        .week-body { display: none; padding: 0 25px 25px 25px; border-top: 1px solid #f4f4f4; animation: fadeIn 0.3s ease; }
+        .week-body.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        .phase-title { font-size: 0.8rem; font-weight: 900; letter-spacing: 2px; text-transform: uppercase; color: #b2bec3; margin: 40px 0 20px 0; padding-left: 10px; border-left: 3px solid var(--accent); }
+        .day-row { display: flex; align-items: center; padding: 15px 0; border-bottom: 1px solid #f8f8f8; }
+        .day-row:last-child { border-bottom: none; }
+        .check-box { width: 24px; height: 24px; border: 2px solid #dfe6e9; border-radius: 6px; margin-right: 20px; cursor: pointer; display: flex; align-items: center; justify-content: center; color: white; font-size: 14px; transition: 0.2s; }
+        @keyframes checkPop { 0% { transform: scale(1); } 50% { transform: scale(1.2); } 100% { transform: scale(1); } }
+        .check-box.checked { background: var(--accent); border-color: var(--accent); animation: checkPop 0.2s ease-out; }
+        .day-content { flex: 1; }
+        .day-name { font-size: 0.75rem; font-weight: 800; color: #b2bec3; text-transform: uppercase; display: block; margin-bottom: 4px; }
+        .day-desc { font-weight: 600; font-size: 0.95rem; display: flex; align-items: center; gap: 8px; flex-wrap: wrap;}
+        .day-dist { font-size: 0.8rem; font-weight: bold; background: #ecf0f1; padding: 5px 10px; border-radius: 20px; color: #636e72; white-space: nowrap; }
+        .session-link { color: var(--primary); text-decoration: none; border-bottom: 2px solid var(--accent); transition: 0.2s; cursor: pointer; }
+        .session-link:hover { background: var(--accent); color: white; }
+        .type-tag { font-size: 0.65rem; font-weight: 800; text-transform: uppercase; padding: 3px 8px; border-radius: 4px; display: inline-block; letter-spacing: 0.5px; }
+        .tag-easy { background: rgba(39, 174, 96, 0.1); color: var(--warmup); }
+        .tag-hard { background: rgba(231, 76, 60, 0.1); color: var(--track-red); }
+        .tag-long { background: rgba(41, 128, 185, 0.1); color: var(--long-blue); }
+
+        /* --- CALENDAR VIEW STYLES --- */
+        #calendar-container { display: none; }
+        .cal-month-title { font-size: 1.5rem; font-weight: 900; margin: 30px 0 15px 0; color: var(--primary); border-bottom: 2px solid #eee; padding-bottom: 10px; }
+        .cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 10px; margin-bottom: 40px; }
+        .cal-header { font-size: 0.7rem; font-weight: 900; text-transform: uppercase; color: #b2bec3; text-align: center; margin-bottom: 10px; }
+        
+        .cal-day { 
+            background: white; border-radius: 12px; min-height: 100px; padding: 10px; 
+            border: 1px solid #eee; cursor: pointer; transition: 0.2s; position: relative;
+            display: flex; flex-direction: column; justify-content: space-between;
+            border-top-width: 5px; 
+        }
+        .cal-day:hover { transform: translateY(-3px); box-shadow: 0 5px 15px rgba(0,0,0,0.05); }
+        
+        /* Calendar Color Coding */
+        .cal-type-Hard { border-top-color: var(--track-red); }
+        .cal-type-Easy { border-top-color: var(--warmup); }
+        .cal-type-Long { border-top-color: var(--long-blue); }
+        .cal-type-Rest { border-top-color: #dfe6e9; opacity: 0.7; }
+
+        .cal-day.cal-complete { 
+            background-color: rgba(85, 230, 193, 0.15); 
+            border-color: var(--accent); 
+            border-top-color: var(--accent); 
+        }
+        .cal-day.cal-complete::after {
+            content: '✔'; position: absolute; top: 5px; right: 8px; 
+            color: var(--accent); font-weight: 900; font-size: 1rem;
+        }
+
+        .cal-date-num { font-size: 0.9rem; font-weight: 900; color: #b2bec3; margin-bottom: 5px; }
+        .cal-session-name { font-size: 0.75rem; font-weight: 700; color: var(--primary); line-height: 1.3; }
+        .cal-dist-tag { 
+            font-size: 0.65rem; font-weight: 800; background: #f1f2f6; 
+            color: #636e72; padding: 2px 6px; border-radius: 4px; 
+            align-self: flex-start; margin-top: 5px; 
+        }
+        
+        /* Specific Link Styling for Calendar */
+        .cal-link { 
+            color: inherit; text-decoration: underline; font-weight: 900; 
+            text-decoration-color: var(--accent); transition: 0.2s;
+        }
+        .cal-link:hover { color: var(--track-red); }
+
+        .cal-empty { background: transparent; border: none; cursor: default; }
+
+        @media(max-width: 600px) {
+            .cal-grid { grid-template-columns: repeat(1, 1fr); gap: 15px; }
+            .cal-header { display: none; }
+            .cal-day { min-height: auto; flex-direction: row; align-items: center; gap: 15px; border-top-width: 1px; border-left: 5px solid #eee;}
+            .cal-type-Hard { border-left-color: var(--track-red); border-top-color: #eee; }
+            .cal-type-Easy { border-left-color: var(--warmup); border-top-color: #eee; }
+            .cal-type-Long { border-left-color: var(--long-blue); border-top-color: #eee; }
+            .cal-type-Rest { border-left-color: #dfe6e9; border-top-color: #eee;}
+            .cal-dist-tag { margin-top: 0; margin-left: auto;}
+        }
+
+        /* RIGHT SIDEBAR */
+        .card { background: var(--white); border-radius: 16px; padding: 25px; box-shadow: 0 4px 20px rgba(0,0,0,0.04); margin-bottom: 25px; }
+        .target-grid { display: grid; grid-template-columns: 1fr; gap: 15px; }
+        .target-box { background: #f8f8f8; padding: 15px; border-radius: 12px; text-align: center; border: 1px solid #eee; }
+        .tb-easy { border-bottom: 4px solid var(--warmup); }
+        .tb-tempo { border-bottom: 4px solid var(--track-red); }
+        .tb-long { border-bottom: 4px solid var(--long-blue); }
+        .t-label { display: block; font-size: 0.7rem; font-weight: bold; text-transform: uppercase; color: #b2bec3; margin-bottom: 5px; }
+        .t-val { font-size: 1.2rem; font-weight: 900; color: var(--primary); }
+
+        @media(min-width: 769px) { .dashboard > div:nth-child(2) { position: sticky; top: 110px; height: fit-content; } }
+        .footer { text-align: center; padding: 40px; color: #b2bec3; font-size: 0.8rem; margin-top: 50px; }
+
+    </style>
+</head>
+<body>
+
+    <header>
+        <a href="index.html" class="home-btn">← Back to Library</a>
+        <a href="index.html" class="logo">THE 11th MILE</a>
+        <div class="sub-logo">Foundation Builder</div>
+    </header>
+
+    <div class="container">
+
+        <div class="intro-box">
+            <h3>Plan Overview</h3>
+            <p>This 12-week session plan is designed to help you build a solid aerobic foundation. It focuses on slowly and safely increasing your volume over time.</p>
+            <p><strong>The Goal:</strong> To build fitness at 21, 26, and 31 miles per week.</p>
+        </div>
+
+        <div class="sticky-bar">
+            <div class="bar-top">
+                <div class="bar-left">
+                    <div class="input-group">
+                        <label>5K Time:</label>
+                        <input type="text" id="planPace" class="calc-input" placeholder="20:00" oninput="formatInput(this)">
+                    </div>
+                    
+                    <div class="input-group" id="datePickerContainer" style="display:none;">
+                        <label>Start Date:</label>
+                        <input type="date" id="startDate" class="calc-input" style="width: 130px; font-size: 0.85rem;" onchange="updateCalendar()">
+                    </div>
+                </div>
+
+                <div class="bar-right">
+                    <button id="viewToggleBtn" class="view-btn" onclick="toggleViewMode()">View: Calendar</button>
+                    <button id="unitBtn" class="unit-btn miles" onclick="toggleUnits()">Miles</button>
+                </div>
+            </div>
+
+            <div class="progress-wrapper">
+                <div class="progress-meta">
+                    <div>
+                        <span>Plan Completion: </span>
+                        <span id="progressText" style="color:white;">0%</span>
+                    </div>
+                    <button class="reset-btn" onclick="resetAll()">Reset Plan</button>
+                </div>
+                <div class="progress-track">
+                    <div id="progressBar" class="progress-fill"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="dashboard">
+
+            <div class="content-area">
+                
+                <div id="list-container" class="weeks-list"></div>
+
+                <div id="calendar-container"></div>
+
+                <div class="intro-box" style="border-left-color: var(--accent); margin-top: 40px;">
+                    <h3>🏁 What Next?</h3>
+                    <p>Congratulations on completing the 12 weeks! You have successfully built your volume from 21 to 31 miles per week.</p>
+                    <p><strong>Maintenance Options:</strong></p>
+                    <ul style="padding-left:20px; color:#636e72; font-size:0.95rem; margin-bottom:15px;">
+                        <li>To stay at <strong>21 Miles</strong>: Repeat Weeks 1-4.</li>
+                        <li>To stay at <strong>26 Miles</strong>: Repeat Weeks 5-8.</li>
+                        <li>To stay at <strong>31 Miles</strong>: Repeat Weeks 9-12.</li>
+                    </ul>
+                    <p>To continue building your durability and increasing your distance, check out <a href="plan-31.html" style="color:var(--primary); font-weight:bold;">Plan 31</a>.</p>
+                </div>
+
+            </div>
+
+            <div>
+                <div class="card">
+                    <h3 style="margin-top:0;">Your Targets</h3>
+                    <div class="target-grid">
+                        <div class="target-box tb-easy">
+                            <span class="t-label">Easy Pace</span>
+                            <span id="t-easy" class="t-val">--:--</span>
+                        </div>
+                        <div class="target-box tb-tempo">
+                            <span class="t-label">Tempo Pace</span>
+                            <span id="t-tempo" class="t-val">--:--</span>
+                        </div>
+                        <div class="target-box tb-long">
+                            <span class="t-label">Long Run</span>
+                            <span id="t-long" class="t-val">--:--</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3 style="margin-top:0;">Color Key</h3>
+                    <div style="display:flex; flex-direction:column; gap:8px;">
+                        <div style="display:flex; align-items:center; gap:10px;">
+                            <div style="width:12px; height:12px; background:var(--warmup); border-radius:2px;"></div>
+                            <span style="font-size:0.8rem; color:#636e72;">Easy / Steady Runs</span>
+                        </div>
+                        <div style="display:flex; align-items:center; gap:10px;">
+                            <div style="width:12px; height:12px; background:var(--track-red); border-radius:2px;"></div>
+                            <span style="font-size:0.8rem; color:#636e72;">Engine Room (Hard)</span>
+                        </div>
+                        <div style="display:flex; align-items:center; gap:10px;">
+                            <div style="width:12px; height:12px; background:var(--long-blue); border-radius:2px;"></div>
+                            <span style="font-size:0.8rem; color:#636e72;">Long Runs</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3 style="margin-top:0;">What are Strides?</h3>
+                    <p style="font-size:0.9rem; color:#636e72;">Strides are short bursts of speed used to improve running form. They are not sprints!</p>
+                    <ul style="padding-left:20px; font-size:0.9rem; color:#636e72;">
+                        <li style="margin-bottom:8px;"><strong>Duration:</strong> ~20 seconds total.</li>
+                        <li style="margin-bottom:8px;"><strong>How:</strong> Accelerate for 5s, hold speed for 10s, slow down for 5s.</li>
+                        <li><strong>Effort:</strong> 90% of max. Stay relaxed.</li>
+                    </ul>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="footer">
+        &copy; 2025 THE 11th MILE. England.
+    </div>
+
+    <script>
+        // --- MASTER DATA SOURCE ---
+        const planData = [
+            // PHASE 1
+            { week: 1, title: "The Benchmark", total: 21, days: [
+                { id: 'w1d1', name: 'Mon', desc: 'Rest Day', type: 'Rest', dist: 0 },
+                { id: 'w1d2', name: 'Tue', desc: 'Easy Run + 4x Strides', type: 'Easy', dist: 5 },
+                { id: 'w1d3', name: 'Wed', desc: 'Rest/Workout (Stretch)', type: 'Rest', dist: 0 },
+                { id: 'w1d4', name: 'Thu', desc: 'Session 8: The 5K Benchmark', type: 'Hard', dist: 5, link: 'session-8.html' },
+                { id: 'w1d5', name: 'Fri', desc: 'Rest Day', type: 'Rest', dist: 0 },
+                { id: 'w1d6', name: 'Sat', desc: 'Steady Run', type: 'Easy', dist: 4 },
+                { id: 'w1d7', name: 'Sun', desc: 'Long Run (Steady)', type: 'Long', dist: 7 }
+            ]},
+            { week: 2, title: "Speed Play", total: 21, days: [
+                { id: 'w2d1', name: 'Mon', desc: 'Rest Day', type: 'Rest', dist: 0 },
+                { id: 'w2d2', name: 'Tue', desc: 'Easy Run + 4x Strides', type: 'Easy', dist: 5 },
+                { id: 'w2d3', name: 'Wed', desc: 'Rest/Workout (Stretch)', type: 'Rest', dist: 0 },
+                { id: 'w2d4', name: 'Thu', desc: 'Session 9: Fartlek Pyramid', type: 'Hard', dist: 5, link: 'session-9.html' },
+                { id: 'w2d5', name: 'Fri', desc: 'Rest Day', type: 'Rest', dist: 0 },
+                { id: 'w2d6', name: 'Sat', desc: 'Steady Run', type: 'Easy', dist: 4 },
+                { id: 'w2d7', name: 'Sun', desc: 'Long Run (Steady)', type: 'Long', dist: 7 }
+            ]},
+            { week: 3, title: "Tempo", total: 21, days: [
+                { id: 'w3d1', name: 'Mon', desc: 'Rest Day', type: 'Rest', dist: 0 },
+                { id: 'w3d2', name: 'Tue', desc: 'Easy Run + 4x Strides', type: 'Easy', dist: 5 },
+                { id: 'w3d3', name: 'Wed', desc: 'Rest/Workout (Stretch)', type: 'Rest', dist: 0 },
+                { id: 'w3d4', name: 'Thu', desc: 'Session 1: Tempo + Ladder', type: 'Hard', dist: 5, link: 'session-1.html' },
+                { id: 'w3d5', name: 'Fri', desc: 'Rest Day', type: 'Rest', dist: 0 },
+                { id: 'w3d6', name: 'Sat', desc: 'Steady Run', type: 'Easy', dist: 4 },
+                { id: 'w3d7', name: 'Sun', desc: 'Long Run (Steady)', type: 'Long', dist: 7 }
+            ]},
+            { week: 4, title: "Progression", total: 21, days: [
+                { id: 'w4d1', name: 'Mon', desc: 'Rest Day', type: 'Rest', dist: 0 },
+                { id: 'w4d2', name: 'Tue', desc: 'Easy Run + 4x Strides', type: 'Easy', dist: 5 },
+                { id: 'w4d3', name: 'Wed', desc: 'Rest/Workout (Stretch)', type: 'Rest', dist: 0 },
+                { id: 'w4d4', name: 'Thu', desc: 'Session 7: 4 Mile Progressive', type: 'Hard', dist: 5, link: 'session-7.html' },
+                { id: 'w4d5', name: 'Fri', desc: 'Rest Day', type: 'Rest', dist: 0 },
+                { id: 'w4d6', name: 'Sat', desc: 'Steady Run', type: 'Easy', dist: 4 },
+                { id: 'w4d7', name: 'Sun', desc: 'Long Run (Steady)', type: 'Long', dist: 7 }
+            ]},
+            // PHASE 2
+            { week: 5, title: "Threshold Mix", total: 26, days: [
+                { id: 'w5d1', name: 'Mon', desc: 'Rest Day', type: 'Rest', dist: 0 },
+                { id: 'w5d2', name: 'Tue', desc: 'Easy Run + 5x Strides', type: 'Easy', dist: 5 },
+                { id: 'w5d3', name: 'Wed', desc: 'Rest/Workout (Stretch)', type: 'Rest', dist: 0 },
+                { id: 'w5d4', name: 'Thu', desc: 'Session 6: The 4 & 7 Mix', type: 'Hard', dist: 6, link: 'session-6.html' },
+                { id: 'w5d5', name: 'Fri', desc: 'Shakeout Run', type: 'Easy', dist: 3 },
+                { id: 'w5d6', name: 'Sat', desc: 'Steady Run', type: 'Easy', dist: 4 },
+                { id: 'w5d7', name: 'Sun', desc: 'Long Run (Steady)', type: 'Long', dist: 8 }
+            ]},
+            { week: 6, title: "Mixed Pace", total: 26, days: [
+                { id: 'w6d1', name: 'Mon', desc: 'Rest Day', type: 'Rest', dist: 0 },
+                { id: 'w6d2', name: 'Tue', desc: 'Easy Run + 5x Strides', type: 'Easy', dist: 5 },
+                { id: 'w6d3', name: 'Wed', desc: 'Rest/Workout (Stretch)', type: 'Rest', dist: 0 },
+                { id: 'w6d4', name: 'Thu', desc: 'Session 2: Mixed Pace Strength', type: 'Hard', dist: 6, link: 'session-2.html' },
+                { id: 'w6d5', name: 'Fri', desc: 'Shakeout Run', type: 'Easy', dist: 3 },
+                { id: 'w6d6', name: 'Sat', desc: 'Steady Run', type: 'Easy', dist: 4 },
+                { id: 'w6d7', name: 'Sun', desc: 'Long Run (Steady)', type: 'Long', dist: 8 }
+            ]},
+            { week: 7, title: "Tempo", total: 26, days: [
+                { id: 'w7d1', name: 'Mon', desc: 'Rest Day', type: 'Rest', dist: 0 },
+                { id: 'w7d2', name: 'Tue', desc: 'Easy Run + 5x Strides', type: 'Easy', dist: 5 },
+                { id: 'w7d3', name: 'Wed', desc: 'Rest/Workout (Stretch)', type: 'Rest', dist: 0 },
+                { id: 'w7d4', name: 'Thu', desc: 'Session 1: Tempo + Ladder', type: 'Hard', dist: 6, link: 'session-1.html' },
+                { id: 'w7d5', name: 'Fri', desc: 'Shakeout Run', type: 'Easy', dist: 3 },
+                { id: 'w7d6', name: 'Sat', desc: 'Steady Run', type: 'Easy', dist: 4 },
+                { id: 'w7d7', name: 'Sun', desc: 'Long Run (Steady)', type: 'Long', dist: 8 }
+            ]},
+            { week: 8, title: "Speed Play", total: 26, days: [
+                { id: 'w8d1', name: 'Mon', desc: 'Rest Day', type: 'Rest', dist: 0 },
+                { id: 'w8d2', name: 'Tue', desc: 'Easy Run + 5x Strides', type: 'Easy', dist: 5 },
+                { id: 'w8d3', name: 'Wed', desc: 'Rest/Workout (Stretch)', type: 'Rest', dist: 0 },
+                { id: 'w8d4', name: 'Thu', desc: 'Session 9: Fartlek Pyramid', type: 'Hard', dist: 6, link: 'session-9.html' },
+                { id: 'w8d5', name: 'Fri', desc: 'Shakeout Run', type: 'Easy', dist: 3 },
+                { id: 'w8d6', name: 'Sat', desc: 'Steady Run', type: 'Easy', dist: 4 },
+                { id: 'w8d7', name: 'Sun', desc: 'Long Run (Steady)', type: 'Long', dist: 8 }
+            ]},
+            // PHASE 3
+            { week: 9, title: "Progression", total: 31, days: [
+                { id: 'w9d1', name: 'Mon', desc: 'Rest Day', type: 'Rest', dist: 0 },
+                { id: 'w9d2', name: 'Tue', desc: 'Easy Run + 6x Strides', type: 'Easy', dist: 6 },
+                { id: 'w9d3', name: 'Wed', desc: 'Rest/Workout (Stretch)', type: 'Rest', dist: 0 },
+                { id: 'w9d4', name: 'Thu', desc: 'Session 7: 4 Mile Progressive', type: 'Hard', dist: 7, link: 'session-7.html' },
+                { id: 'w9d5', name: 'Fri', desc: 'Shakeout Run', type: 'Easy', dist: 4 },
+                { id: 'w9d6', name: 'Sat', desc: 'Steady Run', type: 'Easy', dist: 4 },
+                { id: 'w9d7', name: 'Sun', desc: 'Long Run (Steady)', type: 'Long', dist: 10 }
+            ]},
+            { week: 10, title: "Adv. Tempo", total: 31, days: [
+                { id: 'w10d1', name: 'Mon', desc: 'Rest Day', type: 'Rest', dist: 0 },
+                { id: 'w10d2', name: 'Tue', desc: 'Easy Run + 6x Strides', type: 'Easy', dist: 6 },
+                { id: 'w10d3', name: 'Wed', desc: 'Rest/Workout (Stretch)', type: 'Rest', dist: 0 },
+                { id: 'w10d4', name: 'Thu', desc: 'Session 5: Progressive Tempo', type: 'Hard', dist: 7, link: 'session-5.html' },
+                { id: 'w10d5', name: 'Fri', desc: 'Shakeout Run', type: 'Easy', dist: 4 },
+                { id: 'w10d6', name: 'Sat', desc: 'Steady Run', type: 'Easy', dist: 4 },
+                { id: 'w10d7', name: 'Sun', desc: 'Long Run (Steady)', type: 'Long', dist: 10 }
+            ]},
+            { week: 11, title: "Threshold Mix", total: 31, days: [
+                { id: 'w11d1', name: 'Mon', desc: 'Rest Day', type: 'Rest', dist: 0 },
+                { id: 'w11d2', name: 'Tue', desc: 'Easy Run + 6x Strides', type: 'Easy', dist: 6 },
+                { id: 'w11d3', name: 'Wed', desc: 'Rest/Workout (Stretch)', type: 'Rest', dist: 0 },
+                { id: 'w11d4', name: 'Thu', desc: 'Session 6: The 4 & 7 Mix', type: 'Hard', dist: 7, link: 'session-6.html' },
+                { id: 'w11d5', name: 'Fri', desc: 'Shakeout Run', type: 'Easy', dist: 4 },
+                { id: 'w11d6', name: 'Sat', desc: 'Steady Run', type: 'Easy', dist: 4 },
+                { id: 'w11d7', name: 'Sun', desc: 'Long Run (Steady)', type: 'Long', dist: 10 }
+            ]},
+            { week: 12, title: "Retest", total: 31, days: [
+                { id: 'w12d1', name: 'Mon', desc: 'Rest Day', type: 'Rest', dist: 0 },
+                { id: 'w12d2', name: 'Tue', desc: 'Easy Run + 6x Strides', type: 'Easy', dist: 6 },
+                { id: 'w12d3', name: 'Wed', desc: 'Rest/Workout (Stretch)', type: 'Rest', dist: 0 },
+                { id: 'w12d4', name: 'Thu', desc: 'Session 8: The 5K Benchmark', type: 'Hard', dist: 7, link: 'session-8.html' },
+                { id: 'w12d5', name: 'Fri', desc: 'Shakeout Run', type: 'Easy', dist: 4 },
+                { id: 'w12d6', name: 'Sat', desc: 'Steady Run', type: 'Easy', dist: 4 },
+                { id: 'w12d7', name: 'Sun', desc: 'Long Run (Steady)', type: 'Long', dist: 10 }
+            ]},
+        ];
+
+        let isMetric = false;
+        let isCalendarView = false;
+        
+        window.onload = function() {
+            // Load Settings
+            const savedTime = localStorage.getItem('user5kTime');
+            if(savedTime) document.getElementById('planPace').value = savedTime;
+            
+            const savedUnit = localStorage.getItem('userUnit');
+            if(savedUnit === 'KM') isMetric = true;
+
+            const savedStart = localStorage.getItem('planStartDate');
+            if(savedStart) document.getElementById('startDate').value = savedStart;
+
+            // Load saved view state
+            const savedView = localStorage.getItem('viewMode');
+            if(savedView === 'calendar') {
+                isCalendarView = true;
+                toggleViewUI(true);
+            }
+
+            renderListView(); 
+            updateCalendar(); 
+            restoreWeekState();
+            loadChecks(); 
+            updateDisplay(); 
+        }
+
+        // --- RENDER LIST VIEW ---
+        function renderListView() {
+            const container = document.getElementById('list-container');
+            container.innerHTML = ''; // Clear existing
+
+            let wCount = 0;
+            planData.forEach(week => {
+                wCount++;
+                // Insert Phase Titles
+                if(wCount === 1) container.innerHTML += `<div class="phase-title">Phase 1: Stability (21 Miles)</div>`;
+                if(wCount === 5) container.innerHTML += `<div class="phase-title">Phase 2: Building (26 Miles)</div>`;
+                if(wCount === 9) container.innerHTML += `<div class="phase-title">Phase 3: Consolidation (31 Miles)</div>`;
+
+                let rowsHtml = '';
+                week.days.forEach(day => {
+                    let descHtml = `<span>${day.desc}</span>`;
+                    // If it's a hard session with a link
+                    if(day.link) {
+                        descHtml = `<a href="${day.link}" class="session-link">${day.desc}</a>`;
+                    }
+                    // Tag type
+                    let tagClass = 'tag-easy';
+                    if(day.type === 'Hard') tagClass = 'tag-hard';
+                    if(day.type === 'Long') tagClass = 'tag-long';
+                    if(day.type === 'Rest') tagClass = '';
+
+                    let tagHtml = day.type !== 'Rest' ? `<span class="type-tag ${tagClass}">${day.type}</span>` : '';
+
+                    rowsHtml += `
+                        <div class="day-row">
+                            <div class="check-box" id="box-${day.id}" onclick="toggleCheck('${day.id}')">✔</div>
+                            <div class="day-content">
+                                <span class="day-name">${day.name}</span>
+                                <div class="day-desc">${tagHtml}${descHtml}</div>
+                            </div>
+                            ${day.dist > 0 ? `<span class="day-dist" data-miles="${day.dist}"></span>` : ''}
+                        </div>
+                    `;
+                });
+
+                const weekHtml = `
+                    <div id="card-w${week.week}" class="week-card">
+                        <div class="week-header" onclick="toggleWeek('w${week.week}')">
+                            <h3 class="week-title">Week ${week.week}: ${week.title}</h3>
+                            <span class="week-meta" id="meta-w${week.week}">~${week.total} Miles</span>
+                        </div>
+                        <div id="w${week.week}" class="week-body">
+                            ${rowsHtml}
+                        </div>
+                    </div>
+                `;
+                container.innerHTML += weekHtml;
+            });
+        }
+
+        // --- RENDER CALENDAR VIEW ---
+        function updateCalendar() {
+            const startVal = document.getElementById('startDate').value;
+            localStorage.setItem('planStartDate', startVal);
+            
+            const container = document.getElementById('calendar-container');
+            container.innerHTML = '';
+
+            if(!startVal) {
+                container.innerHTML = '<div style="text-align:center; padding:40px; color:#b2bec3;">Please select a Start Date (Monday) above.</div>';
+                return;
+            }
+
+            const startDate = new Date(startVal);
+            startDate.setHours(12,0,0,0);
+
+            // Group by Month
+            let flatDays = [];
+            let dayCounter = 0;
+
+            planData.forEach(week => {
+                week.days.forEach(day => {
+                    let d = new Date(startDate);
+                    d.setDate(startDate.getDate() + dayCounter);
+                    flatDays.push({ ...day, dateObj: d });
+                    dayCounter++;
+                });
+            });
+
+            let months = {};
+            flatDays.forEach(day => {
+                const mKey = day.dateObj.toLocaleString('default', { month: 'long', year: 'numeric' });
+                if(!months[mKey]) months[mKey] = [];
+                months[mKey].push(day);
+            });
+
+            // Render DOM
+            for (const [mName, days] of Object.entries(months)) {
+                container.innerHTML += `<div class="cal-month-title">${mName}</div>`;
+                
+                let gridHtml = `<div class="cal-grid">
+                    <div class="cal-header">MON</div><div class="cal-header">TUE</div><div class="cal-header">WED</div>
+                    <div class="cal-header">THU</div><div class="cal-header">FRI</div><div class="cal-header">SAT</div>
+                    <div class="cal-header">SUN</div>`;
+
+                let firstDayIndex = days[0].dateObj.getDay(); 
+                let offset = firstDayIndex === 0 ? 6 : firstDayIndex - 1; 
+
+                for(let i=0; i<offset; i++) {
+                    gridHtml += `<div class="cal-day cal-empty"></div>`;
+                }
+
+                days.forEach(day => {
+                    let dateNum = day.dateObj.getDate();
+                    let distText = day.dist > 0 ? (isMetric ? (day.dist * 1.61).toFixed(1) + "km" : day.dist + "mi") : "Rest";
+                    let typeClass = "cal-type-" + day.type; // e.g. cal-type-Hard
+
+                    // Create the content string. If link exists, wrap in <a> tag with stopPropagation
+                    let sessionContent = day.desc;
+                    if(day.link) {
+                        sessionContent = `<a href="${day.link}" class="cal-link" onclick="event.stopPropagation();">${day.desc}</a>`;
+                    }
+
+                    gridHtml += `
+                        <div id="cal-${day.id}" class="cal-day ${typeClass}" onclick="toggleCheck('${day.id}')">
+                            <div class="cal-date-num">${dateNum}</div>
+                            <div class="cal-session-name">${sessionContent}</div>
+                            ${day.dist > 0 ? `<div class="cal-dist-tag">${distText}</div>` : ''}
+                        </div>
+                    `;
+                });
+
+                gridHtml += `</div>`;
+                container.innerHTML += gridHtml;
+            }
+            loadChecks(); 
+        }
+
+        // --- VIEW TOGGLE ---
+        function toggleViewMode() {
+            isCalendarView = !isCalendarView;
+            localStorage.setItem('viewMode', isCalendarView ? 'calendar' : 'list');
+            toggleViewUI(isCalendarView);
+        }
+
+        function toggleViewUI(isCal) {
+            const listEl = document.getElementById('list-container');
+            const calEl = document.getElementById('calendar-container');
+            const datePicker = document.getElementById('datePickerContainer');
+            const btn = document.getElementById('viewToggleBtn');
+
+            if(isCal) {
+                listEl.style.display = 'none';
+                calEl.style.display = 'block';
+                datePicker.style.display = 'flex'; // Show date picker in Cal view
+                btn.innerText = "View: List";
+                updateCalendar();
+            } else {
+                listEl.style.display = 'block';
+                calEl.style.display = 'none';
+                datePicker.style.display = 'none'; // Hide date picker in List view
+                btn.innerText = "View: Calendar";
+            }
+        }
+
+        // --- SHARED LOGIC ---
+
+        function toggleCheck(id) {
+            const isChecked = localStorage.getItem(id) === 'true';
+            localStorage.setItem(id, !isChecked);
+
+            const box = document.getElementById('box-' + id);
+            const cal = document.getElementById('cal-' + id);
+
+            if(!isChecked) {
+                if(box) box.classList.add('checked');
+                if(cal) cal.classList.add('cal-complete');
+            } else {
+                if(box) box.classList.remove('checked');
+                if(cal) cal.classList.remove('cal-complete');
+            }
+            updateProgress();
+        }
+
+        function loadChecks() {
+            for(let w=1; w<=12; w++) {
+                for(let d=1; d<=7; d++) {
+                    const id = `w${w}d${d}`;
+                    const isChecked = localStorage.getItem(id) === 'true';
+                    
+                    if(isChecked) {
+                        const box = document.getElementById('box-' + id);
+                        const cal = document.getElementById('cal-' + id);
+                        if(box) box.classList.add('checked');
+                        if(cal) cal.classList.add('cal-complete');
+                    }
+                }
+            }
+            updateProgress();
+        }
+
+        function formatInput(input) {
+            let val = input.value.replace(/\D/g, '');
+            if (val.length > 4) val = val.substring(0, 4);
+            if (val.length > 2) input.value = val.slice(0, 2) + ':' + val.slice(2);
+            else input.value = val;
+            
+            localStorage.setItem('user5kTime', input.value);
+            updateDisplay();
+        }
+
+        function toggleUnits() {
+            isMetric = !isMetric;
+            localStorage.setItem('userUnit', isMetric ? 'KM' : 'MILES');
+            updateDisplay();
+            if(isCalendarView) updateCalendar();
+        }
+
+        function updateDisplay() {
+            updateUnitButton();
+            updateCalculations();
+            updateDistances();
+        }
+
+        function updateUnitButton() {
+            const btn = document.getElementById('unitBtn');
+            if(isMetric) {
+                btn.innerText = "Display: KM";
+                btn.className = "unit-btn km";
+            } else {
+                btn.innerText = "Display: Miles";
+                btn.className = "unit-btn miles";
+            }
+        }
+
+        function updateDistances() {
+            document.querySelectorAll('.day-dist').forEach(span => {
+                const miles = parseFloat(span.getAttribute('data-miles'));
+                if(!miles) return;
+                span.innerText = isMetric ? (miles * 1.61).toFixed(1) + " km" : miles + " mi";
+            });
+
+            for(let w=1; w<=12; w++) {
+                const el = document.getElementById('meta-w' + w);
+                const total = planData[w-1].total; 
+                if(el) el.innerText = "~" + (isMetric ? (total * 1.61).toFixed(0) + " KM" : total + " Miles");
+            }
+        }
+
+        function updateCalculations() {
+            const input = document.getElementById('planPace').value;
+            if(!input.includes(':')) {
+                document.getElementById('t-easy').innerText = "--:--";
+                document.getElementById('t-tempo').innerText = "--:--";
+                document.getElementById('t-long').innerText = "--:--";
+                return;
+            }
+
+            const parts = input.split(':');
+            const totalSec = (parseInt(parts[0]) * 60) + parseInt(parts[1]);
+            let easy, tempo, long, suffix;
+
+            if(isMetric) {
+                const pacePerKm = totalSec / 5;
+                easy = pacePerKm + 75; 
+                tempo = pacePerKm + 25; 
+                long = pacePerKm + 56;
+                suffix = "/km";
+            } else {
+                const pacePerMile = totalSec / 3.1068;
+                easy = pacePerMile + 120;
+                tempo = pacePerMile + 40;
+                long = pacePerMile + 90;
+                suffix = "/mi";
+            }
+
+            document.getElementById('t-easy').innerText = formatTime(easy) + suffix;
+            document.getElementById('t-tempo').innerText = formatTime(tempo) + suffix;
+            document.getElementById('t-long').innerText = formatTime(long) + suffix;
+        }
+
+        function formatTime(s) {
+            const m = Math.floor(s / 60);
+            const sec = Math.floor(s % 60);
+            return m + ":" + (sec < 10 ? '0' : '') + sec;
+        }
+
+        // --- LIST VIEW TOGGLE LOGIC ---
+        function toggleWeek(id) {
+            document.querySelectorAll('.week-card').forEach(c => c.classList.remove('is-open'));
+            document.querySelectorAll('.week-body').forEach(el => el.classList.remove('active'));
+            
+            const saved = localStorage.getItem('openWeek');
+            if (saved === id) {
+                localStorage.setItem('openWeek', 'closed');
+                return; 
+            }
+
+            const body = document.getElementById(id);
+            const card = document.getElementById('card-' + id);
+            
+            if(body) body.classList.add('active');
+            if(card) card.classList.add('is-open');
+            localStorage.setItem('openWeek', id);
+        }
+
+        function restoreWeekState() {
+            document.querySelectorAll('.week-body').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.week-card').forEach(el => el.classList.remove('is-open'));
+
+            const saved = localStorage.getItem('openWeek');
+            if(saved === 'closed') return;
+
+            if(saved) {
+                const body = document.getElementById(saved);
+                const card = document.getElementById('card-' + saved);
+                if(body) body.classList.add('active');
+                if(card) card.classList.add('is-open');
+            } else {
+                const body = document.getElementById('w1');
+                const card = document.getElementById('card-w1');
+                if(body) body.classList.add('active');
+                if(card) card.classList.add('is-open');
+            }
+        }
+
+        function resetAll() {
+            if(confirm("Are you sure you want to reset your progress? This will untick all boxes.")) {
+                for(let w=1; w<=12; w++) {
+                    for(let d=1; d<=7; d++) {
+                        localStorage.removeItem(`w${w}d${d}`);
+                    }
+                }
+                document.querySelectorAll('.check-box').forEach(b => b.classList.remove('checked'));
+                document.querySelectorAll('.cal-day').forEach(c => c.classList.remove('cal-complete'));
+                updateProgress();
+            }
+        }
+
+        function updateWeekStatus() {
+            for(let i=1; i<=12; i++) {
+                const weekId = 'w' + i;
+                const weekContainer = document.getElementById('w' + i);
+                const card = document.getElementById('card-w' + i);
+                
+                if(weekContainer && card) {
+                    const total = weekContainer.querySelectorAll('.check-box').length;
+                    const checked = weekContainer.querySelectorAll('.check-box.checked').length;
+                    
+                    if(total > 0 && total === checked) {
+                        card.classList.add('week-complete');
+                    } else {
+                        card.classList.remove('week-complete');
+                    }
+                }
+            }
+        }
+
+        function updateProgress() {
+            let totalDays = 12 * 7; 
+            let checkedCount = 0;
+
+            for(let w=1; w<=12; w++) {
+                for(let d=1; d<=7; d++) {
+                    if(localStorage.getItem(`w${w}d${d}`) === 'true') checkedCount++;
+                }
+            }
+
+            let pct = Math.round((checkedCount / totalDays) * 100);
+            document.getElementById('progressBar').style.width = pct + "%";
+            document.getElementById('progressText').innerText = pct + "%";
+
+            updateWeekStatus();
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The 11th Mile | The 4 & 7 Mix</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header>
+    <a href="index.html" class="home-btn">← Back to Library</a>
+    <a href="index.html" class="logo">THE 11th MILE</a>
+</header>
+
+<div class="container">
+
+    <div class="sticky-bar">
+        <h3 style="margin:0; font-size:1.1rem;">Session Settings</h3>
+        
+        <div style="display: flex; align-items: center; gap: 15px; flex-wrap: wrap;">
+            <div style="display: flex; align-items: center; gap: 8px;">
+                <span style="font-size: 0.85rem; opacity: 0.8; white-space: nowrap;">Enter 5K Time:</span>
+                <input type="text" id="sessionPace" class="calc-input" placeholder="MM:SS" oninput="formatInput(this)">
+            </div>
+            <button id="unitBtn" class="unit-btn" onclick="toggleUnits()" style="margin: 0;">Display: Miles</button>
+        </div>
+    </div>
+
+    <div class="dashboard">
+        
+        <div>
+            <div class="card">
+                <h2>The 4 & 7 Mix <span id="dist-tag" style="font-size: 0.8em; font-weight: normal; color: #888; margin-left: 10px;">(~6.5 Miles)</span></h2>
+                <p><strong>Goal:</strong> Threshold Endurance & Speed.</p>
+                
+                <div class="step">
+                    <div class="step-num" style="background: var(--warmup);">W</div>
+                    <div class="step-content">
+                        <strong id="lbl-wu">1 Mile Warm Up</strong>
+                        <small>Easy conversation pace.</small>
+                    </div>
+                </div>
+
+                <div class="step">
+                    <div class="step-num">1</div>
+                    <div class="step-content">
+                        <strong>Strides: 3 x 20 Seconds</strong>
+                        <small>Very Fast. <br><strong>Recovery:</strong> 60s walk between strides. 90s rest after set.</small>
+                    </div>
+                </div>
+
+                <div class="step">
+                    <div class="step-num">2</div>
+                    <div class="step-content">
+                        <strong>4 Minutes</strong>
+                        <small>Hard Effort (5k Pace). <br><strong>Recovery:</strong> 1:30 Steady Float (Do not walk).</small>
+                    </div>
+                </div>
+
+                <div class="step">
+                    <div class="step-num">3</div>
+                    <div class="step-content">
+                        <strong>7 Minutes</strong>
+                        <small>Controlled Hard (10k Pace). <br><strong>Recovery:</strong> 1:30 Steady Float.</small>
+                    </div>
+                </div>
+
+                <div class="step">
+                    <div class="step-num">4</div>
+                    <div class="step-content">
+                        <strong>4 Minutes</strong>
+                        <small>Hard Effort (5k Pace). <br><strong>Recovery:</strong> 1:30 Steady Float.</small>
+                    </div>
+                </div>
+
+                <div class="step">
+                    <div class="step-num">5</div>
+                    <div class="step-content">
+                        <strong>7 Minutes</strong>
+                        <small>Controlled Hard (10k Pace).</small>
+                    </div>
+                </div>
+
+                <div class="step">
+                    <div class="step-num" style="background: var(--warmup);">C</div>
+                    <div class="step-content">
+                        <strong id="lbl-cd">1 Mile Cool Down</strong>
+                        <small>Very slow jog to flush lactate.</small>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="pros-cons">
+                    <div class="pc-box">
+                        <h3>Pros</h3>
+                        <ul>
+                            <li>Breaks up the monotony of steady running.</li>
+                            <li>The "float" recoveries keep heart rate high.</li>
+                            <li>Simulates race surges effectively.</li>
+                        </ul>
+                    </div>
+                    <div class="pc-box">
+                        <h3>Cons</h3>
+                        <ul>
+                            <li>The 7-minute reps feel very long after the 4-minute ones.</li>
+                            <li>Requires programming a watch or constant checking.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card tip-box">
+                <strong>Coach's Tip:</strong>
+                <p style="margin: 5px 0 0 0;">The "Recovery" here is short (1:30) and should be run at a "Float" pace if possible (steady, not slow). This keeps the heart rate high throughout the whole session.</p>
+            </div>
+        </div>
+
+        <div>
+            <div class="card" style="background: #2D3436; color: white;">
+                <h2 style="color:var(--accent); border-color:var(--accent);">Your Targets</h2>
+                <p style="font-size: 0.9rem; opacity: 0.8;">Based on <span id="displayTime">--:--</span> 5K</p>
+                
+                <div class="pace-row">
+                    <div><span id="tgt-wu">Warm Up Pace</span></div>
+                    <span id="p-wu" class="pace-val" style="color: white;">--:--</span>
+                </div>
+
+                <div class="pace-row">
+                    <div><span>Strides (20s)</span><span class="sub-label">Mile/1500m Pace</span></div>
+                    <span id="p-strides" class="pace-val" style="color: white;">--:--</span>
+                </div>
+
+                <div class="pace-row">
+                    <div><span>4 Min Reps</span><span class="sub-label">5k Pace</span></div>
+                    <span id="p-4min" class="pace-val" style="color: white;">--:--</span>
+                </div>
+
+                <div class="pace-row">
+                    <div><span>7 Min Reps</span><span class="sub-label">10k Pace</span></div>
+                    <span id="p-7min" class="pace-val" style="color: white;">--:--</span>
+                </div>
+
+                <div class="pace-row">
+                    <div><span>1:30 Recovery</span><span class="sub-label">Float / Steady</span></div>
+                    <span id="p-rec" class="pace-val">--:--</span>
+                </div>
+
+                <div class="pace-row" style="border-bottom: none;">
+                    <div><span id="tgt-cd">Cool Down Pace</span></div>
+                    <span id="p-cd" class="pace-val" style="color: white;">--:--</span>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>Session Logic</h3>
+                <p style="font-size: 0.9rem;">Alternating between short (4m) and long (7m) intervals forces the body to clear lactate at different rates. The short recovery makes the second 7-minute rep mentally very tough.</p>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+<script src="app.js"></script>
+
+<script>
+    // PAGE SPECIFIC LOGIC
+    window.onload = function() {
+        initPage(); // From app.js
+        updatePageCalc();
+    }
+
+    function updatePageCalc() {
+        const input = document.getElementById('sessionPace').value;
+        const totalSeconds = parseTime(input); // From app.js
+        document.getElementById('displayTime').innerText = input || "--:--";
+
+        if (!totalSeconds) return;
+
+        let basePace, pStrides, p4min, p7min, pRec, wuPace, cdPace, suffix;
+
+        if (isMetric) {
+            // KM MATH
+            basePace = totalSeconds / 5; 
+            suffix = " /km";
+            pStrides = basePace - 28;
+            p4min = basePace;
+            p7min = basePace + 9;
+            pRec = basePace + 60; // Float recovery (faster than jog)
+            wuPace = basePace + 101;  
+            cdPace = basePace + 101; 
+
+            // Labels
+            document.getElementById('dist-tag').innerText = "(~10.5 KM)";
+            document.getElementById('lbl-wu').innerText = "1.6km Warm Up";
+            document.getElementById('lbl-cd').innerText = "1.6km Cool Down";
+            document.getElementById('tgt-wu').innerText = "Warm Up Pace";
+            document.getElementById('tgt-cd').innerText = "Cool Down Pace";
+
+        } else {
+            // MILE MATH
+            basePace = totalSeconds / 3.1068; 
+            suffix = " /mi";
+            pStrides = basePace - 45;
+            p4min = basePace;
+            p7min = basePace + 15;
+            pRec = basePace + 90; // Float recovery
+            wuPace = basePace + 161; 
+            cdPace = basePace + 161; 
+
+            // Labels
+            document.getElementById('dist-tag').innerText = "(~6.5 Miles)";
+            document.getElementById('lbl-wu').innerText = "1 Mile Warm Up";
+            document.getElementById('lbl-cd').innerText = "1 Mile Cool Down";
+            document.getElementById('tgt-wu').innerText = "Warm Up Pace";
+            document.getElementById('tgt-cd').innerText = "Cool Down Pace";
+        }
+
+        document.getElementById('p-wu').innerText = formatTime(wuPace) + suffix;
+        document.getElementById('p-strides').innerText = formatTime(pStrides) + suffix;
+        document.getElementById('p-4min').innerText = formatTime(p4min) + suffix;
+        document.getElementById('p-7min').innerText = formatTime(p7min) + suffix;
+        document.getElementById('p-rec').innerText = formatTime(pRec) + suffix;
+        document.getElementById('p-cd').innerText = formatTime(cdPace) + suffix;
+    }
+</script>
+
+</body>
+</html>

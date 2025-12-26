@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The 11th Mile | 5K Time Trial</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* Specific override for the gold accent on this page */
+        .gold-text { color: var(--gold); font-weight: bold; }
+        .gold-border { border-color: var(--gold) !important; }
+    </style>
+</head>
+<body>
+
+<header>
+    <a href="index.html" class="home-btn">← Back to Library</a>
+    <a href="index.html" class="logo">THE 11th MILE</a>
+</header>
+
+<div class="container">
+
+    <div class="sticky-bar">
+        <h3 style="margin:0; font-size:1.1rem; display:none;">Session Settings</h3> <div style="display: flex; gap: 20px; flex-wrap: wrap; align-items: center; width: 100%; justify-content: space-between;">
+            
+            <div style="display: flex; gap: 20px; flex-wrap: wrap;">
+                <div style="display: flex; align-items: center; gap: 8px;">
+                    <span style="font-size: 0.85rem; opacity: 0.8;">Current PB:</span>
+                    <input type="text" id="currentPace" class="calc-input" placeholder="MM:SS" oninput="formatInput(this)">
+                </div>
+
+                <div style="display: flex; align-items: center; gap: 8px;">
+                    <span style="font-size: 0.85rem; color: var(--gold); font-weight: bold;">Target Goal:</span>
+                    <input type="text" id="goalPace" class="calc-input" placeholder="MM:SS" oninput="formatInput(this)" style="border-color: var(--gold);">
+                </div>
+            </div>
+
+            <button id="unitBtn" class="unit-btn" onclick="toggleUnits()" style="margin: 0;">Display: Miles</button>
+        </div>
+    </div>
+
+    <div class="dashboard">
+        
+        <div>
+            <div class="card">
+                <h2>The 5K Benchmark <span id="dist-tag" style="font-size: 0.8em; font-weight: normal; color: #888; margin-left: 10px;">(~5 Miles)</span></h2>
+                <p><strong>Goal:</strong> Assessment. 95% Max Effort.</p>
+                
+                <div class="step">
+                    <div class="step-num" style="background: var(--warmup);">W</div>
+                    <div class="step-content">
+                        <strong id="lbl-wu">1 Mile Warm Up</strong>
+                        <small>Easy conversation pace.</small>
+                    </div>
+                </div>
+
+                <div class="step">
+                    <div class="step-num">1</div>
+                    <div class="step-content">
+                        <strong>Drills & Strides</strong>
+                        <small>5 mins dynamic stretching + 4 x 20s Strides to prime the legs.</small>
+                    </div>
+                </div>
+
+                <div class="step">
+                    <div class="step-num">2</div>
+                    <div class="step-content">
+                        <strong id="lbl-tt">The 5K Time Trial</strong>
+                        <small>Continuous max effort. Aim for even splits. <br><strong>Note:</strong> Start watch exactly as you begin.</small>
+                    </div>
+                </div>
+
+                <div class="step">
+                    <div class="step-num" style="background: var(--warmup);">C</div>
+                    <div class="step-content">
+                        <strong id="lbl-cd">1 Mile Cool Down</strong>
+                        <small>Very slow jog to flush lactate.</small>
+                    </div>
+                </div>
+            </div>
+
+            <div class="route-box">
+                <strong style="color: #d35400;">⚠️ Critical: Route Selection</strong>
+                <p style="font-size: 0.9rem; margin: 5px 0 0 0;">
+                    To get accurate data, you must use a consistent route. 
+                    <ul style="margin-bottom:0; padding-left: 20px;">
+                        <li>It should be flat.</li>
+                        <li>It must have zero road crossings or traffic lights.</li>
+                        <li>Use the same loop every time you re-test.</li>
+                    </ul>
+                </p>
+            </div>
+
+            <div class="card">
+                <div class="pros-cons">
+                    <div class="pc-box">
+                        <h3>Pros</h3>
+                        <ul>
+                            <li>The only way to accurately set training zones.</li>
+                            <li>Simulates race day nerves.</li>
+                            <li>Massive confidence builder.</li>
+                        </ul>
+                    </div>
+                    <div class="pc-box">
+                        <h3>Cons</h3>
+                        <ul>
+                            <li>It hurts. A lot.</li>
+                            <li>Requires good pacing discipline.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card tip-box">
+                <strong>Coach's Tip:</strong>
+                <p style="margin: 5px 0 0 0;">Don't go out too fast in the first mile/km. The goal is even splits. Use the warm up to calm your nerves and check your watch is locked onto GPS.</p>
+            </div>
+        </div>
+
+        <div>
+            <div class="card" style="background: #2D3436; color: white;">
+                <h2 style="color:var(--gold); border-color:var(--gold);">Your Targets</h2>
+                <p style="font-size: 0.9rem; opacity: 0.8;">To hit <span id="displayGoal" class="gold-text">--:--</span></p>
+                
+                <div class="pace-row">
+                    <div>
+                        <span id="lbl-avg">Required Avg / Mile</span>
+                        <span class="sub-label">Goal Split</span>
+                    </div>
+                    <span id="t-avg" class="pace-val gold-text">--:--</span>
+                </div>
+
+                <div style="margin: 15px 0; border-top: 1px solid #444;"></div>
+
+                <div class="pace-row">
+                    <div>
+                        <span id="tgt-wu">Warm Up Pace</span>
+                        <span class="sub-label">Based on Current PB</span>
+                    </div>
+                    <span id="p-wu" class="pace-val" style="color: white;">--:--</span>
+                </div>
+
+                <div class="pace-row">
+                    <div>
+                        <span>Strides</span>
+                        <span class="sub-label">Goal Race Pace</span>
+                    </div>
+                    <span id="p-strides" class="pace-val" style="color: white;">--:--</span>
+                </div>
+
+                <div class="pace-row" style="border-bottom: none;">
+                    <div>
+                        <span id="tgt-cd">Cool Down Pace</span>
+                        <span class="sub-label">Based on Current PB</span>
+                    </div>
+                    <span id="p-cd" class="pace-val" style="color: white;">--:--</span>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>Session Logic</h3>
+                <p style="font-size: 0.9rem;">This is a benchmark. It is not about fitness gains, it is about calibration. If you beat your PB today, enter the new time on the Homepage to update all your training zones.</p>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+<script src="app.js"></script>
+
+<script>
+    // PAGE SPECIFIC LOGIC
+    window.onload = function() {
+        initPage(); // From app.js
+        
+        // Custom init: restore Goal Pace if it was used previously
+        // (Optional, otherwise it stays blank)
+        
+        updatePageCalc();
+    }
+
+    function updatePageCalc() {
+        // --- 1. HANDLE CURRENT PB (Warmup/Cooldown) ---
+        const currentInput = document.getElementById('currentPace').value;
+        // Save PB to storage
+        if(currentInput.includes(':')) localStorage.setItem('user5kTime', currentInput);
+        
+        const currentSeconds = parseTime(currentInput);
+
+        // --- 2. HANDLE GOAL TIME (Splits & Strides) ---
+        const goalInput = document.getElementById('goalPace').value;
+        const goalSeconds = parseTime(goalInput);
+        document.getElementById('displayGoal').innerText = goalInput || "--:--";
+
+        // --- CALCULATIONS ---
+        let wuPace, cdPace, goalSplit, suffix;
+
+        if (isMetric) {
+            // KM MATH
+            suffix = " /km";
+            document.getElementById('dist-tag').innerText = "(~8 KM)";
+            document.getElementById('lbl-wu').innerText = "1.6km Warm Up";
+            document.getElementById('lbl-cd').innerText = "1.6km Cool Down";
+            document.getElementById('lbl-tt').innerText = "5km Time Trial";
+            document.getElementById('tgt-wu').innerText = "Warm Up Pace";
+            document.getElementById('tgt-cd').innerText = "Cool Down Pace";
+            document.getElementById('lbl-avg').innerText = "Required Avg / KM";
+
+            if (currentSeconds) {
+                let basePace = currentSeconds / 5;
+                wuPace = basePace + 101;  
+                cdPace = basePace + 101;
+            }
+
+            if (goalSeconds) {
+                goalSplit = goalSeconds / 5;
+            }
+
+        } else {
+            // MILE MATH
+            suffix = " /mi";
+            document.getElementById('dist-tag').innerText = "(~5 Miles)";
+            document.getElementById('lbl-wu').innerText = "1 Mile Warm Up";
+            document.getElementById('lbl-cd').innerText = "1 Mile Cool Down";
+            document.getElementById('lbl-tt').innerText = "5K Time Trial";
+            document.getElementById('tgt-wu').innerText = "Warm Up Pace";
+            document.getElementById('tgt-cd').innerText = "Cool Down Pace";
+            document.getElementById('lbl-avg').innerText = "Required Avg / Mile";
+
+            if (currentSeconds) {
+                let basePace = currentSeconds / 3.1068;
+                wuPace = basePace + 161; 
+                cdPace = basePace + 161; 
+            }
+
+            if (goalSeconds) {
+                goalSplit = goalSeconds / 3.1068;
+            }
+        }
+
+        // --- RENDER ---
+        document.getElementById('p-wu').innerText = formatTime(wuPace) + suffix;
+        document.getElementById('p-cd').innerText = formatTime(cdPace) + suffix;
+        
+        // Goal Pace & Strides share the same value
+        const displayGoal = formatTime(goalSplit) + suffix;
+        document.getElementById('t-avg').innerText = displayGoal;
+        document.getElementById('p-strides').innerText = displayGoal;
+    }
+</script>
+
+</body>
+</html>
