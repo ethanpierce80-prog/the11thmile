@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The 11th Mile | The Track Pyramid</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header>
+    <a href="index.html" class="home-btn">← Back to Library</a>
+    <a href="index.html" class="logo">THE 11th MILE</a>
+</header>
+
+<div class="container">
+
+    <div class="sticky-bar">
+        <h3 style="margin:0; font-size:1.1rem;">Session Settings</h3>
+        
+        <div style="display: flex; align-items: center; gap: 15px; flex-wrap: wrap;">
+            <div style="display: flex; align-items: center; gap: 8px;">
+                <span style="font-size: 0.85rem; opacity: 0.8; white-space: nowrap;">Enter 5K Time:</span>
+                <input type="text" id="sessionPace" class="calc-input" placeholder="MM:SS" oninput="formatInput(this)">
+            </div>
+            <button id="unitBtn" class="unit-btn" onclick="toggleUnits()" style="margin: 0;">Display: Miles</button>
+        </div>
+    </div>
+
+    <div class="dashboard">
+        
+        <div>
+            <div class="card">
+                <h2>The Track Pyramid <span id="dist-tag" style="font-size: 0.8em; font-weight: normal; color: #888; margin-left: 10px;">(~5.5 Miles)</span></h2>
+                <p><strong>Goal:</strong> V02 Max & Aerobic Strength.</p>
+                
+                <div class="step">
+                    <div class="step-num" style="background: var(--warmup);">W</div>
+                    <div class="step-content">
+                        <strong id="lbl-wu">1 Mile Warm Up</strong>
+                        <small>Easy conversation pace.</small>
+                    </div>
+                </div>
+
+                <div class="step">
+                    <div class="step-num">1</div>
+                    <div class="step-content">
+                        <strong>600m</strong>
+                        <small>Target: 5K Pace. <br><strong>Recovery:</strong> 200m Jog.</small>
+                    </div>
+                </div>
+
+                <div class="step">
+                    <div class="step-num">2</div>
+                    <div class="step-content">
+                        <strong>800m</strong>
+                        <small>Target: 5K Pace. <br><strong>Recovery:</strong> 200m Jog.</small>
+                    </div>
+                </div>
+
+                <div class="step">
+                    <div class="step-num">3</div>
+                    <div class="step-content">
+                        <strong>1200m (The Summit)</strong>
+                        <small>Target: 10K Pace (Controlled). <br><strong>Recovery:</strong> 400m Jog.</small>
+                    </div>
+                </div>
+
+                <div class="step">
+                    <div class="step-num">4</div>
+                    <div class="step-content">
+                        <strong>2 x 800m</strong>
+                        <small>Target: 5K Pace. <br><strong>Recovery:</strong> 200m Jog between reps.</small>
+                    </div>
+                </div>
+
+                <div class="step">
+                    <div class="step-num">5</div>
+                    <div class="step-content">
+                        <strong>3 x 600m</strong>
+                        <small>Target: 5K Pace (Fast). <br><strong>Recovery:</strong> 200m Jog between reps.</small>
+                    </div>
+                </div>
+
+                <div class="step">
+                    <div class="step-num" style="background: var(--warmup);">C</div>
+                    <div class="step-content">
+                        <strong id="lbl-cd">1 Mile Cool Down</strong>
+                        <small>Very slow jog to flush lactate.</small>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="pros-cons">
+                    <div class="pc-box">
+                        <h3>Pros</h3>
+                        <ul>
+                            <li>High volume session (good for endurance).</li>
+                            <li>Pyramid structure breaks up the monotony.</li>
+                            <li>Teaches pacing on the longer 1200m rep.</li>
+                        </ul>
+                    </div>
+                    <div class="pc-box">
+                        <h3>Cons</h3>
+                        <ul>
+                            <li>Requires a track or measured loop.</li>
+                            <li>The 3 x 600m at the end is mentally grueling.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card tip-box">
+                <strong>Coach's Tip:</strong>
+                <p style="margin: 5px 0 0 0;">The 1200m at the top isn't the hardest part—it's the pace trap. If you run the 1200m too hard (like it's an 800), you will fail the final set of 600s. Respect "The Summit."</p>
+            </div>
+        </div>
+
+        <div>
+            <div class="card" style="background: #2D3436; color: white;">
+                <h2 style="color:var(--accent); border-color:var(--accent);">Lap Splits</h2>
+                <p style="font-size: 0.9rem; opacity: 0.8;">Based on <span id="displayTime">--:--</span> 5K</p>
+                
+                <div class="pace-row">
+                    <div>
+                        <span>5K Pace</span>
+                        <span class="sub-label">For 600m & 800m Reps</span>
+                    </div>
+                    <span id="p-5k" class="pace-val" style="color: white;">--:-- / 400m</span>
+                </div>
+
+                <div class="pace-row">
+                    <div>
+                        <span>10K Pace</span>
+                        <span class="sub-label">For 1200m Rep</span>
+                    </div>
+                    <span id="p-10k" class="pace-val" style="color: white;">--:-- / 400m</span>
+                </div>
+
+                <div style="margin: 15px 0; border-top: 1px solid #444;"></div>
+
+                <div class="pace-row">
+                    <div><span id="tgt-wu">Warm Up Pace</span></div>
+                    <span id="p-wu" class="pace-val" style="color: white;">--:--</span>
+                </div>
+
+                <div class="pace-row">
+                    <div><span id="tgt-cd">Cool Down Pace</span></div>
+                    <span id="p-cd" class="pace-val" style="color: white;">--:--</span>
+                </div>
+
+                <div class="pace-row" style="border-bottom: none;">
+                    <div>
+                        <span>Recovery Jogs</span>
+                        <span class="sub-label">Very Easy</span>
+                    </div>
+                    <span id="p-rec" class="pace-val">--:--</span>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>Session Logic</h3>
+                <p style="font-size: 0.9rem;">We ascend to 1200m to fatigue the aerobic system, then descend back down with shorter reps where you must hold 5k form despite heavy legs.</p>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+<script src="app.js"></script>
+
+<script>
+    // PAGE SPECIFIC LOGIC
+    window.onload = function() {
+        initPage(); // From app.js
+        updatePageCalc();
+    }
+
+    function updatePageCalc() {
+        const input = document.getElementById('sessionPace').value;
+        const totalSeconds = parseTime(input); // From app.js
+        document.getElementById('displayTime').innerText = input || "--:--";
+
+        if (!totalSeconds) return;
+
+        // 1. CALCULATE TRACK SPLITS (Always 400m math)
+        // 5k Pace per 400m = Total 5k Time / 12.5
+        const split5k = totalSeconds / 12.5;
+        
+        // 10k Pace per 400m logic:
+        // Metric Rule: 10k is ~9s/km slower than 5k.
+        // 10k/km = (Total/5) + 9.
+        // 10k/400m = (10k/km) / 2.5
+        const pacePerKm_5k = totalSeconds / 5;
+        const pacePerKm_10k = pacePerKm_5k + 9;
+        const split10k = pacePerKm_10k / 2.5;
+
+        // Update Splits
+        document.getElementById('p-5k').innerText = formatTime(split5k) + " / 400m";
+        document.getElementById('p-10k').innerText = formatTime(split10k) + " / 400m";
+
+        // 2. CALCULATE GENERAL PACES (Dynamic Units for WU/CD)
+        let wuPace, cdPace, recPace, suffix;
+
+        if (isMetric) {
+            // KM MATH for Warmup/Cooldown
+            let basePace = totalSeconds / 5;
+            suffix = " /km";
+            recPace = basePace + 93; 
+            wuPace = basePace + 101;  
+            cdPace = basePace + 101; 
+
+            // Update Labels
+            document.getElementById('dist-tag').innerText = "(~9 KM)";
+            document.getElementById('lbl-wu').innerText = "1.6km Warm Up";
+            document.getElementById('lbl-cd').innerText = "1.6km Cool Down";
+            document.getElementById('tgt-wu').innerText = "Warm Up Pace";
+            document.getElementById('tgt-cd').innerText = "Cool Down Pace";
+
+        } else {
+            // MILE MATH for Warmup/Cooldown
+            let basePace = totalSeconds / 3.1068;
+            suffix = " /mi";
+            recPace = basePace + 150; 
+            wuPace = basePace + 161; 
+            cdPace = basePace + 161; 
+
+            // Update Labels
+            document.getElementById('dist-tag').innerText = "(~5.5 Miles)";
+            document.getElementById('lbl-wu').innerText = "1 Mile Warm Up";
+            document.getElementById('lbl-cd').innerText = "1 Mile Cool Down";
+            document.getElementById('tgt-wu').innerText = "Warm Up Pace";
+            document.getElementById('tgt-cd').innerText = "Cool Down Pace";
+        }
+
+        document.getElementById('p-wu').innerText = formatTime(wuPace) + suffix;
+        document.getElementById('p-cd').innerText = formatTime(cdPace) + suffix;
+        document.getElementById('p-rec').innerText = formatTime(recPace) + suffix;
+    }
+</script>
+
+</body>
+</html>

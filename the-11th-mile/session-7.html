@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The 11th Mile | The Cut-Down</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header>
+    <a href="index.html" class="home-btn">← Back to Library</a>
+    <a href="index.html" class="logo">THE 11th MILE</a>
+</header>
+
+<div class="container">
+
+    <div class="sticky-bar">
+        <h3 style="margin:0; font-size:1.1rem;">Session Settings</h3>
+        
+        <div style="display: flex; align-items: center; gap: 15px; flex-wrap: wrap;">
+            <div style="display: flex; align-items: center; gap: 8px;">
+                <span style="font-size: 0.85rem; opacity: 0.8; white-space: nowrap;">Enter 5K Time:</span>
+                <input type="text" id="sessionPace" class="calc-input" placeholder="MM:SS" oninput="formatInput(this)">
+            </div>
+            <button id="unitBtn" class="unit-btn" onclick="toggleUnits()" style="margin: 0;">Display: Miles</button>
+        </div>
+    </div>
+
+    <div class="dashboard">
+        
+        <div>
+            <div class="card">
+                <h2>The Cut-Down <span id="dist-tag" style="font-size: 0.8em; font-weight: normal; color: #888; margin-left: 10px;">(~6 Miles)</span></h2>
+                <p><strong>Goal:</strong> Aerobic Power & Discipline.</p>
+                <p id="structure-text" style="margin-bottom: 20px; font-size: 0.9rem; color: #666;"><strong>Structure:</strong> 4 Continuous Miles. Faster every mile.</p>
+                
+                <div id="steps-container"></div>
+            </div>
+
+            <div class="card">
+                <div class="pros-cons">
+                    <div class="pc-box">
+                        <h3>Pros</h3>
+                        <ul>
+                            <li>Teaches pacing discipline.</li>
+                            <li>Massive confidence builder.</li>
+                            <li>Simulates "Negative Split" strategy.</li>
+                        </ul>
+                    </div>
+                    <div class="pc-box">
+                        <h3>Cons</h3>
+                        <ul>
+                            <li>Easy to ruin by starting too fast.</li>
+                            <li>Requires intense mental focus.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card tip-box">
+                <strong>Coach's Tip:</strong>
+                <p style="margin: 5px 0 0 0;">If you run the first section too fast, you have nowhere to go. Be brave enough to run slow at the start so you can run fast at the end.</p>
+            </div>
+        </div>
+
+        <div>
+            <div class="card" style="background: #2D3436; color: white;">
+                <h2 style="color:var(--accent); border-color:var(--accent);">Your Targets</h2>
+                <p style="font-size: 0.9rem; opacity: 0.8;">Based on <span id="displayTime">--:--</span> 5K</p>
+                
+                <div id="targets-container"></div>
+            </div>
+
+            <div class="card">
+                <h3>Session Purpose</h3>
+                <p style="font-size: 0.9rem;">This session bridges the gap between "Easy Running" and "Race Pace." By starting slow and finishing fast, you teach your body to clear lactate efficiently while running at speed.</p>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+<script src="app.js"></script>
+
+<script>
+    // PAGE SPECIFIC LOGIC
+    window.onload = function() {
+        initPage(); // From app.js
+        updatePageCalc();
+    }
+
+    function updatePageCalc() {
+        const input = document.getElementById('sessionPace').value;
+        const totalSeconds = parseTime(input); // From app.js
+        document.getElementById('displayTime').innerText = input || "--:--";
+
+        // DOM Elements
+        const rightContainer = document.getElementById('targets-container');
+        const leftContainer = document.getElementById('steps-container');
+        const structText = document.getElementById('structure-text');
+        const distTag = document.getElementById('dist-tag');
+
+        // Reset Containers
+        rightContainer.innerHTML = ""; 
+        leftContainer.innerHTML = "";
+
+        if (!totalSeconds) return;
+
+        let basePace, suffix, adjustments, labels, descriptions, wuPace, cdPace;
+
+        if (isMetric) {
+            // KM CONFIGURATION (6 Steps)
+            distTag.innerText = "(~10 KM)";
+            structText.innerHTML = "<strong>Structure:</strong> 6 Continuous KM. Faster every KM.";
+            basePace = totalSeconds / 5;
+            suffix = " /km";
+            
+            // Warm Up / Cool Down Math
+            wuPace = basePace + 101; 
+            cdPace = basePace + 101;
+
+            // Pacing adjustments (slower than 5k pace)
+            adjustments = [30, 26, 22, 18, 14, 10]; 
+            labels = ["KM 1", "KM 2", "KM 3", "KM 4", "KM 5", "KM 6"];
+            descriptions = [
+                "The Setup: Controlled & Easy.",
+                "Finding Rhythm: Relax shoulders.",
+                "The Build: Start focusing.",
+                "The Work: Squeeze the pace.",
+                "Hard Effort: Hold on now.",
+                "The Finish: Race pace form."
+            ];
+        } else {
+            // MILE CONFIGURATION (4 Steps)
+            distTag.innerText = "(~6 Miles)";
+            structText.innerHTML = "<strong>Structure:</strong> 4 Continuous Miles. Faster every mile.";
+            basePace = totalSeconds / 3.1068;
+            suffix = " /mi";
+
+            // Warm Up / Cool Down Math
+            wuPace = basePace + 161; 
+            cdPace = basePace + 161;
+
+            adjustments = [50, 40, 30, 20];
+            labels = ["Mile 1", "Mile 2", "Mile 3", "Mile 4"];
+            descriptions = [
+                "The Setup: Controlled. Aerobic.",
+                "The Rhythm: Settle in.",
+                "The Work: Where it gets hard.",
+                "The Finish: Race effort form."
+            ];
+        }
+
+        // --- 1. DRAW WARM UP ---
+        const wuLabel = isMetric ? "1.6km Warm Up" : "1 Mile Warm Up";
+        leftContainer.innerHTML += createStepHTML("W", wuLabel, "Easy conversation pace.", "var(--warmup)");
+        rightContainer.innerHTML += createTargetHTML("Warm Up Pace", formatTime(wuPace) + suffix);
+
+        // --- 2. DRAW MAIN SET LOOP ---
+        adjustments.forEach((adj, index) => {
+            const targetTime = basePace + adj;
+            
+            // Draw Left Side (Instructions)
+            leftContainer.innerHTML += createStepHTML(index + 1, labels[index], descriptions[index]);
+
+            // Draw Right Side (Targets)
+            rightContainer.innerHTML += createTargetHTML(labels[index], formatTime(targetTime) + suffix);
+        });
+
+        // --- 3. DRAW COOL DOWN ---
+        const cdLabel = isMetric ? "1.6km Cool Down" : "1 Mile Cool Down";
+        leftContainer.innerHTML += createStepHTML("C", cdLabel, "Very slow jog to flush lactate.", "var(--warmup)");
+        
+        // Custom target HTML for the last item (remove border)
+        const cdTarget = `
+            <div class="pace-row" style="border-bottom: none;">
+                <div><span>Cool Down Pace</span></div>
+                <span class="pace-val" style="color: white;">${formatTime(cdPace)}${suffix}</span>
+            </div>`;
+        rightContainer.innerHTML += cdTarget;
+    }
+
+    // Helper to generate Step HTML
+    function createStepHTML(num, title, desc, bg = "#2c3e50") {
+        return `
+        <div class="step">
+            <div class="step-num" style="background: ${bg};">${num}</div>
+            <div class="step-content">
+                <strong>${title}</strong>
+                <small>${desc}</small>
+            </div>
+        </div>`;
+    }
+
+    // Helper to generate Target HTML
+    function createTargetHTML(label, value) {
+        return `
+        <div class="pace-row">
+            <div><span>${label}</span></div>
+            <span class="pace-val" style="color: white;">${value}</span>
+        </div>`;
+    }
+</script>
+
+</body>
+</html>

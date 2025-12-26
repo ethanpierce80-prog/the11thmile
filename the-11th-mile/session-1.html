@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The 11th Mile | Tempo + Ladder</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header>
+    <a href="index.html" class="home-btn">← Back to Library</a>
+    <a href="index.html" class="logo">THE 11th MILE</a>
+</header>
+
+<div class="container">
+
+    <div class="sticky-bar">
+        <h3 style="margin:0; font-size:1.1rem;">Session Settings</h3>
+        
+        <div style="display: flex; align-items: center; gap: 15px; flex-wrap: wrap;">
+            <div style="display: flex; align-items: center; gap: 8px;">
+                <span style="font-size: 0.85rem; opacity: 0.8; white-space: nowrap;">Enter 5K Time:</span>
+                <input type="text" id="sessionPace" class="calc-input" placeholder="MM:SS" oninput="formatInput(this)">
+            </div>
+            <button id="unitBtn" class="unit-btn" onclick="toggleUnits()" style="margin: 0;">Display: Miles</button>
+        </div>
+    </div>
+
+    <div class="dashboard">
+        
+        <div>
+            <div class="card">
+                <h2>The Tempo + Ladder <span id="dist-tag" style="font-size: 0.8em; font-weight: normal; color: #888; margin-left: 10px;">(~6.5 Miles)</span></h2>
+                <p><strong>Goal:</strong> Speed Endurance & Turnover.</p>
+                
+                <div class="step">
+                    <div class="step-num" style="background: var(--warmup);">W</div>
+                    <div class="step-content">
+                        <strong id="lbl-wu">1 Mile Warm Up</strong>
+                        <small>Easy conversation pace.</small>
+                    </div>
+                </div>
+
+                <div class="step">
+                    <div class="step-num">1</div>
+                    <div class="step-content">
+                        <strong id="lbl-tempo">1 Mile Tempo</strong>
+                        <small>Controlled hard effort. <br><strong>Recovery:</strong> 3 Minutes Easy Jog (Reset).</small>
+                    </div>
+                </div>
+
+                <div class="step">
+                    <div class="step-num">2</div>
+                    <div class="step-content">
+                        <strong>4 x 90 Seconds</strong>
+                        <small>Target: 5K Pace. <br><strong>Recovery:</strong> 90s Jog between reps.</small>
+                    </div>
+                </div>
+
+                <div class="step">
+                    <div class="step-num">3</div>
+                    <div class="step-content">
+                        <strong>4 x 60 Seconds</strong>
+                        <small>Target: 5K Pace. <br><strong>Recovery:</strong> 60s Jog between reps.</small>
+                    </div>
+                </div>
+
+                <div class="step">
+                    <div class="step-num">4</div>
+                    <div class="step-content">
+                        <strong>4 x 45 Seconds</strong>
+                        <small>Target: 3K Pace (Fast). <br><strong>Recovery:</strong> 45s Jog between reps.</small>
+                    </div>
+                </div>
+
+                <div class="step">
+                    <div class="step-num">5</div>
+                    <div class="step-content">
+                        <strong>2 x 30 Seconds</strong>
+                        <small>Full Sprints. <br><strong>Recovery:</strong> 30s Jog between reps.</small>
+                    </div>
+                </div>
+
+                <div class="step">
+                    <div class="step-num" style="background: var(--warmup);">C</div>
+                    <div class="step-content">
+                        <strong id="lbl-cd">1 Mile Cool Down</strong>
+                        <small>Very slow jog to flush lactate.</small>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="pros-cons">
+                    <div class="pc-box">
+                        <h3>Pros</h3>
+                        <ul>
+                            <li>Time-based (can do on road or grass).</li>
+                            <li>Forces you to change gears on tired legs.</li>
+                            <li>The reps get shorter as you get more fatigued.</li>
+                        </ul>
+                    </div>
+                    <div class="pc-box">
+                        <h3>Cons</h3>
+                        <ul>
+                            <li>Requires constant watch checking.</li>
+                            <li>Very easy to run the Tempo too hard and blow up.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card tip-box">
+                <strong>Coach's Tip:</strong>
+                <p style="margin: 5px 0 0 0;">The Tempo is just to fatigue the legs. Don't try to win the workout there. The real work starts at the 45-second reps where form usually breaks down.</p>
+            </div>
+        </div>
+
+        <div>
+            <div class="card" style="background: #2D3436; color: white;">
+                <h2 style="color:var(--accent); border-color:var(--accent);">Your Targets</h2>
+                <p style="font-size: 0.9rem; opacity: 0.8;">Based on <span id="displayTime">--:--</span> 5K</p>
+                
+                <div class="pace-row">
+                    <div><span id="tgt-wu">Warm Up Pace</span></div>
+                    <span id="p-wu" class="pace-val" style="color: white;">--:--</span>
+                </div>
+
+                <div class="pace-row">
+                    <div><span id="tgt-tempo">1 Mile (Tempo)</span></div>
+                    <span id="p-tempo" class="pace-val" style="color: white;">--:--</span>
+                </div>
+
+                <div class="pace-row">
+                    <div><span>90s & 60s Reps</span><span class="sub-label">5k Pace</span></div>
+                    <span id="p-5k" class="pace-val" style="color: white;">--:--</span>
+                </div>
+
+                <div class="pace-row">
+                    <div><span>45s Reps</span><span class="sub-label">3k Pace</span></div>
+                    <span id="p-3k" class="pace-val" style="color: white;">--:--</span>
+                </div>
+
+                <div class="pace-row">
+                    <div><span>30s Reps</span><span class="sub-label">Sprint / Mile Pace</span></div>
+                    <span id="p-sprint" class="pace-val" style="color: white;">--:--</span>
+                </div>
+
+                <div class="pace-row">
+                    <div><span id="tgt-cd">Cool Down Pace</span></div>
+                    <span id="p-cd" class="pace-val" style="color: white;">--:--</span>
+                </div>
+
+                <div class="pace-row" style="border-bottom: none;">
+                    <div><span>Recovery Pace</span><span class="sub-label">Very Slow Jog</span></div>
+                    <span id="p-rec" class="pace-val">--:--</span>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>Session Logic</h3>
+                <p style="font-size: 0.9rem;">We start aerobic (Tempo), move to V02 Max (5k Pace), and finish anaerobic (Sprints). This specifically trains your body to find speed even when your legs are heavy.</p>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+<script src="app.js"></script>
+
+<script>
+    // PAGE SPECIFIC LOGIC
+    window.onload = function() {
+        initPage(); // From app.js
+        updatePageCalc();
+    }
+
+    function updatePageCalc() {
+        const input = document.getElementById('sessionPace').value;
+        const totalSeconds = parseTime(input); // From app.js
+        document.getElementById('displayTime').innerText = input || "--:--";
+
+        if (!totalSeconds) return;
+
+        let basePace, pTempo, p5k, p3k, pSprint, wuPace, cdPace, pRec, suffix;
+
+        if (isMetric) {
+            // KM MATH
+            basePace = totalSeconds / 5; 
+            suffix = " /km";
+            pTempo = basePace + 19;
+            p5k = basePace;
+            p3k = basePace - 9;
+            pSprint = basePace - 19;
+            pRec = basePace + 93;
+            wuPace = basePace + 101;  
+            cdPace = basePace + 101; 
+            
+            // Update Text Labels
+            document.getElementById('dist-tag').innerText = "(~10.5 KM)";
+            document.getElementById('lbl-wu').innerText = "1.6km Warm Up";
+            document.getElementById('lbl-cd').innerText = "1.6km Cool Down";
+            document.getElementById('lbl-tempo').innerText = "1.6km Tempo";
+            document.getElementById('tgt-wu').innerText = "Warm Up Pace";
+            document.getElementById('tgt-cd').innerText = "Cool Down Pace";
+            document.getElementById('tgt-tempo').innerText = "1.6km (Tempo)";
+
+        } else {
+            // MILE MATH
+            basePace = totalSeconds / 3.1068; 
+            suffix = " /mi";
+            pTempo = basePace + 30;
+            p5k = basePace;
+            p3k = basePace - 15;
+            pSprint = basePace - 30;
+            pRec = basePace + 150;
+            wuPace = basePace + 161; 
+            cdPace = basePace + 161; 
+
+            // Update Text Labels
+            document.getElementById('dist-tag').innerText = "(~6.5 Miles)";
+            document.getElementById('lbl-wu').innerText = "1 Mile Warm Up";
+            document.getElementById('lbl-cd').innerText = "1 Mile Cool Down";
+            document.getElementById('lbl-tempo').innerText = "1 Mile Tempo";
+            document.getElementById('tgt-wu').innerText = "Warm Up Pace";
+            document.getElementById('tgt-cd').innerText = "Cool Down Pace";
+            document.getElementById('tgt-tempo').innerText = "1 Mile (Tempo)";
+        }
+
+        document.getElementById('p-wu').innerText = formatTime(wuPace) + suffix;
+        document.getElementById('p-tempo').innerText = formatTime(pTempo) + suffix;
+        document.getElementById('p-5k').innerText = formatTime(p5k) + suffix;
+        document.getElementById('p-3k').innerText = formatTime(p3k) + suffix;
+        document.getElementById('p-sprint').innerText = formatTime(pSprint) + suffix;
+        document.getElementById('p-cd').innerText = formatTime(cdPace) + suffix;
+        document.getElementById('p-rec').innerText = formatTime(pRec) + suffix;
+    }
+</script>
+
+</body>
+</html>
