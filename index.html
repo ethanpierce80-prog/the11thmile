@@ -1,0 +1,1012 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>The 11th Mile | Elite Training Library</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&display=swap" rel="stylesheet">
+
+    <style>
+        /* --- 1. MASTER DESIGN VARIABLES --- */
+        :root {
+            --primary: #2D3436; 
+            --accent: #55E6C1; 
+            --bg: #F8FAFB;
+            --white: #FFFFFF;
+            
+            --text-dark: #2D3436;
+            --text-light: #b2bec3;
+            
+            --track-red: #c0392b; 
+            --warmup: #27ae60;
+            
+            /* FILTER COLORS */
+            --col-gold: #f39c12;
+            --col-red: #e74c3c;
+            --col-grey: #95a5a6;
+            --col-teal: #1abc9c;
+            
+            /* GRADIENTS (Light Left -> Dark Right) */
+            --grad-gold: linear-gradient(135deg, #f1c40f 0%, #d35400 100%);   
+            --grad-red: linear-gradient(135deg, #ff7675 0%, #c0392b 100%);    
+            --grad-grey: linear-gradient(135deg, #bdc3c7 0%, #7f8fa6 100%);  
+            --grad-teal: linear-gradient(135deg, #55E6C1 0%, #16a085 100%);   
+        }
+
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background-color: var(--bg); 
+            color: var(--text-dark); 
+            margin: 0; 
+            line-height: 1.5;
+        }
+
+        /* --- 2. HEADER (RUNNING TRACK DESIGN) --- */
+        header { 
+            background-color: var(--track-red);
+            background-image: repeating-linear-gradient(
+                0deg,
+                transparent,
+                transparent 19px,
+                rgba(255,255,255,0.4) 20px
+            );
+            padding: 40px 20px; 
+            text-align: center; 
+            border-bottom: 4px solid white;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .logo { 
+            font-size: 2.2rem; 
+            font-weight: 900; 
+            letter-spacing: -1px; 
+            margin: 0; 
+            line-height: 1; 
+            color: white; 
+            display:block;
+            text-transform: uppercase;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+        
+        .sub-logo { 
+            color: rgba(255,255,255,0.9); 
+            text-transform: uppercase; 
+            letter-spacing: 2px; 
+            font-size: 0.75rem; 
+            margin-top: 8px; 
+            font-weight: 600;
+        }
+
+        /* --- 3. LAYOUT --- */
+        .container { 
+            max-width: 1200px; 
+            margin: 30px auto; 
+            padding: 0 20px; 
+        }
+
+        .dashboard { 
+            display: grid; 
+            grid-template-columns: 320px 1fr; 
+            gap: 40px; 
+            align-items: start;
+        }
+
+        /* --- 4. SIDEBAR --- */
+        .sidebar {
+            background: var(--primary); 
+            color: white;
+            padding: 25px;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            position: sticky;
+            top: 20px;
+            z-index: 10;
+        }
+
+        .input-group { margin-bottom: 20px; }
+        
+        label { 
+            display: block; 
+            font-size: 0.75rem; 
+            text-transform: uppercase; 
+            opacity: 0.8; 
+            margin-bottom: 8px; 
+            letter-spacing: 1px;
+            color: white;
+        }
+
+        .calc-input {
+            width: 100%;
+            padding: 15px; 
+            border-radius: 8px; 
+            border: 2px solid rgba(255,255,255,0.2); 
+            background: rgba(255,255,255,0.1); 
+            color: white; 
+            font-weight: bold; 
+            font-size: 1.5rem; 
+            text-align: center; 
+            transition: 0.3s;
+            outline: none;
+        }
+        .calc-input:focus { border-color: var(--accent); background: rgba(0,0,0,0.2); }
+
+        .action-btn {
+            width: 100%;
+            background: var(--accent); 
+            border: none; 
+            color: var(--primary); 
+            padding: 12px 15px; 
+            border-radius: 30px; 
+            font-size: 0.9rem; 
+            font-weight: 800; 
+            cursor: pointer; 
+            transition: 0.2s;
+            text-transform: uppercase;
+            margin-top: 10px;
+        }
+        .action-btn:hover { opacity: 0.9; transform: translateY(-2px); }
+
+        .gender-toggle {
+            display: flex;
+            background: rgba(255,255,255,0.1);
+            border-radius: 8px;
+            padding: 4px;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+
+        .g-btn {
+            flex: 1;
+            background: transparent;
+            border: none;
+            color: rgba(255,255,255,0.5);
+            font-weight: 700;
+            padding: 8px;
+            cursor: pointer;
+            transition: 0.2s;
+            border-radius: 6px;
+            font-size: 0.8rem;
+        }
+        .g-btn.active { background: var(--white); color: var(--primary); }
+
+        .results-box {
+            margin-top: 25px;
+            border-top: 1px solid rgba(255,255,255,0.2);
+            padding-top: 20px;
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .res-row {
+            display: flex; justify-content: space-between; align-items: center;
+            margin-bottom: 12px;
+        }
+        .res-label { font-size: 0.75rem; opacity: 0.7; text-transform: uppercase; color:white; }
+        .res-val { font-size: 1.1rem; font-weight: 900; color: var(--accent); }
+        
+        .tier-badge {
+            background: rgba(255,255,255,0.1);
+            color: white;
+            text-align: center;
+            padding: 8px;
+            border-radius: 6px;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-size: 0.9rem;
+            margin-bottom: 20px;
+        }
+
+        /* --- 5. FILTERS --- */
+        .filter-container {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-bottom: 30px;
+        }
+
+        .filter-pill {
+            background: white;
+            border: 2px solid #eee;
+            color: var(--text-light);
+            padding: 10px 18px;
+            border-radius: 30px;
+            font-size: 0.8rem;
+            font-weight: 800;
+            cursor: pointer;
+            transition: 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .filter-pill:hover { transform: translateY(-2px); }
+
+        .pill-all.active { background: var(--primary); color: var(--accent); border-color: var(--primary); }
+        .pill-gold.active { background: var(--col-gold); color: white; border-color: var(--col-gold); }
+        .pill-teal.active { background: var(--col-teal); color: white; border-color: var(--col-teal); }
+        .pill-red.active { background: var(--col-red); color: white; border-color: var(--col-red); }
+        .pill-grey.active { background: var(--col-grey); color: white; border-color: var(--col-grey); }
+
+        /* --- 6. CARDS --- */
+        .session-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 25px;
+        }
+
+        .session-card {
+            background: var(--white);
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.04);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            text-decoration: none;
+            border: 1px solid transparent;
+        }
+
+        .session-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+            border-color: var(--accent);
+        }
+
+        .card-header {
+            padding: 25px;
+            min-height: 120px;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            position: relative;
+        }
+
+        /* GRADIENTS */
+        .grad-gold { background: var(--grad-gold); }
+        .grad-red { background: var(--grad-red); }
+        .grad-grey { background: var(--grad-grey); }
+        .grad-teal { background: var(--grad-teal); }
+
+        .tag {
+            position: absolute;
+            top: 20px; left: 20px;
+            font-size: 0.65rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            background: rgba(0,0,0,0.2); 
+            color: white;
+            padding: 5px 12px;
+            border-radius: 20px;
+            backdrop-filter: blur(5px);
+        }
+
+        .card-title {
+            color: white;
+            margin: 0;
+            font-size: 1.3rem;
+            font-weight: 800;
+            line-height: 1.2;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .card-body { padding: 25px; flex-grow: 1; }
+
+        .difficulty {
+            font-size: 0.7rem;
+            font-weight: 800;
+            color: #27ae60;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            display: block;
+            margin-bottom: 5px;
+        }
+        .diff-hard { color: var(--track-red); }
+        .diff-med { color: var(--col-gold); }
+
+        .card-divider { border-bottom: 1px solid #eee; margin: 12px 0; }
+
+        .card-summary {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--text-dark);
+            margin: 0;
+            line-height: 1.4;
+        }
+
+        .no-results {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 40px;
+            color: var(--text-light);
+            font-style: italic;
+        }
+
+        /* --- 7. MODAL --- */
+        .modal {
+            display: none;
+            position: fixed; z-index: 2000; left: 0; top: 0; 
+            width: 100%; height: 100%; 
+            background-color: rgba(45, 52, 54, 0.85); 
+            backdrop-filter: blur(5px);
+            padding: 10px;
+            align-items: center; 
+            justify-content: center;
+        }
+
+        .modal-content {
+            background-color: var(--white);
+            border-radius: 16px;
+            width: 100%; 
+            max-width: 800px; 
+            max-height: 85vh; 
+            box-shadow: 0 25px 50px rgba(0,0,0,0.25);
+            display: flex;
+            flex-direction: column;
+            animation: slideUp 0.3s ease;
+        }
+        @keyframes slideUp { from { transform: translateY(40px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+
+        .modal-header {
+            padding: 25px;
+            border-bottom: 1px solid #eee;
+            flex-shrink: 0;
+        }
+
+        .close-btn { 
+            position: absolute; top: 20px; right: 20px; 
+            font-size: 1.5rem; cursor: pointer; color: var(--text-light); 
+            background: var(--bg); width: 40px; height: 40px; 
+            border-radius: 50%; display: flex; align-items: center; justify-content: center;
+            transition: 0.2s;
+        }
+        .close-btn:hover { background: var(--primary); color: var(--accent); }
+
+        .modal-body { 
+            padding: 25px; 
+            overflow-y: auto; 
+            -webkit-overflow-scrolling: touch; 
+        }
+
+        .step { 
+            background: var(--bg); 
+            border: 1px solid #eee; 
+            border-left: 4px solid var(--accent); 
+            border-radius: 8px; 
+            padding: 15px; 
+            margin-bottom: 12px; 
+            display: flex; gap: 15px; align-items: center; justify-content: space-between;
+        }
+
+        .step-content { display: flex; align-items: center; gap: 15px; flex-grow: 1; }
+
+        .step-num { 
+            background: var(--primary); color: white; 
+            width: 28px; height: 28px; border-radius: 50%; 
+            display: flex; align-items: center; justify-content: center; 
+            font-weight: 800; font-size: 0.8rem; flex-shrink: 0; 
+        }
+        
+        .step-text { font-weight: 600; color: var(--text-dark); font-size: 0.9rem; }
+
+        .pace-highlight {
+            color: var(--track-red);
+            font-weight: 800;
+            background: rgba(231, 76, 60, 0.1);
+            padding: 2px 6px;
+            border-radius: 4px;
+            margin-left: 5px;
+            white-space: nowrap;
+        }
+
+        .pro-con-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 30px; }
+        .pc-col h4 { margin: 0 0 10px 0; border-bottom: 2px solid #eee; padding-bottom: 8px; font-size: 0.8rem; text-transform: uppercase; color: var(--text-light); }
+        .pc-col ul { padding-left: 18px; color: var(--text-dark); font-size: 0.9rem; margin: 0; }
+        .pc-col li { margin-bottom: 6px; }
+
+        @media (max-width: 800px) {
+            .dashboard { grid-template-columns: 1fr; gap: 30px; }
+            .sidebar { position: relative; top: 0; z-index: 1; }
+            .pro-con-grid { grid-template-columns: 1fr; gap: 20px; }
+            .modal-content { max-height: 90vh; }
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1 class="logo">The 11th Mile</h1>
+    <div class="sub-logo">Performance Laboratory // England</div>
+</header>
+
+<div class="container">
+    <div class="dashboard">
+        
+        <div class="sidebar">
+            <div class="input-group">
+                <label>5K Time (MM:SS)</label>
+                <input type="text" id="timeInput" class="calc-input" placeholder="20:00" maxlength="5" inputmode="numeric">
+            </div>
+
+            <div class="input-group">
+                <label>Gender</label>
+                <div class="gender-toggle">
+                    <button class="g-btn active" id="btnMale" onclick="setGender('male')">MALE</button>
+                    <button class="g-btn" id="btnFemale" onclick="setGender('female')">FEMALE</button>
+                </div>
+            </div>
+
+            <div class="input-group">
+                <label>Units</label>
+                <button class="action-btn" id="unitBtn" onclick="toggleUnit()">Switch to KM</button>
+            </div>
+
+            <div id="resultsArea" class="results-box">
+                <div id="levelBadge" class="tier-badge">Beginner</div>
+                
+                <div class="res-row">
+                    <span class="res-label" style="color:var(--accent);">Warm Up / Cool Down</span>
+                    <span class="res-val" id="warmupPace">--:--</span>
+                </div>
+                <div class="res-row">
+                    <span class="res-label">Easy Run</span>
+                    <span class="res-val" id="easyPace">--:--</span>
+                </div>
+                <div class="res-row">
+                    <span class="res-label">Tempo</span>
+                    <span class="res-val" id="tempoPace">--:--</span>
+                </div>
+                <div class="res-row">
+                    <span class="res-label">Threshold</span>
+                    <span class="res-val" id="thresholdPace">--:--</span>
+                </div>
+                <div class="res-row">
+                    <span class="res-label">Intervals</span>
+                    <span class="res-val" id="intervalPace">--:--</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="main-content">
+            <div class="filter-container">
+                <button class="filter-pill pill-all active" onclick="setFilter('all')">All Sessions</button>
+                <button class="filter-pill pill-gold" onclick="setFilter('Time Trial')">Time Trial</button>
+                <button class="filter-pill pill-teal" onclick="setFilter('Tempo')">Tempo</button>
+                <button class="filter-pill pill-red" onclick="setFilter('Interval')">Interval</button>
+                <button class="filter-pill pill-grey" onclick="setFilter('Fartlek')">Fartlek</button>
+            </div>
+            <div id="sessionContainer" class="session-grid"></div>
+        </div>
+
+    </div>
+</div>
+
+<div id="infoModal" class="modal">
+    <div id="modalContent" class="modal-content">
+        <div class="modal-header">
+            <div class="close-btn" onclick="closeModal()">&times;</div>
+            <span style="font-size:0.7rem; font-weight:800; color:#b2bec3; text-transform:uppercase;">Session Detail</span>
+            <h2 id="modalTitle" style="margin:5px 0 0 0; color:var(--primary);">Title</h2>
+        </div>
+        <div class="modal-body">
+            <div style="background:#F8FAFB; padding:15px; border-radius:8px; margin-bottom:25px; border:1px solid #eee;">
+                <strong style="text-transform:uppercase; font-size:0.7rem; color:#b2bec3;">Purpose</strong>
+                <div id="modalPurpose" style="margin-top:5px; font-weight:600; color:var(--primary);"></div>
+            </div>
+            <h4 style="margin:0 0 15px 0; text-transform:uppercase; color:#b2bec3; font-size:0.8rem;">The Workout</h4>
+            <div id="modalSteps"></div>
+            <div class="pro-con-grid">
+                <div class="pc-col"><h4>Pros</h4><ul id="modalPros"></ul></div>
+                <div class="pc-col"><h4>Cons</h4><ul id="modalCons"></ul></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // --- 1. STATE ---
+    let currentUnit = 'miles'; 
+    let currentGender = 'male';
+    let activeFilter = 'all';
+    
+    // Paces
+    let pEasy = 0, pTempo = 0, pInterval = 0, pFloat = 0, pThreshold = 0, pRecovery = 0, pWarmUp = 0;
+
+    // --- 2. SESSION DATA (13 Total) ---
+    const sessions = [
+        {
+            id: 1,
+            title: "5k Time Trial", 
+            category: "Time Trial",
+            bgClass: "grad-gold", 
+            diffColor: "#d35400",
+            difficulty: "Max Effort",
+            summary: "3.1 Mile Time Trial // 90-95% Intensity",
+            purpose: "To establish a baseline fitness level and predict future race times.",
+            steps: [
+                "1 Mile @ [WARMUP] (Includes Drills)",
+                "3.1 Miles @ [MAX_EFFORT]", 
+                "1 Mile @ [WARMUP]"
+            ],
+            pros: ["Accurate fitness gauge", "Builds mental toughness"],
+            cons: ["Physically taxing", "Requires high motivation"]
+        },
+        {
+            id: 2,
+            title: "7 Mile Alternating Tempo", 
+            category: "Tempo",
+            bgClass: "grad-teal",
+            diffColor: "#16a085",
+            difficulty: "Hard",
+            summary: "Alternating tempo miles with moderate recovery miles.",
+            purpose: "Teaches your body to recover while still moving fast.",
+            steps: [
+                "1 Mile @ [WARMUP]",
+                "1 Mile @ [TEMPO]",
+                "1 Mile @ [FLOAT]",
+                "1 Mile @ [TEMPO]",
+                "1 Mile @ [FLOAT]",
+                "1 Mile @ [TEMPO]",
+                "0.5 Mile @ [RECOVERY]",
+                "5 x 20sec Strides @ [INTERVAL]",
+                "1 Mile @ [WARMUP]"
+            ],
+            pros: ["Marathon specific strength", "Lactate clearance"],
+            cons: ["High volume", "Easy to run recovery too fast"]
+        },
+        {
+            id: 3,
+            title: "6 Mile Mixed Intervals", 
+            category: "Interval",
+            bgClass: "grad-red",
+            diffColor: "#c0392b",
+            difficulty: "Medium",
+            summary: "1mi Tempo // 1mi 10k // 2x0.5mi 5k",
+            purpose: "Work endurance and speed in one session.",
+            steps: [
+                "1 Mile @ [WARMUP]",
+                "1 Mile @ [TEMPO] (Rec: 0.50 Mile Jog)",
+                "2 x 0.50 Miles @ [THRESHOLD] (Rec: 0.25 Mile Jog)",
+                "4 x 0.25 Miles @ [INTERVAL] (Rec: 0.15 Mile Jog)",
+                "1 Mile @ [WARMUP]"
+            ],
+            pros: ["Varied and fun", "Touches all energy systems"],
+            cons: ["Complex structure to remember"]
+        },
+        {
+            id: 4,
+            title: "6 Mile Threshold Ladder", 
+            category: "Fartlek",
+            bgClass: "grad-grey",
+            diffColor: "#7f8fa6",
+            difficulty: "Hard",
+            summary: "Time-based intervals that go up and down in duration.",
+            purpose: "Maintain threshold effort over varying durations.",
+            steps: [
+                "1 Mile @ [WARMUP]",
+                "3 mins @ [THRESHOLD] (Rec: 2 min jog)",
+                "4 mins @ [THRESHOLD] (Rec: 2 min jog)",
+                "5 mins @ [THRESHOLD] (Rec: 2 min jog)",
+                "3 mins @ [THRESHOLD] (Rec: 2 min jog)",
+                "2 mins @ [THRESHOLD] (Rec: 2 min jog)",
+                "1 min @ [THRESHOLD]",
+                "1 Mile @ [WARMUP]"
+            ],
+            pros: ["Time based (no track needed)", "Good volume"],
+            cons: ["Hard to gauge pace without GPS"]
+        },
+        {
+            id: 5,
+            title: "5 Mile Progressive Tempo",
+            category: "Tempo",
+            bgClass: "grad-teal",
+            diffColor: "#16a085",
+            difficulty: "Hard",
+            summary: "Progressive tempo where each mile gets faster.",
+            purpose: "Teaches pacing control and finishing strong on tired legs.",
+            steps: [
+                "1 Mile @ [WARMUP]",
+                "5 Miles @ [TEMPO] (Start steady, finish faster)",
+                "1 Mile @ [WARMUP]"
+            ],
+            pros: ["Builds aerobic stamina", "Teaches negative splitting"],
+            cons: ["Easy to start too fast", "High sustained volume"]
+        },
+        {
+            id: 6,
+            title: "6 Mile Progressive Tempo",
+            category: "Tempo",
+            bgClass: "grad-teal",
+            diffColor: "#16a085",
+            difficulty: "Hard",
+            summary: "Longer progressive tempo run.",
+            purpose: "Extended aerobic threshold work for endurance.",
+            steps: [
+                "1 Mile @ [WARMUP]",
+                "6 Miles @ [TEMPO] (Progressive Effort)",
+                "1 Mile @ [WARMUP]"
+            ],
+            pros: ["Great for 10k/Half Marathon prep", "Mental endurance"],
+            cons: ["Very demanding session"]
+        },
+        {
+            id: 7,
+            title: "Pyramid Fartlek Mix",
+            category: "Fartlek",
+            bgClass: "grad-grey",
+            diffColor: "#7f8fa6",
+            difficulty: "Hard",
+            summary: "1-4-2-3-3-2-4-1 minutes with equal jog recovery.",
+            purpose: "Simulates race surges and changes of pace.",
+            steps: [
+                "1 Mile @ [WARMUP]",
+                "1 min @ [THRESHOLD] (Rec: 60s Jog)",
+                "4 mins @ [THRESHOLD] (Rec: 60s Jog)",
+                "2 mins @ [THRESHOLD] (Rec: 60s Jog)",
+                "3 mins @ [THRESHOLD] (Rec: 60s Jog)",
+                "3 mins @ [THRESHOLD] (Rec: 60s Jog)",
+                "2 mins @ [THRESHOLD] (Rec: 60s Jog)",
+                "4 mins @ [THRESHOLD] (Rec: 60s Jog)",
+                "1 min @ [THRESHOLD]",
+                "1 Mile @ [WARMUP]"
+            ],
+            pros: ["Keeps mind engaged", "Time based (no GPS needed)"],
+            cons: ["Hard to pace the 4 minute sections"]
+        },
+        {
+            id: 8,
+            title: "Tempo/Hard Mix Fartlek",
+            category: "Fartlek",
+            bgClass: "grad-grey",
+            diffColor: "#7f8fa6",
+            difficulty: "Very Hard",
+            summary: "Blocks of Tempo -> Hard -> Recovery.",
+            purpose: "Mixing energy systems to flush lactate while running.",
+            steps: [
+                "1 Mile @ [WARMUP]",
+                "2 min @ [TEMPO] -> 1 min @ [INTERVAL] -> 1 min Rec",
+                "3 min @ [TEMPO] -> 1 min @ [INTERVAL] -> 1 min Rec",
+                "4 min @ [TEMPO] -> 1 min @ [INTERVAL] -> 1 min Rec",
+                "2 min @ [TEMPO] -> 1 min @ [INTERVAL] -> 1 min Rec",
+                "3 min @ [TEMPO] -> 1 min @ [INTERVAL] -> 1 min Rec",
+                "300m @ [MAX_EFFORT]",
+                "1 Mile @ [WARMUP]"
+            ],
+            pros: ["Simulates race finishes", "High intensity"],
+            cons: ["Complex structure", "Physically exhausting"]
+        },
+        {
+            id: 9,
+            title: "4 Mile Progressive Tempo",
+            category: "Tempo",
+            bgClass: "grad-teal",
+            diffColor: "#16a085",
+            difficulty: "Medium",
+            summary: "Shorter continuous tempo run.",
+            purpose: "Good introduction to tempo running or a lighter workout week.",
+            steps: [
+                "1 Mile @ [WARMUP]",
+                "4 Miles @ [TEMPO] (Progressive Effort)",
+                "1 Mile @ [WARMUP]"
+            ],
+            pros: ["Manageable volume", "Good confidence builder"],
+            cons: ["Can feel short for advanced runners"]
+        },
+        {
+            id: 10,
+            title: "Track Pyramid Breakdown",
+            category: "Interval",
+            bgClass: "grad-red",
+            diffColor: "#c0392b",
+            difficulty: "Hard",
+            summary: "2k Tempo buy-in followed by track intervals.",
+            purpose: "Fatigue resistance on the track.",
+            steps: [
+                "1 Mile @ [WARMUP]",
+                "2km @ [TEMPO] (Rec: 120s)",
+                "3 x 800m @ [INTERVAL] (Rec: 60s)",
+                "3 x 600m @ [INTERVAL] (Rec: 60s)",
+                "3 x 400m @ [INTERVAL] (Rec: 60s)",
+                "1 Mile @ [WARMUP]"
+            ],
+            pros: ["High volume quality", "Track specific"],
+            cons: ["Need a track or GPS accuracy"]
+        },
+        {
+            id: 11,
+            title: "Track Volume Ladder",
+            category: "Interval",
+            bgClass: "grad-red",
+            diffColor: "#c0392b",
+            difficulty: "Very Hard",
+            summary: "Mile Tempo buy-in into a pyramid ladder.",
+            purpose: "V02 Max development.",
+            steps: [
+                "1 Mile @ [WARMUP]",
+                "1 Mile @ [TEMPO] (Rec: 2 mins)",
+                "3 x 400m @ [INTERVAL] (Rec: 60s)",
+                "2 x 600m @ [INTERVAL] (Rec: 60s)",
+                "1200m @ [THRESHOLD] (Rec: 60s)",
+                "2 x 600m @ [INTERVAL] (Rec: 60s)",
+                "3 x 400m @ [INTERVAL] (Rec: 60s)",
+                "1 Mile @ [WARMUP]"
+            ],
+            pros: ["Classic track workout", "High calorie burn"],
+            cons: ["Long duration", "Mentally tough"]
+        },
+        {
+            id: 12,
+            title: "12x90s Fartlek",
+            category: "Fartlek",
+            bgClass: "grad-grey",
+            diffColor: "#7f8fa6",
+            difficulty: "Medium",
+            summary: "Short, sharp repetitions.",
+            purpose: "Speed endurance and turnover.",
+            steps: [
+                "1 Mile @ [WARMUP]",
+                "12 x 90s @ [INTERVAL] (Rec: 60s Jog)",
+                "1 Mile @ [WARMUP]"
+            ],
+            pros: ["Simple structure", "Good for speed"],
+            cons: ["Repetitive"]
+        },
+        {
+            id: 13,
+            title: "Complex Fartlek",
+            category: "Fartlek",
+            bgClass: "grad-grey",
+            diffColor: "#7f8fa6",
+            difficulty: "Hard",
+            summary: "A mix of tempo, threshold and short speed.",
+            purpose: "Total fitness test covering all zones.",
+            steps: [
+                "1 Mile @ [WARMUP]",
+                "1 Mile @ [TEMPO] (Rec: 120s)",
+                "1 min @ [THRESHOLD] (Rec: 60s)",
+                "2 min @ [THRESHOLD] (Rec: 60s)",
+                "3 min @ [THRESHOLD] (Rec: 60s)",
+                "2 min @ [THRESHOLD] (Rec: 60s)",
+                "1 min @ [THRESHOLD] (Rec: 60s)",
+                "1 Mile @ [TEMPO] (Rec: 60s)",
+                "4 x 20s @ [MAX_EFFORT] (Rec: 30s)",
+                "1 Mile @ [WARMUP]"
+            ],
+            pros: ["Covers all bases", "Engaging"],
+            cons: ["Very long session", "Hard to remember"]
+        }
+    ];
+
+    // --- 3. STORAGE LOGIC ---
+    function saveData() {
+        const prefs = { time: timeInput.value, gender: currentGender, unit: currentUnit };
+        localStorage.setItem('11thMilePrefs', JSON.stringify(prefs));
+    }
+
+    function loadData() {
+        const saved = JSON.parse(localStorage.getItem('11thMilePrefs'));
+        if(saved) {
+            if(saved.gender) setGender(saved.gender, false);
+            if(saved.unit) { currentUnit = saved.unit; updateUnitUI(); }
+            if(saved.time) { timeInput.value = saved.time; if(saved.time.length === 5) calculatePaces(); }
+        }
+    }
+
+    // --- 4. PACE ENGINE ---
+    const timeInput = document.getElementById('timeInput');
+    timeInput.addEventListener('input', function(e) {
+        let val = e.target.value.replace(/\D/g, ''); 
+        if (val.length > 4) val = val.slice(0, 4); 
+        if (val.length > 2) val = val.slice(0, 2) + ':' + val.slice(2); 
+        e.target.value = val;
+        saveData(); 
+        if (val.length === 5) calculatePaces();
+    });
+
+    function calculatePaces() {
+        const totalSeconds = parseTime(timeInput.value);
+        if (totalSeconds === 0) return;
+
+        let avgPaceSeconds = (currentUnit === 'miles') 
+            ? totalSeconds / 3.10686 
+            : totalSeconds / 5.0; 
+
+        let factor = (currentUnit === 'miles') ? 1 : 0.621371;
+
+        // ZONES
+        pInterval = avgPaceSeconds - (10 * factor);
+        pThreshold = avgPaceSeconds + (20 * factor);
+        pTempo = avgPaceSeconds + (40 * factor);
+        pFloat = avgPaceSeconds + (70 * factor);
+        pEasy = avgPaceSeconds + (105 * factor);
+        
+        // Warm Up = Easy + 30 seconds
+        pWarmUp = pEasy + (30 * factor);
+        
+        pRecovery = avgPaceSeconds + (130 * factor);
+
+        document.getElementById('resultsArea').style.display = 'block';
+        
+        let suffix = (currentUnit==='miles'?' /mi':' /km');
+        document.getElementById('warmupPace').innerText = formatTime(pWarmUp) + suffix;
+        document.getElementById('easyPace').innerText = formatTime(pEasy) + suffix;
+        document.getElementById('thresholdPace').innerText = formatTime(pThreshold) + suffix;
+        document.getElementById('tempoPace').innerText = formatTime(pTempo) + suffix;
+        document.getElementById('intervalPace').innerText = formatTime(pInterval) + suffix;
+
+        let mins = totalSeconds / 60;
+        let lvl = "Beginner";
+        if(currentGender === 'male') {
+            if(mins < 16) lvl = "Elite"; else if(mins < 20) lvl = "Advanced"; else if(mins < 25) lvl = "Intermediate";
+        } else {
+            if(mins < 18) lvl = "Elite"; else if(mins < 23) lvl = "Advanced"; else if(mins < 28) lvl = "Intermediate";
+        }
+        document.getElementById('levelBadge').innerText = lvl;
+    }
+
+    // --- 5. RENDER & MODAL ---
+    function renderSessions() {
+        const container = document.getElementById('sessionContainer');
+        container.innerHTML = '';
+        let count = 0;
+
+        sessions.forEach(session => {
+            if (activeFilter !== 'all' && session.category !== activeFilter) return;
+            count++;
+            
+            let diffClass = "difficulty";
+            if(session.difficulty.includes("Hard") || session.difficulty.includes("Max")) diffClass += " diff-hard";
+            else if(session.difficulty.includes("Medium")) diffClass += " diff-med";
+
+            const card = `
+                <div class="session-card" onclick="openModal(${session.id})">
+                    <div class="card-header ${session.bgClass}">
+                        <span class="tag">${session.category}</span>
+                        <h3 class="card-title">${session.title}</h3>
+                    </div>
+                    <div class="card-body">
+                        <span class="${diffClass}" style="color:${session.diffColor}">${session.difficulty}</span>
+                        <div class="card-divider"></div>
+                        <p class="card-summary">${session.summary}</p>
+                    </div>
+                </div>
+            `;
+            container.innerHTML += card;
+        });
+        if(count === 0) container.innerHTML = `<div class="no-results">No sessions found for this category.</div>`;
+    }
+
+    function openModal(id) {
+        const session = sessions.find(s => s.id === id);
+        document.getElementById('modalTitle').innerText = session.title;
+        document.getElementById('modalPurpose').innerText = session.purpose;
+        
+        const stepContainer = document.getElementById('modalSteps');
+        stepContainer.innerHTML = '';
+        
+        session.steps.forEach((step, index) => {
+            let text = step;
+            if(pEasy > 0) { 
+                // INJECT PACES
+                text = text.replace("[WARMUP]", `<span class='pace-highlight'>${formatTime(pWarmUp)}</span>`);
+                text = text.replace("[EASY]", `<span class='pace-highlight'>${formatTime(pEasy)}</span>`);
+                text = text.replace("[TEMPO]", `<span class='pace-highlight'>${formatTime(pTempo)}</span>`);
+                text = text.replace("[THRESHOLD]", `<span class='pace-highlight'>${formatTime(pThreshold)}</span>`);
+                text = text.replace("[INTERVAL]", `<span class='pace-highlight'>${formatTime(pInterval)}</span>`);
+                text = text.replace("[FLOAT]", `<span class='pace-highlight'>${formatTime(pFloat)}</span>`);
+                text = text.replace("[RECOVERY]", `<span class='pace-highlight'>${formatTime(pRecovery)}</span>`);
+                text = text.replace("[MAX_EFFORT]", `<span class='pace-highlight'>Best Effort</span>`);
+            } else {
+                text = text.replace("[WARMUP]", "Warm Up");
+                text = text.replace("[EASY]", "Easy");
+                text = text.replace("[TEMPO]", "Tempo");
+                text = text.replace("[THRESHOLD]", "Threshold");
+                text = text.replace("[INTERVAL]", "Interval");
+                text = text.replace("[FLOAT]", "Tempo + 30s");
+                text = text.replace("[RECOVERY]", "Recovery");
+                text = text.replace("[MAX_EFFORT]", "Max Effort");
+            }
+
+            if(currentUnit === 'km') {
+                text = text.replace(/3.1 Miles/g, "5km");
+                text = text.replace(/1 Mile/g, "1.6km");
+                text = text.replace(/4 Mile/g, "6.5km");
+                text = text.replace(/5 Mile/g, "8km");
+                text = text.replace(/5 Miles/g, "8km");
+                text = text.replace(/6 Mile/g, "10km");
+                text = text.replace(/6 Miles/g, "10km");
+                text = text.replace(/7 Mile/g, "11km");
+                text = text.replace(/0.50 Mile/g, "800m");
+                text = text.replace(/0.25 Mile/g, "400m");
+                text = text.replace(/0.5 Mile/g, "800m");
+                text = text.replace(/0.15 Mile/g, "250m");
+                text = text.replace(/Miles/g, "km");
+            }
+
+            stepContainer.innerHTML += `
+                <div class="step">
+                    <div class="step-content">
+                        <div class="step-num">${index + 1}</div>
+                        <div class="step-text">${text}</div>
+                    </div>
+                </div>
+            `;
+        });
+
+        const prosList = document.getElementById('modalPros');
+        const consList = document.getElementById('modalCons');
+        prosList.innerHTML = '';
+        consList.innerHTML = '';
+        session.pros.forEach(i => prosList.innerHTML += `<li>${i}</li>`);
+        session.cons.forEach(i => consList.innerHTML += `<li>${i}</li>`);
+
+        document.getElementById('infoModal').style.display = "flex";
+        document.body.style.overflow = 'hidden'; 
+    }
+
+    // --- UTILS ---
+    function setGender(gender, shouldSave = true) {
+        currentGender = gender;
+        document.getElementById('btnMale').className = gender === 'male' ? 'g-btn active' : 'g-btn';
+        document.getElementById('btnFemale').className = gender === 'female' ? 'g-btn active' : 'g-btn';
+        if(timeInput.value.length === 5) calculatePaces();
+        if(shouldSave) saveData();
+    }
+
+    function updateUnitUI() {
+        const btn = document.getElementById('unitBtn');
+        btn.innerText = currentUnit === 'miles' ? 'SWITCH TO KM' : 'SWITCH TO MILES';
+        renderSessions();
+    }
+
+    function toggleUnit() {
+        currentUnit = (currentUnit === 'miles') ? 'km' : 'miles';
+        updateUnitUI();
+        if(timeInput.value.length === 5) calculatePaces();
+        saveData(); 
+    }
+
+    function setFilter(category) {
+        activeFilter = category;
+        const buttons = document.querySelectorAll('.filter-pill');
+        buttons.forEach(btn => {
+            if(btn.innerText.toLowerCase().includes(category.toLowerCase()) || (category === 'all' && btn.innerText.includes('All'))) {
+                btn.classList.add('active');
+            } else {
+                btn.classList.remove('active');
+            }
+        });
+        renderSessions();
+    }
+
+    function closeModal() {
+        document.getElementById('infoModal').style.display = "none";
+        document.body.style.overflow = 'auto'; 
+    }
+
+    function parseTime(timeStr) {
+        if(!timeStr.includes(":")) return 0;
+        const parts = timeStr.split(":");
+        return (parseInt(parts[0]) * 60) + parseInt(parts[1]);
+    }
+
+    function formatTime(totalSeconds) {
+        const m = Math.floor(totalSeconds / 60);
+        const s = Math.round(totalSeconds % 60);
+        return `${m}:${s < 10 ? '0' : ''}${s}`;
+    }
+
+    window.onclick = function(event) {
+        if (event.target == document.getElementById('infoModal')) closeModal();
+    }
+
+    loadData();
+    if(document.getElementById('sessionContainer').innerHTML === "") { renderSessions(); }
+
+</script>
+
+</body>
+</html>
