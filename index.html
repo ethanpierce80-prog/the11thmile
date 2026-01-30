@@ -6,11 +6,7 @@
     <title>The 11th Mile | Elite Training Library</title>
     
     <meta name="theme-color" content="#c0392b">
-    <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="description" content="Elite running session library and pace calculator. Tailored intervals, tempos, and fartleks based on your 5k time.">
-    <meta property="og:title" content="The 11th Mile">
-    <meta property="og:description" content="Calculate your training paces and access elite sessions.">
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🏃</text></svg>">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -18,26 +14,14 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;800;900&display=swap" rel="stylesheet">
 
     <style>
-        /* --- 1. DESIGN SYSTEM --- */
+        /* --- VARIABLES --- */
         :root {
-            --primary: #2D3436; 
-            --accent: #55E6C1; 
-            --bg: #F8FAFB;
-            --white: #FFFFFF;
+            --primary: #2D3436; --accent: #55E6C1; --bg: #F8FAFB; --white: #FFFFFF;
+            --text-dark: #2D3436; --text-light: #636e72;
+            --track-red: #c0392b; --warmup: #27ae60;
+            --col-gold: #f39c12; --col-red: #e74c3c; --col-grey: #95a5a6; --col-teal: #1abc9c;
             
-            --text-dark: #2D3436;
-            --text-light: #636e72;
-            
-            --track-red: #c0392b; 
-            --warmup: #27ae60;
-            
-            /* Category Colors */
-            --col-gold: #f39c12;
-            --col-red: #e74c3c;
-            --col-grey: #95a5a6;
-            --col-teal: #1abc9c;
-            
-            /* Gradients */
+            /* GRADIENTS */
             --grad-gold: linear-gradient(135deg, #f1c40f 0%, #d35400 100%);   
             --grad-red: linear-gradient(135deg, #ff7675 0%, #c0392b 100%);    
             --grad-grey: linear-gradient(135deg, #bdc3c7 0%, #7f8fa6 100%);  
@@ -45,7 +29,7 @@
         }
 
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-        body { font-family: 'Inter', sans-serif; background-color: var(--bg); color: var(--text-dark); margin: 0; line-height: 1.5; overscroll-behavior-y: none; }
+        body { font-family: 'Inter', sans-serif; background-color: var(--bg); color: var(--text-dark); margin: 0; line-height: 1.5; overscroll-behavior: none; }
 
         /* --- HEADER --- */
         header { 
@@ -57,24 +41,20 @@
         .sub-logo { color: rgba(255,255,255,0.9); text-transform: uppercase; letter-spacing: 2px; font-size: 0.75rem; margin-top: 8px; font-weight: 600; }
 
         /* --- LAYOUT --- */
-        .container { max-width: 1200px; margin: 0 auto; padding: 0 20px 60px 20px; }
-        .intro-text { text-align: center; max-width: 800px; margin: 25px auto 30px auto; color: var(--text-light); font-size: 0.95rem; line-height: 1.6; font-weight: 500; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 20px 40px 20px; }
+        .intro-text { text-align: center; max-width: 800px; margin: 25px auto 30px auto; color: var(--text-light); font-size: 0.95rem; line-height: 1.5; font-weight: 500; }
         .dashboard { display: grid; grid-template-columns: 320px 1fr; gap: 40px; align-items: start; }
 
         /* --- SIDEBAR --- */
         .sidebar { background: var(--primary); color: white; padding: 25px; border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.15); position: sticky; top: 20px; z-index: 10; }
         .input-group { margin-bottom: 20px; }
         label { display: block; font-size: 0.75rem; text-transform: uppercase; opacity: 0.8; margin-bottom: 8px; letter-spacing: 1px; color: white; }
-        
         .calc-input { width: 100%; padding: 15px; border-radius: 8px; border: 2px solid rgba(255,255,255,0.2); background: rgba(255,255,255,0.1); color: white; font-weight: bold; font-size: 1.5rem; text-align: center; transition: 0.3s; outline: none; }
         .calc-input:focus { border-color: var(--accent); background: rgba(0,0,0,0.2); }
-        
         .action-btn { width: 100%; background: var(--accent); border: none; color: var(--primary); padding: 12px 15px; border-radius: 30px; font-size: 0.9rem; font-weight: 800; cursor: pointer; transition: 0.2s; text-transform: uppercase; margin-top: 10px; }
-        
         .gender-toggle { display: flex; background: rgba(255,255,255,0.1); border-radius: 8px; padding: 4px; border: 1px solid rgba(255,255,255,0.2); }
         .g-btn { flex: 1; background: transparent; border: none; color: rgba(255,255,255,0.5); font-weight: 700; padding: 8px; cursor: pointer; transition: 0.2s; border-radius: 6px; font-size: 0.8rem; }
         .g-btn.active { background: var(--white); color: var(--primary); }
-        
         .results-box { margin-top: 25px; border-top: 1px solid rgba(255,255,255,0.2); padding-top: 20px; display: none; animation: fadeIn 0.5s ease; }
         .res-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
         .res-label { font-size: 0.75rem; opacity: 0.7; text-transform: uppercase; color:white; }
@@ -86,7 +66,6 @@
         .filter-container { display: flex; gap: 8px; flex-wrap: wrap; flex: 1; }
         .filter-pill { background: white; border: 2px solid #eee; color: var(--text-light); padding: 8px 16px; border-radius: 30px; font-size: 0.75rem; font-weight: 800; cursor: pointer; transition: 0.3s; text-transform: uppercase; letter-spacing: 0.5px; white-space: nowrap; }
         .sort-btn { background: #eee; border: none; padding: 8px 16px; border-radius: 8px; font-size: 0.8rem; font-weight: 700; color: var(--primary); cursor: pointer; display: flex; align-items: center; gap: 5px; }
-        
         .pill-all.active { background: var(--primary); color: var(--accent); border-color: var(--primary); }
         .pill-gold.active { background: var(--col-gold); color: white; border-color: var(--col-gold); }
         .pill-teal.active { background: var(--col-teal); color: white; border-color: var(--col-teal); }
@@ -97,10 +76,7 @@
         .session-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 25px; }
         .session-card { background: var(--white); border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.04); cursor: pointer; transition: all 0.3s ease; overflow: hidden; display: flex; flex-direction: column; text-decoration: none; border: 1px solid transparent; }
         .card-header { padding: 25px; min-height: 120px; display: flex; flex-direction: column; justify-content: flex-end; position: relative; }
-        
-        .grad-gold { background: var(--grad-gold); } .grad-red { background: var(--grad-red); } 
-        .grad-grey { background: var(--grad-grey); } .grad-teal { background: var(--grad-teal); }
-        
+        .grad-gold { background: var(--grad-gold); } .grad-red { background: var(--grad-red); } .grad-grey { background: var(--grad-grey); } .grad-teal { background: var(--grad-teal); }
         .tag { position: absolute; top: 20px; left: 20px; font-size: 0.65rem; font-weight: 800; text-transform: uppercase; background: rgba(0,0,0,0.2); color: white; padding: 5px 12px; border-radius: 20px; backdrop-filter: blur(5px); }
         .card-title { color: white; margin: 0; font-size: 1.3rem; font-weight: 800; line-height: 1.2; text-shadow: 0 2px 10px rgba(0,0,0,0.1); }
         .card-body { padding: 25px; flex-grow: 1; }
@@ -112,38 +88,49 @@
 
         /* --- MODAL --- */
         .modal { display: none; position: fixed; z-index: 2000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(45, 52, 54, 0.9); backdrop-filter: blur(5px); padding: 0; align-items: flex-end; justify-content: center; }
-        .modal-content { background-color: var(--white); width: 100%; max-width: 800px; height: 90vh; border-top-left-radius: 20px; border-top-right-radius: 20px; box-shadow: 0 -10px 40px rgba(0,0,0,0.3); display: flex; flex-direction: column; position: relative; animation: slideUp 0.3s ease; }
-        @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+        .modal-content { 
+            background-color: var(--white); width: 100%; max-width: 800px; 
+            height: 90vh; /* Default height */
+            border-top-left-radius: 20px; border-top-right-radius: 20px; 
+            box-shadow: 0 -10px 40px rgba(0,0,0,0.3); display: flex; flex-direction: column; 
+            position: relative; animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            transform: translateY(0); /* Start state for drag */
+        }
         
-        .drag-handle { width: 50px; height: 5px; background: #dfe6e9; border-radius: 5px; margin: 15px auto 5px auto; flex-shrink: 0; }
-        .modal-header { padding: 20px 30px; border-bottom: 1px solid #eee; flex-shrink: 0; position: relative; }
+        @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+
+        /* Header is the drag zone */
+        .modal-header { padding: 20px 30px; border-bottom: 1px solid #eee; flex-shrink: 0; position: relative; cursor: grab; }
+        .modal-header:active { cursor: grabbing; }
+        
+        .drag-handle { width: 50px; height: 5px; background: #dfe6e9; border-radius: 5px; margin: 0 auto 15px auto; flex-shrink: 0; }
         .close-btn { position: absolute; top: 20px; right: 20px; font-size: 1.5rem; cursor: pointer; color: var(--text-light); background: #eee; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; transition: 0.2s; }
+        
         .modal-body { padding: 30px; overflow-y: auto; -webkit-overflow-scrolling: touch; flex-grow: 1; padding-bottom: 100px; }
 
-        /* --- STEPS DESIGN --- */
+        /* --- STEPS --- */
         .step-block { border: 1px solid #eee; border-radius: 12px; overflow: hidden; margin-bottom: 15px; box-shadow: 0 2px 8px rgba(0,0,0,0.03); }
-        
-        /* The Run */
         .run-segment { background: white; padding: 18px 20px; display: flex; align-items: center; gap: 15px; }
         .step-num { background: var(--primary); color: white; width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 0.8rem; flex-shrink: 0; }
         .step-text { font-weight: 700; color: var(--text-dark); font-size: 1rem; line-height: 1.4; }
         
-        /* The Recovery */
+        /* Revised Recovery Segment */
         .rec-segment { background: #f1f2f6; padding: 10px 20px; border-top: 1px solid #eee; color: #636e72; font-size: 0.8rem; font-weight: 700; display: flex; align-items: center; gap: 8px; text-transform: uppercase; letter-spacing: 0.5px; }
         .rec-label { color: var(--primary); font-weight: 900; font-size: 0.7rem; padding: 2px 6px; border-radius: 4px; background: #dfe6e9; margin-right: 5px; }
         
-        /* Special Blocks */
+        /* Set Recovery Separator */
         .set-recovery-block { background: #fff0f0; border: 1px dashed var(--track-red); border-radius: 8px; padding: 15px; margin-bottom: 15px; text-align: center; color: var(--track-red); font-weight: 800; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px; }
+        
         .step-block.warmup .step-num { background-color: var(--warmup); }
         .step-block.warmup .run-segment { background-color: rgba(39, 174, 96, 0.05); }
         .pace-highlight { color: var(--track-red); font-weight: 800; background: rgba(231, 76, 60, 0.1); padding: 2px 6px; border-radius: 4px; margin-left: 5px; white-space: nowrap; }
 
-        /* Purpose Box */
+        /* PURPOSE BOX */
         .purpose-box { margin-top: 40px; padding-top: 30px; border-top: 1px solid #eee; }
         .purpose-header { text-transform: uppercase; font-size: 0.7rem; color: #b2bec3; font-weight: 800; letter-spacing: 1px; margin-bottom: 10px; }
         .purpose-text { font-size: 0.95rem; line-height: 1.6; color: var(--text-dark); background: #F8FAFB; padding: 20px; border-radius: 12px; border: 1px solid #eee; }
 
-        /* Footer */
+        /* FOOTER */
         .modal-footer { padding: 20px; background: white; border-top: 1px solid #eee; position: absolute; bottom: 0; left: 0; width: 100%; }
         .big-close-btn { width: 100%; background: var(--primary); color: white; border: none; padding: 15px; border-radius: 12px; font-size: 1rem; font-weight: 800; text-transform: uppercase; }
 
@@ -152,7 +139,6 @@
         .pc-col ul { padding-left: 18px; color: var(--text-dark); font-size: 0.9rem; margin: 0; }
         .pc-col li { margin-bottom: 6px; }
 
-        /* Responsive */
         @media (max-width: 800px) {
             .dashboard { grid-template-columns: 1fr; gap: 30px; }
             .sidebar { position: relative; top: 0; z-index: 1; }
@@ -165,6 +151,7 @@
             .modal-footer { position: static; }
             .modal-body { padding-bottom: 30px; }
         }
+
         @media (hover: hover) {
             .session-card:hover { transform: translateY(-5px); box-shadow: 0 15px 30px rgba(0,0,0,0.1); border-color: var(--accent); }
             .action-btn:hover { opacity: 0.9; transform: translateY(-2px); }
@@ -238,8 +225,8 @@
 
 <div id="infoModal" class="modal">
     <div id="modalContent" class="modal-content">
-        <div class="drag-handle"></div>
         <div class="modal-header">
+            <div class="drag-handle"></div>
             <div class="close-btn" onclick="closeModal()">&times;</div>
             <span style="font-size:0.7rem; font-weight:800; color:#b2bec3; text-transform:uppercase;">Session Detail</span>
             <h2 id="modalTitle" style="margin:5px 0 0 0; color:var(--primary);">Title</h2>
@@ -311,7 +298,7 @@
         
         { id: 19, title: "3 & 3 Mile Broken Tempo", simple: "3 Miles / 3 Miles", category: "Tempo", bgClass: "grad-teal", diffColor: "#16a085", difficulty: "Hard", distanceVal: 12, summary: "Two 3-mile blocks.", purpose: "High volume quality. Breaking the tempo into two blocks allows you to reset mentally and physically, enabling you to run a higher total volume at tempo pace than you could continuously.", steps: ["1 Mile Warm Up @ [WARMUP]", "3 Miles @ [TEMPO]", "[RECOVERY: 5 mins walk/jog]", "3 Miles @ [TEMPO]", "1 Mile Cool Down @ [WARMUP]"], steps_km: ["2km Warm Up @ [WARMUP]", "5km @ [TEMPO]", "[RECOVERY: 5 mins walk/jog]", "5km @ [TEMPO]", "2km Cool Down @ [WARMUP]"], pros: ["Psychologically easier than continuous", "High quality"], cons: ["Long session"] },
         
-        { id: 20, title: "10 Mile Alternating Tempo", simple: "1 Fast / 1 Float x 5", category: "Tempo", bgClass: "grad-teal", diffColor: "#16a085", difficulty: "Very Hard", distanceVal: 16, summary: "Alternating miles of Tempo/Float.", purpose: "Specific endurance. This is an elite marathon workout. You never fully rest; you just float. This teaches your body to recover while running at a moderate pace.", steps: ["1 Mile Warm Up @ [WARMUP]", "1 Mile @ [TEMPO]", "1 Mile @ [FLOAT]", "1 Mile @ [TEMPO]", "1 Mile @ [FLOAT]", "1 Mile @ [TEMPO]", "1 Mile @ [FLOAT]", "1 Mile @ [TEMPO]", "1 Mile @ [FLOAT]", "1 Mile @ [TEMPO]", "1 Mile @ [FLOAT]", "1 Mile Cool Down @ [WARMUP]"], steps_km: ["2km Warm Up @ [WARMUP]", "1km @ [TEMPO]", "1km @ [FLOAT]", "1km @ [TEMPO]", "1km @ [FLOAT]", "1km @ [TEMPO]", "1km @ [FLOAT]", "1km @ [TEMPO]", "1km @ [FLOAT]", "1km @ [TEMPO]", "1km @ [FLOAT]", "1km @ [TEMPO]", "1km @ [FLOAT]", "1km @ [TEMPO]", "1km @ [FLOAT]", "1km @ [TEMPO]", "1km @ [FLOAT]", "2km Cool Down @ [WARMUP]"], pros: ["Elite fitness"], cons: ["Brutal session"] },
+        { id: 20, title: "10 Mile Alternating Tempo", simple: "1 Fast / 1 Float x 5", category: "Tempo", bgClass: "grad-teal", diffColor: "#16a085", difficulty: "Very Hard", distanceVal: 16, summary: "Alternating miles of Tempo/Float.", purpose: "Specific endurance. This is an elite marathon workout. You never fully rest; you just float. This teaches your body to recover while running at a moderate pace.", steps: ["1 Mile Warm Up @ [WARMUP]", "1 Mile @ [TEMPO]", "1 Mile @ [FLOAT]", "1 Mile @ [TEMPO]", "1 Mile @ [FLOAT]", "1 Mile @ [TEMPO]", "1 Mile @ [FLOAT]", "1 Mile @ [TEMPO]", "1 Mile @ [FLOAT]", "1 Mile @ [TEMPO]", "1 Mile @ [FLOAT]", "1 Mile Cool Down @ [WARMUP]"], steps_km: ["2km Warm Up @ [WARMUP]", "1km @ [TEMPO]", "1km @ [FLOAT]", "1km @ [TEMPO]", "1km @ [FLOAT]", "1km @ [TEMPO]", "1km @ [FLOAT]", "1km @ [TEMPO]", "1km @ [FLOAT]", "1km @ [TEMPO]", "1km @ [FLOAT]", "1km @ [TEMPO]", "1km @ [FLOAT]", "1km @ [TEMPO]", "1km @ [FLOAT]", "2km Cool Down @ [WARMUP]"], pros: ["Elite fitness"], cons: ["Brutal session"] },
         
         { id: 21, title: "1 Mile & 10x60s Fartlek", simple: "1 Mile / 10 x 60s", category: "Fartlek", bgClass: "grad-grey", diffColor: "#7f8fa6", difficulty: "Hard", distanceVal: 9, summary: "Mile tempo + 60s reps.", purpose: "Aerobic into speed. You fatigue the legs with a sustained tempo run, then force them to turnover quickly with short fartlek reps.", steps: ["1 Mile Warm Up @ [WARMUP]", "1 Mile @ [TEMPO]", "[SET RECOVERY: End of Set - 3 Mins Jog]", "10 x 60s @ [TEMPO] (Rec: 60s Jog Between Reps)", "1 Mile Cool Down @ [WARMUP]"], steps_km: ["2km Warm Up @ [WARMUP]", "1.6km @ [TEMPO]", "[SET RECOVERY: End of Set - 3 Mins Jog]", "10 x 60s @ [TEMPO] (Rec: 60s Jog Between Reps)", "2km Cool Down @ [WARMUP]"], pros: ["Good mix of speeds", "Not too long"], cons: ["Hard to control pace on short reps"] },
         
@@ -461,10 +448,12 @@
                 runText = runText.replace(/\[.*?\]/g, " ... ");
             }
 
+            // Unit conversions if relying on default array but in KM mode
             if(currentUnit === 'km' && !session.steps_km) {
                 runText = runText.replace(/3.1 Miles/g, "5km").replace(/1 Mile/g, "1.6km").replace(/0.50 Mile/g, "800m").replace(/0.25 Mile/g, "400m").replace(/0.5 Mile/g, "800m").replace(/0.15 Mile/g, "250m").replace(/Miles/g, "km");
             }
 
+            // Build HTML
             let html = ``;
             
             if(extraClass === "set-recovery") {
@@ -499,12 +488,38 @@
         session.pros.forEach(i => prosList.innerHTML += `<li>${i}</li>`);
         session.cons.forEach(i => consList.innerHTML += `<li>${i}</li>`);
 
+        // Mobile swipe logic
         const modalContent = document.getElementById('modalContent');
         let touchStartY = 0;
-        modalContent.addEventListener('touchstart', e => { touchStartY = e.touches[0].clientY; });
-        modalContent.addEventListener('touchend', e => {
-            let touchEndY = e.changedTouches[0].clientY;
-            if(touchEndY - touchStartY > 100) closeModal(); 
+        const modalHeader = document.querySelector('.modal-header'); // Drag via header
+
+        modalHeader.addEventListener('touchstart', e => { 
+            touchStartY = e.touches[0].clientY; 
+            modalContent.style.transition = 'none'; // Follow finger
+        });
+        
+        document.addEventListener('touchmove', e => {
+            if(!touchStartY) return;
+            const y = e.touches[0].clientY;
+            const diff = y - touchStartY;
+            if(diff > 0) { // Dragging down
+                e.preventDefault(); 
+                modalContent.style.transform = `translateY(${diff}px)`;
+            }
+        }, { passive: false });
+
+        document.addEventListener('touchend', e => {
+            if(!touchStartY) return;
+            const y = e.changedTouches[0].clientY;
+            const diff = y - touchStartY;
+            
+            modalContent.style.transition = 'transform 0.3s cubic-bezier(0.16, 1, 0.3, 1)';
+            if(diff > 100) {
+                closeModal();
+            } else {
+                modalContent.style.transform = `translateY(0)`;
+            }
+            touchStartY = 0;
         });
 
         document.getElementById('infoModal').style.display = "flex";
@@ -557,14 +572,27 @@
         renderSessions();
     }
 
-    function closeModal() { document.getElementById('infoModal').style.display = "none"; document.body.style.overflow = 'auto'; }
+    function closeModal() { 
+        const modal = document.getElementById('infoModal');
+        const content = document.getElementById('modalContent');
+        content.style.transform = 'translateY(100%)';
+        setTimeout(() => {
+            modal.style.display = "none"; 
+            document.body.style.overflow = 'auto'; 
+            content.style.transform = 'translateY(0)'; // Reset for next open
+        }, 300);
+    }
+    
     function parseTime(timeStr) { if(!timeStr.includes(":")) return 0; const parts = timeStr.split(":"); return (parseInt(parts[0]) * 60) + parseInt(parts[1]); }
     function formatTime(totalSeconds) { const m = Math.floor(totalSeconds / 60); const s = Math.round(totalSeconds % 60); return `${m}:${s < 10 ? '0' : ''}${s}`; }
-    window.onload = function(event) { 
-        if (event.target == document.getElementById('infoModal')) closeModal(); 
-        loadData(); // Ensure data loads on window load
-        if(document.getElementById('sessionContainer').innerHTML === "") { renderSessions(); }
-    }
+    
+    // Close on background click
+    document.getElementById('infoModal').addEventListener('click', function(e) {
+        if(e.target === this) closeModal();
+    });
+
+    loadData();
+    if(document.getElementById('sessionContainer').innerHTML === "") { renderSessions(); }
 
 </script>
 
