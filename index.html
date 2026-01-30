@@ -6,19 +6,19 @@
     <title>The 11th Mile | Elite Training Library</title>
     
     <meta name="theme-color" content="#c0392b">
+    <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="description" content="Elite running session library and pace calculator.">
+    <meta name="description" content="Elite running session library and pace calculator. Tailored intervals, tempos, and fartleks based on your 5k time.">
     <meta property="og:title" content="The 11th Mile">
     <meta property="og:description" content="Calculate your training paces and access elite sessions.">
-    
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🏃</text></svg>">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;800;900&display=swap" rel="stylesheet">
 
     <style>
-        /* --- VARIABLES --- */
+        /* --- 1. DESIGN SYSTEM --- */
         :root {
             --primary: #2D3436; 
             --accent: #55E6C1; 
@@ -31,13 +31,13 @@
             --track-red: #c0392b; 
             --warmup: #27ae60;
             
-            /* FILTER COLORS */
+            /* Category Colors */
             --col-gold: #f39c12;
             --col-red: #e74c3c;
             --col-grey: #95a5a6;
             --col-teal: #1abc9c;
             
-            /* GRADIENTS */
+            /* Gradients */
             --grad-gold: linear-gradient(135deg, #f1c40f 0%, #d35400 100%);   
             --grad-red: linear-gradient(135deg, #ff7675 0%, #c0392b 100%);    
             --grad-grey: linear-gradient(135deg, #bdc3c7 0%, #7f8fa6 100%);  
@@ -45,102 +45,48 @@
         }
 
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-
-        body { 
-            font-family: 'Inter', sans-serif; 
-            background-color: var(--bg); 
-            color: var(--text-dark); 
-            margin: 0; 
-            line-height: 1.5;
-        }
+        body { font-family: 'Inter', sans-serif; background-color: var(--bg); color: var(--text-dark); margin: 0; line-height: 1.5; overscroll-behavior-y: none; }
 
         /* --- HEADER --- */
         header { 
             background-color: var(--track-red);
-            background-image: repeating-linear-gradient(
-                0deg, transparent, transparent 19px, rgba(255,255,255,0.4) 20px
-            );
-            padding: 40px 20px 20px 20px; 
-            text-align: center; 
-            border-bottom: 4px solid white;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            background-image: repeating-linear-gradient(0deg, transparent, transparent 19px, rgba(255,255,255,0.4) 20px);
+            padding: 40px 20px 20px 20px; text-align: center; border-bottom: 4px solid white; box-shadow: 0 4px 15px rgba(0,0,0,0.1);
         }
-
-        .logo { 
-            font-size: 2.2rem; font-weight: 900; letter-spacing: -1px; margin: 0; line-height: 1; 
-            color: white; display:block; text-transform: uppercase; text-shadow: 0 2px 4px rgba(0,0,0,0.2);
-        }
-        
-        .sub-logo { 
-            color: rgba(255,255,255,0.9); text-transform: uppercase; letter-spacing: 2px; 
-            font-size: 0.75rem; margin-top: 8px; font-weight: 600;
-        }
+        .logo { font-size: 2.2rem; font-weight: 900; letter-spacing: -1px; margin: 0; line-height: 1; color: white; display:block; text-transform: uppercase; text-shadow: 0 2px 4px rgba(0,0,0,0.2); }
+        .sub-logo { color: rgba(255,255,255,0.9); text-transform: uppercase; letter-spacing: 2px; font-size: 0.75rem; margin-top: 8px; font-weight: 600; }
 
         /* --- LAYOUT --- */
-        .container { max-width: 1200px; margin: 0 auto; padding: 0 20px 40px 20px; }
-
-        .intro-text {
-            text-align: center; max-width: 800px; margin: 30px auto 40px auto;
-            color: var(--text-light); font-size: 0.95rem; line-height: 1.6; font-weight: 500;
-        }
-
-        .dashboard { 
-            display: grid; grid-template-columns: 320px 1fr; gap: 40px; align-items: start;
-        }
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 20px 60px 20px; }
+        .intro-text { text-align: center; max-width: 800px; margin: 25px auto 30px auto; color: var(--text-light); font-size: 0.95rem; line-height: 1.6; font-weight: 500; }
+        .dashboard { display: grid; grid-template-columns: 320px 1fr; gap: 40px; align-items: start; }
 
         /* --- SIDEBAR --- */
-        .sidebar {
-            background: var(--primary); color: white; padding: 25px;
-            border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.15);
-            position: sticky; top: 20px; z-index: 10;
-        }
-
+        .sidebar { background: var(--primary); color: white; padding: 25px; border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.15); position: sticky; top: 20px; z-index: 10; }
         .input-group { margin-bottom: 20px; }
         label { display: block; font-size: 0.75rem; text-transform: uppercase; opacity: 0.8; margin-bottom: 8px; letter-spacing: 1px; color: white; }
-
-        .calc-input {
-            width: 100%; padding: 15px; border-radius: 8px; 
-            border: 2px solid rgba(255,255,255,0.2); background: rgba(255,255,255,0.1); 
-            color: white; font-weight: bold; font-size: 1.5rem; text-align: center; 
-            transition: 0.3s; outline: none;
-        }
-        .calc-input:focus { border-color: var(--accent); background: rgba(0,0,0,0.2); }
-
-        .action-btn {
-            width: 100%; background: var(--accent); border: none; color: var(--primary); 
-            padding: 12px 15px; border-radius: 30px; font-size: 0.9rem; font-weight: 800; 
-            cursor: pointer; transition: 0.2s; text-transform: uppercase; margin-top: 10px;
-        }
         
-        .gender-toggle {
-            display: flex; background: rgba(255,255,255,0.1); border-radius: 8px; 
-            padding: 4px; border: 1px solid rgba(255,255,255,0.2);
-        }
-
-        .g-btn {
-            flex: 1; background: transparent; border: none; color: rgba(255,255,255,0.5); 
-            font-weight: 700; padding: 8px; cursor: pointer; transition: 0.2s; 
-            border-radius: 6px; font-size: 0.8rem;
-        }
+        .calc-input { width: 100%; padding: 15px; border-radius: 8px; border: 2px solid rgba(255,255,255,0.2); background: rgba(255,255,255,0.1); color: white; font-weight: bold; font-size: 1.5rem; text-align: center; transition: 0.3s; outline: none; }
+        .calc-input:focus { border-color: var(--accent); background: rgba(0,0,0,0.2); }
+        
+        .action-btn { width: 100%; background: var(--accent); border: none; color: var(--primary); padding: 12px 15px; border-radius: 30px; font-size: 0.9rem; font-weight: 800; cursor: pointer; transition: 0.2s; text-transform: uppercase; margin-top: 10px; }
+        
+        .gender-toggle { display: flex; background: rgba(255,255,255,0.1); border-radius: 8px; padding: 4px; border: 1px solid rgba(255,255,255,0.2); }
+        .g-btn { flex: 1; background: transparent; border: none; color: rgba(255,255,255,0.5); font-weight: 700; padding: 8px; cursor: pointer; transition: 0.2s; border-radius: 6px; font-size: 0.8rem; }
         .g-btn.active { background: var(--white); color: var(--primary); }
-
-        .results-box {
-            margin-top: 25px; border-top: 1px solid rgba(255,255,255,0.2); 
-            padding-top: 20px; display: none; animation: fadeIn 0.5s ease;
-        }
-
+        
+        .results-box { margin-top: 25px; border-top: 1px solid rgba(255,255,255,0.2); padding-top: 20px; display: none; animation: fadeIn 0.5s ease; }
         .res-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
         .res-label { font-size: 0.75rem; opacity: 0.7; text-transform: uppercase; color:white; }
         .res-val { font-size: 1.1rem; font-weight: 900; color: var(--accent); }
         .tier-badge { background: rgba(255,255,255,0.1); color: white; text-align: center; padding: 8px; border-radius: 6px; font-weight: 900; text-transform: uppercase; letter-spacing: 1px; font-size: 0.9rem; margin-bottom: 20px; }
 
-        /* --- FILTERS --- */
-        .filter-container { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 30px; }
-        .filter-pill {
-            background: white; border: 2px solid #eee; color: var(--text-light); 
-            padding: 10px 18px; border-radius: 30px; font-size: 0.8rem; font-weight: 800; 
-            cursor: pointer; transition: 0.3s; text-transform: uppercase; letter-spacing: 0.5px;
-        }
+        /* --- FILTERS & SORT --- */
+        .filter-area { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 30px; align-items: center; justify-content: space-between; }
+        .filter-container { display: flex; gap: 8px; flex-wrap: wrap; flex: 1; }
+        .filter-pill { background: white; border: 2px solid #eee; color: var(--text-light); padding: 8px 16px; border-radius: 30px; font-size: 0.75rem; font-weight: 800; cursor: pointer; transition: 0.3s; text-transform: uppercase; letter-spacing: 0.5px; white-space: nowrap; }
+        .sort-btn { background: #eee; border: none; padding: 8px 16px; border-radius: 8px; font-size: 0.8rem; font-weight: 700; color: var(--primary); cursor: pointer; display: flex; align-items: center; gap: 5px; }
+        
         .pill-all.active { background: var(--primary); color: var(--accent); border-color: var(--primary); }
         .pill-gold.active { background: var(--col-gold); color: white; border-color: var(--col-gold); }
         .pill-teal.active { background: var(--col-teal); color: white; border-color: var(--col-teal); }
@@ -149,15 +95,12 @@
 
         /* --- CARDS --- */
         .session-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 25px; }
-        .session-card {
-            background: var(--white); border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.04); 
-            cursor: pointer; transition: all 0.3s ease; overflow: hidden; display: flex; 
-            flex-direction: column; text-decoration: none; border: 1px solid transparent;
-        }
-        
+        .session-card { background: var(--white); border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.04); cursor: pointer; transition: all 0.3s ease; overflow: hidden; display: flex; flex-direction: column; text-decoration: none; border: 1px solid transparent; }
         .card-header { padding: 25px; min-height: 120px; display: flex; flex-direction: column; justify-content: flex-end; position: relative; }
-        .grad-gold { background: var(--grad-gold); } .grad-red { background: var(--grad-red); }
+        
+        .grad-gold { background: var(--grad-gold); } .grad-red { background: var(--grad-red); } 
         .grad-grey { background: var(--grad-grey); } .grad-teal { background: var(--grad-teal); }
+        
         .tag { position: absolute; top: 20px; left: 20px; font-size: 0.65rem; font-weight: 800; text-transform: uppercase; background: rgba(0,0,0,0.2); color: white; padding: 5px 12px; border-radius: 20px; backdrop-filter: blur(5px); }
         .card-title { color: white; margin: 0; font-size: 1.3rem; font-weight: 800; line-height: 1.2; text-shadow: 0 2px 10px rgba(0,0,0,0.1); }
         .card-body { padding: 25px; flex-grow: 1; }
@@ -168,43 +111,64 @@
         .no-results { grid-column: 1 / -1; text-align: center; padding: 40px; color: var(--text-light); font-style: italic; }
 
         /* --- MODAL --- */
-        .modal { display: none; position: fixed; z-index: 2000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(45, 52, 54, 0.85); backdrop-filter: blur(5px); padding: 10px; align-items: center; justify-content: center; }
-        .modal-content { background-color: var(--white); border-radius: 16px; width: 100%; max-width: 800px; max-height: 85vh; box-shadow: 0 25px 50px rgba(0,0,0,0.25); display: flex; flex-direction: column; animation: slideUp 0.3s ease; }
-        @keyframes slideUp { from { transform: translateY(40px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
-        .modal-header { padding: 25px; border-bottom: 1px solid #eee; flex-shrink: 0; }
-        .close-btn { position: absolute; top: 20px; right: 20px; font-size: 1.5rem; cursor: pointer; color: var(--text-light); background: var(--bg); width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; transition: 0.2s; }
+        .modal { display: none; position: fixed; z-index: 2000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(45, 52, 54, 0.9); backdrop-filter: blur(5px); padding: 0; align-items: flex-end; justify-content: center; }
+        .modal-content { background-color: var(--white); width: 100%; max-width: 800px; height: 90vh; border-top-left-radius: 20px; border-top-right-radius: 20px; box-shadow: 0 -10px 40px rgba(0,0,0,0.3); display: flex; flex-direction: column; position: relative; animation: slideUp 0.3s ease; }
+        @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
         
-        .modal-body { padding: 25px; overflow-y: auto; -webkit-overflow-scrolling: touch; }
+        .drag-handle { width: 50px; height: 5px; background: #dfe6e9; border-radius: 5px; margin: 15px auto 5px auto; flex-shrink: 0; }
+        .modal-header { padding: 20px 30px; border-bottom: 1px solid #eee; flex-shrink: 0; position: relative; }
+        .close-btn { position: absolute; top: 20px; right: 20px; font-size: 1.5rem; cursor: pointer; color: var(--text-light); background: #eee; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; transition: 0.2s; }
+        .modal-body { padding: 30px; overflow-y: auto; -webkit-overflow-scrolling: touch; flex-grow: 1; padding-bottom: 100px; }
+
+        /* --- STEPS DESIGN --- */
+        .step-block { border: 1px solid #eee; border-radius: 12px; overflow: hidden; margin-bottom: 15px; box-shadow: 0 2px 8px rgba(0,0,0,0.03); }
         
-        .step { background: var(--bg); border: 1px solid #eee; border-left: 4px solid var(--accent); border-radius: 8px; padding: 15px; margin-bottom: 12px; display: flex; gap: 15px; align-items: center; justify-content: space-between; }
-        
-        /* HIGHLIGHTS */
-        .step.step-warmup { border-left-color: var(--warmup); background-color: rgba(39, 174, 96, 0.05); }
-        .step.step-warmup .step-num { background-color: var(--warmup); }
-        .step.set-recovery { border-left-color: var(--track-red); background: #fff0f0; }
-        .step-content { display: flex; align-items: center; gap: 15px; flex-grow: 1; }
+        /* The Run */
+        .run-segment { background: white; padding: 18px 20px; display: flex; align-items: center; gap: 15px; }
         .step-num { background: var(--primary); color: white; width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 0.8rem; flex-shrink: 0; }
-        .step-text { font-weight: 600; color: var(--text-dark); font-size: 0.9rem; }
+        .step-text { font-weight: 700; color: var(--text-dark); font-size: 1rem; line-height: 1.4; }
+        
+        /* The Recovery */
+        .rec-segment { background: #f1f2f6; padding: 10px 20px; border-top: 1px solid #eee; color: #636e72; font-size: 0.8rem; font-weight: 700; display: flex; align-items: center; gap: 8px; text-transform: uppercase; letter-spacing: 0.5px; }
+        .rec-label { color: var(--primary); font-weight: 900; font-size: 0.7rem; padding: 2px 6px; border-radius: 4px; background: #dfe6e9; margin-right: 5px; }
+        
+        /* Special Blocks */
+        .set-recovery-block { background: #fff0f0; border: 1px dashed var(--track-red); border-radius: 8px; padding: 15px; margin-bottom: 15px; text-align: center; color: var(--track-red); font-weight: 800; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px; }
+        .step-block.warmup .step-num { background-color: var(--warmup); }
+        .step-block.warmup .run-segment { background-color: rgba(39, 174, 96, 0.05); }
         .pace-highlight { color: var(--track-red); font-weight: 800; background: rgba(231, 76, 60, 0.1); padding: 2px 6px; border-radius: 4px; margin-left: 5px; white-space: nowrap; }
+
+        /* Purpose Box */
+        .purpose-box { margin-top: 40px; padding-top: 30px; border-top: 1px solid #eee; }
+        .purpose-header { text-transform: uppercase; font-size: 0.7rem; color: #b2bec3; font-weight: 800; letter-spacing: 1px; margin-bottom: 10px; }
+        .purpose-text { font-size: 0.95rem; line-height: 1.6; color: var(--text-dark); background: #F8FAFB; padding: 20px; border-radius: 12px; border: 1px solid #eee; }
+
+        /* Footer */
+        .modal-footer { padding: 20px; background: white; border-top: 1px solid #eee; position: absolute; bottom: 0; left: 0; width: 100%; }
+        .big-close-btn { width: 100%; background: var(--primary); color: white; border: none; padding: 15px; border-radius: 12px; font-size: 1rem; font-weight: 800; text-transform: uppercase; }
+
         .pro-con-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 30px; }
         .pc-col h4 { margin: 0 0 10px 0; border-bottom: 2px solid #eee; padding-bottom: 8px; font-size: 0.8rem; text-transform: uppercase; color: var(--text-light); }
         .pc-col ul { padding-left: 18px; color: var(--text-dark); font-size: 0.9rem; margin: 0; }
         .pc-col li { margin-bottom: 6px; }
 
-        /* --- MOBILE OPTIMIZATION --- */
+        /* Responsive */
         @media (max-width: 800px) {
             .dashboard { grid-template-columns: 1fr; gap: 30px; }
             .sidebar { position: relative; top: 0; z-index: 1; }
-            .pro-con-grid { grid-template-columns: 1fr; gap: 20px; }
-            .modal-content { max-height: 90vh; }
+            .modal { align-items: flex-end; }
+            .modal-content { height: 85vh; border-radius: 20px 20px 0 0; }
         }
-
-        /* --- HOVER EFFECTS (DESKTOP ONLY) --- */
+        @media (min-width: 801px) {
+            .modal { align-items: center; }
+            .modal-content { height: auto; max-height: 85vh; border-radius: 16px; }
+            .modal-footer { position: static; }
+            .modal-body { padding-bottom: 30px; }
+        }
         @media (hover: hover) {
             .session-card:hover { transform: translateY(-5px); box-shadow: 0 15px 30px rgba(0,0,0,0.1); border-color: var(--accent); }
             .action-btn:hover { opacity: 0.9; transform: translateY(-2px); }
             .filter-pill:hover { transform: translateY(-2px); }
-            .close-btn:hover { background: var(--primary); color: var(--accent); }
         }
         .session-card:active { transform: scale(0.98); transition: 0.1s; }
     </style>
@@ -253,13 +217,19 @@
         </div>
 
         <div class="main-content">
-            <div class="filter-container">
-                <button class="filter-pill pill-all active" onclick="setFilter('all')">All Sessions</button>
-                <button class="filter-pill pill-gold" onclick="setFilter('Time Trial')">Time Trial</button>
-                <button class="filter-pill pill-teal" onclick="setFilter('Tempo')">Tempo</button>
-                <button class="filter-pill pill-red" onclick="setFilter('Interval')">Interval</button>
-                <button class="filter-pill pill-grey" onclick="setFilter('Fartlek')">Fartlek</button>
+            <div class="filter-area">
+                <div class="filter-container">
+                    <button class="filter-pill pill-all active" onclick="setFilter('all')">All</button>
+                    <button class="filter-pill pill-gold" onclick="setFilter('Time Trial')">Time Trial</button>
+                    <button class="filter-pill pill-teal" onclick="setFilter('Tempo')">Tempo</button>
+                    <button class="filter-pill pill-red" onclick="setFilter('Interval')">Interval</button>
+                    <button class="filter-pill pill-grey" onclick="setFilter('Fartlek')">Fartlek</button>
+                </div>
+                <button class="sort-btn" onclick="toggleSort()">
+                    <span id="sortIcon">↕</span> <span id="sortText">Sort</span>
+                </button>
             </div>
+            
             <div id="sessionContainer" class="session-grid"></div>
         </div>
 
@@ -268,243 +238,99 @@
 
 <div id="infoModal" class="modal">
     <div id="modalContent" class="modal-content">
+        <div class="drag-handle"></div>
         <div class="modal-header">
             <div class="close-btn" onclick="closeModal()">&times;</div>
             <span style="font-size:0.7rem; font-weight:800; color:#b2bec3; text-transform:uppercase;">Session Detail</span>
             <h2 id="modalTitle" style="margin:5px 0 0 0; color:var(--primary);">Title</h2>
+            <div id="modalSimple" style="font-size:0.85rem; color:#636e72; margin-top:5px; font-weight:500;"></div>
         </div>
         <div class="modal-body">
-            <div style="background:#F8FAFB; padding:15px; border-radius:8px; margin-bottom:25px; border:1px solid #eee;">
-                <strong style="text-transform:uppercase; font-size:0.7rem; color:#b2bec3;">Purpose</strong>
-                <div id="modalPurpose" style="margin-top:5px; font-weight:600; color:var(--primary);"></div>
-            </div>
             <h4 style="margin:0 0 15px 0; text-transform:uppercase; color:#b2bec3; font-size:0.8rem;">The Workout</h4>
             <div id="modalSteps"></div>
+            
+            <div class="purpose-box">
+                <div class="purpose-header">Session Purpose & Deep Dive</div>
+                <div class="purpose-text" id="modalPurpose"></div>
+            </div>
+
             <div class="pro-con-grid">
                 <div class="pc-col"><h4>Pros</h4><ul id="modalPros"></ul></div>
                 <div class="pc-col"><h4>Cons</h4><ul id="modalCons"></ul></div>
             </div>
+        </div>
+        <div class="modal-footer">
+            <button class="big-close-btn" onclick="closeModal()">Close Session</button>
         </div>
     </div>
 </div>
 
 <script>
     let currentUnit = 'miles'; let currentGender = 'male'; let activeFilter = 'all';
+    let sortMode = 0; 
     let pEasy=0, pTempo=0, pInterval=0, pFloat=0, pThreshold=0, pRecovery=0, pWarmUp=0;
     let prog1=0, prog2=0, prog3=0, prog4=0, prog5=0; 
 
     // --- SESSION DATA ---
     const sessions = [
-        {
-            id: 1, title: "5k Time Trial", category: "Time Trial", bgClass: "grad-gold", diffColor: "#d35400", difficulty: "Max Effort",
-            summary: "3.1 Mile Time Trial // 90-95% Intensity",
-            purpose: "To establish a baseline fitness level and predict future race times.",
-            steps: ["1 Mile Warm Up @ [WARMUP] (Includes Drills)", "3.1 Miles @ [MAX_EFFORT]", "1 Mile Cool Down @ [WARMUP]"],
-            steps_km: ["2km Warm Up @ [WARMUP]", "5km @ [MAX_EFFORT]", "2km Cool Down @ [WARMUP]"],
-            pros: ["Accurate fitness gauge", "Builds mental toughness"], cons: ["Physically taxing", "Requires high motivation"]
-        },
-        {
-            id: 2, title: "7 Mile Alternating Tempo", category: "Tempo", bgClass: "grad-teal", diffColor: "#16a085", difficulty: "Hard",
-            summary: "Alternating tempo miles with moderate recovery miles.",
-            purpose: "Teaches your body to recover while still moving fast.",
-            steps: ["1 Mile Warm Up @ [WARMUP]", "1 Mile @ [TEMPO]", "1 Mile @ [FLOAT]", "1 Mile @ [TEMPO]", "1 Mile @ [FLOAT]", "1 Mile @ [TEMPO]", "0.5 Mile @ [RECOVERY]", "5 x 20sec Strides @ [INTERVAL]", "1 Mile Cool Down @ [WARMUP]"],
-            steps_km: ["2km Warm Up @ [WARMUP]", "1km @ [TEMPO]", "1km @ [FLOAT]", "1km @ [TEMPO]", "1km @ [FLOAT]", "1km @ [TEMPO]", "1km @ [FLOAT]", "1km @ [TEMPO]", "1km @ [FLOAT]", "1km @ [TEMPO]", "1km @ [FLOAT]", "1km @ [TEMPO]", "1km @ [RECOVERY]", "2km Cool Down @ [WARMUP]"],
-            pros: ["Marathon specific strength", "Lactate clearance"], cons: ["High volume", "Easy to run recovery too fast"]
-        },
-        {
-            id: 3, title: "6 Mile Mixed Intervals", category: "Interval", bgClass: "grad-red", diffColor: "#c0392b", difficulty: "Medium",
-            summary: "1mi Tempo // 1mi 10k // 2x0.5mi 5k",
-            purpose: "Work endurance and speed in one session.",
-            steps: ["1 Mile Warm Up @ [WARMUP]", "1 Mile @ [TEMPO] (Rec: 0.50 Mile Jog)", "2 x 0.50 Miles @ [THRESHOLD] (Rec: 0.25 Mile Jog)", "4 x 0.25 Miles @ [INTERVAL] (Rec: 0.15 Mile Jog)", "1 Mile Cool Down @ [WARMUP]"],
-            steps_km: ["2km Warm Up @ [WARMUP]", "1.6km @ [TEMPO] (Rec: 800m Jog)", "2 x 800m @ [THRESHOLD] (Rec: 400m Jog)", "4 x 400m @ [INTERVAL] (Rec: 200m Jog)", "2km Cool Down @ [WARMUP]"],
-            pros: ["Varied and fun", "Touches all energy systems"], cons: ["Complex structure to remember"]
-        },
-        {
-            id: 4, title: "6 Mile Threshold Ladder", category: "Fartlek", bgClass: "grad-grey", diffColor: "#7f8fa6", difficulty: "Hard",
-            summary: "Time-based intervals that go up and down in duration.",
-            purpose: "Maintain threshold effort over varying durations.",
-            steps: ["1 Mile Warm Up @ [WARMUP]", "3 mins @ [THRESHOLD] (Rec: 2 min jog)", "4 mins @ [THRESHOLD] (Rec: 2 min jog)", "5 mins @ [THRESHOLD] (Rec: 2 min jog)", "3 mins @ [THRESHOLD] (Rec: 2 min jog)", "2 mins @ [THRESHOLD] (Rec: 2 min jog)", "1 min @ [THRESHOLD]", "1 Mile Cool Down @ [WARMUP]"],
-            steps_km: ["2km Warm Up @ [WARMUP]", "3 mins @ [THRESHOLD] (Rec: 2 min jog)", "4 mins @ [THRESHOLD] (Rec: 2 min jog)", "5 mins @ [THRESHOLD] (Rec: 2 min jog)", "3 mins @ [THRESHOLD] (Rec: 2 min jog)", "2 mins @ [THRESHOLD] (Rec: 2 min jog)", "1 min @ [THRESHOLD]", "2km Cool Down @ [WARMUP]"],
-            pros: ["Time based (no track needed)", "Good volume"], cons: ["Hard to gauge pace without GPS"]
-        },
-        {
-            id: 5, title: "5 Mile Progressive Tempo", category: "Tempo", bgClass: "grad-teal", diffColor: "#16a085", difficulty: "Hard",
-            summary: "Progressive tempo where each mile gets faster.",
-            purpose: "Teaches pacing control and finishing strong on tired legs.",
-            steps: ["1 Mile Warm Up @ [WARMUP]", "Mile 1 @ [TEMPO_START]", "Mile 2 @ [TEMPO_STEADY]", "Mile 3 @ [TEMPO]", "Mile 4 @ [TEMPO_FAST]", "Mile 5 @ [TEMPO_HARD]", "1 Mile Cool Down @ [WARMUP]"],
-            steps_km: ["2km Warm Up @ [WARMUP]", "1km @ [TEMPO_START]", "1km @ [TEMPO_START]", "1km @ [TEMPO_STEADY]", "1km @ [TEMPO_STEADY]", "1km @ [TEMPO]", "1km @ [TEMPO]", "1km @ [TEMPO_FAST]", "1km @ [TEMPO_HARD]", "2km Cool Down @ [WARMUP]"],
-            pros: ["Builds aerobic stamina", "Teaches negative splitting"], cons: ["Easy to start too fast", "High sustained volume"]
-        },
-        {
-            id: 6, title: "6 Mile Progressive Tempo", category: "Tempo", bgClass: "grad-teal", diffColor: "#16a085", difficulty: "Hard",
-            summary: "Longer progressive tempo run.",
-            purpose: "Extended aerobic threshold work for endurance.",
-            steps: ["1 Mile Warm Up @ [WARMUP]", "Mile 1 @ [TEMPO_START]", "Mile 2 @ [TEMPO_STEADY]", "Mile 3 @ [TEMPO]", "Mile 4 @ [TEMPO_FAST]", "Mile 5 @ [TEMPO_HARD]", "Mile 6 @ [TEMPO_ELITE]", "1 Mile Cool Down @ [WARMUP]"],
-            steps_km: ["2km Warm Up @ [WARMUP]", "1km @ [TEMPO_START]", "1km @ [TEMPO_START]", "1km @ [TEMPO_STEADY]", "1km @ [TEMPO_STEADY]", "1km @ [TEMPO]", "1km @ [TEMPO]", "1km @ [TEMPO_FAST]", "1km @ [TEMPO_FAST]", "1km @ [TEMPO_HARD]", "1km @ [TEMPO_ELITE]", "2km Cool Down @ [WARMUP]"],
-            pros: ["Great for 10k/Half Marathon prep", "Mental endurance"], cons: ["Very demanding session"]
-        },
-        {
-            id: 7, title: "Pyramid Fartlek Mix", category: "Fartlek", bgClass: "grad-grey", diffColor: "#7f8fa6", difficulty: "Hard",
-            summary: "1-4-2-3-3-2-4-1 minutes with equal jog recovery.",
-            purpose: "Simulates race surges and changes of pace.",
-            steps: ["1 Mile Warm Up @ [WARMUP]", "1 min @ [THRESHOLD] (Rec: 60s Jog)", "[SET RECOVERY: 120s Jog]", "4 mins @ [THRESHOLD] (Rec: 60s Jog)", "2 mins @ [THRESHOLD] (Rec: 60s Jog)", "3 mins @ [THRESHOLD] (Rec: 60s Jog)", "3 mins @ [THRESHOLD] (Rec: 60s Jog)", "2 mins @ [THRESHOLD] (Rec: 60s Jog)", "4 mins @ [THRESHOLD] (Rec: 60s Jog)", "[SET RECOVERY: 120s Jog]", "1 min @ [THRESHOLD]", "1 Mile Cool Down @ [WARMUP]"],
-            steps_km: ["2km Warm Up @ [WARMUP]", "1 min @ [THRESHOLD] (Rec: 60s Jog)", "[SET RECOVERY: 120s Jog]", "4 mins @ [THRESHOLD] (Rec: 60s Jog)", "2 mins @ [THRESHOLD] (Rec: 60s Jog)", "3 mins @ [THRESHOLD] (Rec: 60s Jog)", "3 mins @ [THRESHOLD] (Rec: 60s Jog)", "2 mins @ [THRESHOLD] (Rec: 60s Jog)", "4 mins @ [THRESHOLD] (Rec: 60s Jog)", "[SET RECOVERY: 120s Jog]", "1 min @ [THRESHOLD]", "2km Cool Down @ [WARMUP]"],
-            pros: ["Keeps mind engaged", "Time based (no GPS needed)"], cons: ["Hard to pace the 4 minute sections"]
-        },
-        {
-            id: 8, title: "Tempo/Hard Mix Fartlek", category: "Fartlek", bgClass: "grad-grey", diffColor: "#7f8fa6", difficulty: "Very Hard",
-            summary: "Blocks of Tempo -> Hard -> Recovery.",
-            purpose: "Mixing energy systems to flush lactate while running.",
-            steps: ["1 Mile Warm Up @ [WARMUP]", "2 min @ [TEMPO] -> 1 min @ [INTERVAL] -> 1 min Rec", "3 min @ [TEMPO] -> 1 min @ [INTERVAL] -> 1 min Rec", "4 min @ [TEMPO] -> 1 min @ [INTERVAL] -> 1 min Rec", "2 min @ [TEMPO] -> 1 min @ [INTERVAL] -> 1 min Rec", "3 min @ [TEMPO] -> 1 min @ [INTERVAL] -> 1 min Rec", "300m @ [MAX_EFFORT]", "1 Mile Cool Down @ [WARMUP]"],
-            steps_km: ["2km Warm Up @ [WARMUP]", "2 min @ [TEMPO] -> 1 min @ [INTERVAL] -> 1 min Rec", "3 min @ [TEMPO] -> 1 min @ [INTERVAL] -> 1 min Rec", "4 min @ [TEMPO] -> 1 min @ [INTERVAL] -> 1 min Rec", "2 min @ [TEMPO] -> 1 min @ [INTERVAL] -> 1 min Rec", "3 min @ [TEMPO] -> 1 min @ [INTERVAL] -> 1 min Rec", "300m @ [MAX_EFFORT]", "2km Cool Down @ [WARMUP]"],
-            pros: ["Simulates race finishes", "High intensity"], cons: ["Complex structure", "Physically exhausting"]
-        },
-        {
-            id: 9, title: "4 Mile Progressive Tempo", category: "Tempo", bgClass: "grad-teal", diffColor: "#16a085", difficulty: "Medium",
-            summary: "Shorter continuous tempo run.",
-            purpose: "Good introduction to tempo running or a lighter workout week.",
-            steps: ["1 Mile Warm Up @ [WARMUP]", "Mile 1 @ [TEMPO_START]", "Mile 2 @ [TEMPO_STEADY]", "Mile 3 @ [TEMPO]", "Mile 4 @ [TEMPO_FAST]", "1 Mile Cool Down @ [WARMUP]"],
-            steps_km: ["2km Warm Up @ [WARMUP]", "1km @ [TEMPO_START]", "1km @ [TEMPO_START]", "1km @ [TEMPO_STEADY]", "1km @ [TEMPO_STEADY]", "1km @ [TEMPO]", "1km @ [TEMPO]", "1km @ [TEMPO_FAST]", "2km Cool Down @ [WARMUP]"],
-            pros: ["Manageable volume", "Good confidence builder"], cons: ["Can feel short for advanced runners"]
-        },
-        {
-            id: 10, title: "Track Pyramid Breakdown", category: "Interval", bgClass: "grad-red", diffColor: "#c0392b", difficulty: "Hard",
-            summary: "2k Tempo buy-in followed by track intervals.",
-            purpose: "Fatigue resistance on the track.",
-            steps: ["1 Mile Warm Up @ [WARMUP]", "2km @ [TEMPO] (Rec: 120s)", "3 x 800m @ [INTERVAL] (Rec: 60s)", "3 x 600m @ [INTERVAL] (Rec: 60s)", "3 x 400m @ [INTERVAL] (Rec: 60s)", "1 Mile Cool Down @ [WARMUP]"],
-            steps_km: ["2km Warm Up @ [WARMUP]", "2km @ [TEMPO] (Rec: 120s)", "3 x 800m @ [INTERVAL] (Rec: 60s)", "3 x 600m @ [INTERVAL] (Rec: 60s)", "3 x 400m @ [INTERVAL] (Rec: 60s)", "2km Cool Down @ [WARMUP]"],
-            pros: ["High volume quality", "Track specific"], cons: ["Need a track or GPS accuracy"]
-        },
-        {
-            id: 11, title: "Track Volume Ladder", category: "Interval", bgClass: "grad-red", diffColor: "#c0392b", difficulty: "Very Hard",
-            summary: "Mile Tempo buy-in into a pyramid ladder.",
-            purpose: "V02 Max development.",
-            steps: ["1 Mile Warm Up @ [WARMUP]", "1 Mile @ [TEMPO] (Rec: 2 mins)", "3 x 400m @ [INTERVAL] (Rec: 60s)", "2 x 600m @ [INTERVAL] (Rec: 60s)", "1200m @ [THRESHOLD] (Rec: 60s)", "2 x 600m @ [INTERVAL] (Rec: 60s)", "3 x 400m @ [INTERVAL] (Rec: 60s)", "1 Mile Cool Down @ [WARMUP]"],
-            steps_km: ["2km Warm Up @ [WARMUP]", "1600m @ [TEMPO] (Rec: 2 mins)", "3 x 400m @ [INTERVAL] (Rec: 60s)", "2 x 600m @ [INTERVAL] (Rec: 60s)", "1200m @ [THRESHOLD] (Rec: 60s)", "2 x 600m @ [INTERVAL] (Rec: 60s)", "3 x 400m @ [INTERVAL] (Rec: 60s)", "2km Cool Down @ [WARMUP]"],
-            pros: ["Classic track workout", "High calorie burn"], cons: ["Long duration", "Mentally tough"]
-        },
-        {
-            id: 12, title: "12x90s Fartlek", category: "Fartlek", bgClass: "grad-grey", diffColor: "#7f8fa6", difficulty: "Medium",
-            summary: "Short, sharp repetitions.",
-            purpose: "Speed endurance and turnover.",
-            steps: ["1 Mile Warm Up @ [WARMUP]", "12 x 90s @ [INTERVAL] (Rec: 60s Jog)", "1 Mile Cool Down @ [WARMUP]"],
-            steps_km: ["2km Warm Up @ [WARMUP]", "12 x 90s @ [INTERVAL] (Rec: 60s Jog)", "2km Cool Down @ [WARMUP]"],
-            pros: ["Simple structure", "Good for speed"], cons: ["Repetitive"]
-        },
-        {
-            id: 13, title: "Complex Fartlek", category: "Fartlek", bgClass: "grad-grey", diffColor: "#7f8fa6", difficulty: "Hard",
-            summary: "A mix of tempo, threshold and short speed.",
-            purpose: "Total fitness test covering all zones.",
-            steps: ["1 Mile Warm Up @ [WARMUP]", "1 Mile @ [TEMPO] (Rec: 120s)", "1 min @ [THRESHOLD] (Rec: 60s)", "2 min @ [THRESHOLD] (Rec: 60s)", "3 min @ [THRESHOLD] (Rec: 60s)", "2 min @ [THRESHOLD] (Rec: 60s)", "1 min @ [THRESHOLD] (Rec: 60s)", "1 Mile @ [TEMPO] (Rec: 60s)", "4 x 20s @ [MAX_EFFORT] (Rec: 30s)", "1 Mile Cool Down @ [WARMUP]"],
-            steps_km: ["2km Warm Up @ [WARMUP]", "1.6km @ [TEMPO] (Rec: 120s)", "1 min @ [THRESHOLD] (Rec: 60s)", "2 min @ [THRESHOLD] (Rec: 60s)", "3 min @ [THRESHOLD] (Rec: 60s)", "2 min @ [THRESHOLD] (Rec: 60s)", "1 min @ [THRESHOLD] (Rec: 60s)", "1.6km @ [TEMPO] (Rec: 60s)", "4 x 20s @ [MAX_EFFORT] (Rec: 30s)", "2km Cool Down @ [WARMUP]"],
-            pros: ["Covers all bases", "Engaging"], cons: ["Very long session", "Hard to remember"]
-        },
-        {
-            id: 14, title: "Mixed Time Fartlek", category: "Fartlek", bgClass: "grad-grey", diffColor: "#7f8fa6", difficulty: "Hard",
-            summary: "Tempo buy-in followed by varied time reps.",
-            purpose: "Changes of pace and fatigue resistance.",
-            steps: ["1 Mile Warm Up @ [WARMUP]", "1 Mile @ [TEMPO]", "[SET RECOVERY: 120s Jog]", "2 x 3 mins @ [THRESHOLD] (Rec: 60s)", "[SET RECOVERY: 120s Jog]", "3 x 90s @ [INTERVAL] (Rec: 60s)", "[SET RECOVERY: 120s Jog]", "2 x 2 mins @ [THRESHOLD] (Rec: 60s)", "4 x 60s @ [INTERVAL] (Rec: 60s)", "1 Mile Cool Down @ [WARMUP]"],
-            steps_km: ["2km Warm Up @ [WARMUP]", "1.6km @ [TEMPO]", "[SET RECOVERY: 120s Jog]", "2 x 3 mins @ [THRESHOLD] (Rec: 60s)", "[SET RECOVERY: 120s Jog]", "3 x 90s @ [INTERVAL] (Rec: 60s)", "[SET RECOVERY: 120s Jog]", "2 x 2 mins @ [THRESHOLD] (Rec: 60s)", "4 x 60s @ [INTERVAL] (Rec: 60s)", "2km Cool Down @ [WARMUP]"],
-            pros: ["Varied stimulus", "Good lactate clearance"], cons: ["Complex session structure"]
-        },
-        {
-            id: 15, title: "High Volume Track Tempo", category: "Interval", bgClass: "grad-red", diffColor: "#c0392b", difficulty: "Very Hard",
-            summary: "High volume of 800s and 400s at Tempo pace.",
-            purpose: "Building massive aerobic capacity.",
-            steps: ["1 Mile Warm Up @ [WARMUP]", "8 x 800m @ [TEMPO] (Rec: 60s)", "[SET RECOVERY: 2 mins]", "8 x 400m @ [TEMPO] (Rec: 60s)", "1 Mile Cool Down @ [WARMUP]"],
-            steps_km: ["2km Warm Up @ [WARMUP]", "8 x 800m @ [TEMPO] (Rec: 60s)", "[SET RECOVERY: 2 mins]", "8 x 400m @ [TEMPO] (Rec: 60s)", "2km Cool Down @ [WARMUP]"],
-            pros: ["Mental grit", "Huge aerobic volume"], cons: ["Extremely repetitive", "Requires track"]
-        },
-        {
-            id: 16, title: "Threshold Track Mix", category: "Interval", bgClass: "grad-red", diffColor: "#c0392b", difficulty: "Hard",
-            summary: "Varied distances all at Threshold pace.",
-            purpose: "Lactate threshold improvement.",
-            steps: ["1 Mile Warm Up @ [WARMUP]", "2 x 800m @ [THRESHOLD] (Rec: 60s)", "[SET RECOVERY: 120s]", "3 x 400m @ [THRESHOLD] (Rec: 60s)", "[SET RECOVERY: 120s]", "2 x 600m @ [THRESHOLD] (Rec: 60s)", "[SET RECOVERY: 120s]", "4 x 300m @ [THRESHOLD] (Rec: 60s)", "1 Mile Cool Down @ [WARMUP]"],
-            steps_km: ["2km Warm Up @ [WARMUP]", "2 x 800m @ [THRESHOLD] (Rec: 60s)", "[SET RECOVERY: 120s]", "3 x 400m @ [THRESHOLD] (Rec: 60s)", "[SET RECOVERY: 120s]", "2 x 600m @ [THRESHOLD] (Rec: 60s)", "[SET RECOVERY: 120s]", "4 x 300m @ [THRESHOLD] (Rec: 60s)", "2km Cool Down @ [WARMUP]"],
-            pros: ["Keeps the legs guessing", "Threshold discipline"], cons: ["Track needed for distances"]
-        },
-        {
-            id: 17, title: "Descending Threshold Intervals", category: "Interval", bgClass: "grad-red", diffColor: "#c0392b", difficulty: "Hard",
-            summary: "Descending distances at Threshold pace.",
-            purpose: "Maintain form as fatigue sets in.",
-            steps: ["1 Mile Warm Up @ [WARMUP]", "800m @ [THRESHOLD] (Rec: 60s)", "[SET RECOVERY: 120s]", "2 x 1000m @ [THRESHOLD] (Rec: 60s)", "[SET RECOVERY: 120s]", "3 x 600m @ [THRESHOLD] (Rec: 60s)", "[SET RECOVERY: 120s]", "4 x 400m @ [THRESHOLD] (Rec: 60s)", "1 Mile Cool Down @ [WARMUP]"],
-            steps_km: ["2km Warm Up @ [WARMUP]", "800m @ [THRESHOLD] (Rec: 60s)", "[SET RECOVERY: 120s]", "2 x 1000m @ [THRESHOLD] (Rec: 60s)", "[SET RECOVERY: 120s]", "3 x 600m @ [THRESHOLD] (Rec: 60s)", "[SET RECOVERY: 120s]", "4 x 400m @ [THRESHOLD] (Rec: 60s)", "2km Cool Down @ [WARMUP]"],
-            pros: ["Gets mentally easier", "Good volume"], cons: ["Hard to gauge pace"]
-        },
-        {
-            id: 18, title: "10 Mile Progressive Tempo", category: "Tempo", bgClass: "grad-teal", diffColor: "#16a085", difficulty: "Very Hard",
-            summary: "Long continuous run getting faster each mile.",
-            purpose: "Marathon simulation and elite endurance.",
-            steps: ["1 Mile Warm Up @ [WARMUP]", "Mile 1 @ [TEMPO_START]", "Mile 2 @ [TEMPO_STEADY]", "Mile 3 @ [TEMPO_STEADY]", "Mile 4 @ [TEMPO]", "Mile 5 @ [TEMPO]", "Mile 6 @ [TEMPO]", "Mile 7 @ [TEMPO_FAST]", "Mile 8 @ [TEMPO_FAST]", "Mile 9 @ [TEMPO_HARD]", "Mile 10 @ [TEMPO_ELITE]", "1 Mile Cool Down @ [WARMUP]"],
-            steps_km: ["2km Warm Up @ [WARMUP]", "1km @ [TEMPO_START]", "1km @ [TEMPO_START]", "1km @ [TEMPO_STEADY]", "1km @ [TEMPO_STEADY]", "1km @ [TEMPO]", "1km @ [TEMPO]", "1km @ [TEMPO]", "1km @ [TEMPO]", "1km @ [TEMPO_FAST]", "1km @ [TEMPO_FAST]", "1km @ [TEMPO_FAST]", "1km @ [TEMPO_HARD]", "1km @ [TEMPO_HARD]", "1km @ [TEMPO_ELITE]", "1km @ [TEMPO_ELITE]", "2km Cool Down @ [WARMUP]"],
-            pros: ["Elite marathon prep", "Massive endurance gains"], cons: ["Extremely taxing"]
-        },
-        {
-            id: 19, title: "Broken Tempo (3 & 3)", category: "Tempo", bgClass: "grad-teal", diffColor: "#16a085", difficulty: "Hard",
-            summary: "Two 3-mile blocks of Tempo with recovery.",
-            purpose: "High volume quality with a break to reset.",
-            steps: ["1 Mile Warm Up @ [WARMUP]", "3 Miles @ [TEMPO]", "[RECOVERY: 5 mins walk/jog]", "3 Miles @ [TEMPO]", "1 Mile Cool Down @ [WARMUP]"],
-            steps_km: ["2km Warm Up @ [WARMUP]", "5km @ [TEMPO]", "[RECOVERY: 5 mins walk/jog]", "5km @ [TEMPO]", "2km Cool Down @ [WARMUP]"],
-            pros: ["Psychologically easier than continuous", "High quality"], cons: ["Long session"]
-        },
-        {
-            id: 20, title: "10 Mile Alternating Tempo", category: "Tempo", bgClass: "grad-teal", diffColor: "#16a085", difficulty: "Very Hard",
-            summary: "Alternating miles of Tempo and Float (Tempo + 30s).",
-            purpose: "Specific endurance and lactate clearance.",
-            steps: ["1 Mile Warm Up @ [WARMUP]", "1 Mile @ [TEMPO]", "1 Mile @ [FLOAT]", "1 Mile @ [TEMPO]", "1 Mile @ [FLOAT]", "1 Mile @ [TEMPO]", "1 Mile @ [FLOAT]", "1 Mile @ [TEMPO]", "1 Mile @ [FLOAT]", "1 Mile @ [TEMPO]", "1 Mile @ [FLOAT]", "1 Mile Cool Down @ [WARMUP]"],
-            steps_km: ["2km Warm Up @ [WARMUP]", "1km @ [TEMPO]", "1km @ [FLOAT]", "1km @ [TEMPO]", "1km @ [FLOAT]", "1km @ [TEMPO]", "1km @ [FLOAT]", "1km @ [TEMPO]", "1km @ [FLOAT]", "1km @ [TEMPO]", "1km @ [FLOAT]", "1km @ [TEMPO]", "1km @ [FLOAT]", "1km @ [TEMPO]", "1km @ [FLOAT]", "1km @ [TEMPO]", "1km @ [FLOAT]", "2km Cool Down @ [WARMUP]"],
-            pros: ["Elite specific fitness", "Learn to recover fast"], cons: ["Brutal session"]
-        },
-        {
-            id: 21, title: "Tempo into Fartlek", category: "Fartlek", bgClass: "grad-grey", diffColor: "#7f8fa6", difficulty: "Hard",
-            summary: "Mile tempo buy-in followed by 60s reps.",
-            purpose: "Aerobic strength into speed endurance.",
-            steps: ["1 Mile Warm Up @ [WARMUP]", "1 Mile @ [TEMPO]", "[SET RECOVERY: 3 mins]", "10 x 60s @ [TEMPO] (Rec: 60s)", "1 Mile Cool Down @ [WARMUP]"],
-            steps_km: ["2km Warm Up @ [WARMUP]", "1.6km @ [TEMPO]", "[SET RECOVERY: 3 mins]", "10 x 60s @ [TEMPO] (Rec: 60s)", "2km Cool Down @ [WARMUP]"],
-            pros: ["Good mix of speeds", "Not too long"], cons: ["Hard to control pace on short reps"]
-        },
-        {
-            id: 22, title: "Tempo Pyramid Fartlek", category: "Fartlek", bgClass: "grad-grey", diffColor: "#7f8fa6", difficulty: "Hard",
-            summary: "1-2-3-4-5-4-3-2-1 minutes at Tempo pace.",
-            purpose: "Controlled volume.",
-            steps: ["1 Mile Warm Up @ [WARMUP]", "1 min @ [TEMPO] (Rec: 60s)", "2 min @ [TEMPO] (Rec: 60s)", "3 min @ [TEMPO] (Rec: 60s)", "4 min @ [TEMPO] (Rec: 60s)", "5 min @ [TEMPO] (Rec: 60s)", "4 min @ [TEMPO] (Rec: 60s)", "3 min @ [TEMPO] (Rec: 60s)", "2 min @ [TEMPO] (Rec: 60s)", "1 min @ [TEMPO] (Rec: 60s)", "1 Mile Cool Down @ [WARMUP]"],
-            steps_km: ["2km Warm Up @ [WARMUP]", "1 min @ [TEMPO] (Rec: 60s)", "2 min @ [TEMPO] (Rec: 60s)", "3 min @ [TEMPO] (Rec: 60s)", "4 min @ [TEMPO] (Rec: 60s)", "5 min @ [TEMPO] (Rec: 60s)", "4 min @ [TEMPO] (Rec: 60s)", "3 min @ [TEMPO] (Rec: 60s)", "2 min @ [TEMPO] (Rec: 60s)", "1 min @ [TEMPO] (Rec: 60s)", "2km Cool Down @ [WARMUP]"],
-            pros: ["Mental focus", "High volume"], cons: ["Long session"]
-        },
-        {
-            id: 23, title: "1-2-3 Tempo Fartlek", category: "Fartlek", bgClass: "grad-grey", diffColor: "#7f8fa6", difficulty: "Medium",
-            summary: "3 sets of 1, 2, 3 minutes at Tempo pace.",
-            purpose: "Manageable chunks of tempo work.",
-            steps: ["1 Mile Warm Up @ [WARMUP]", "SET 1: 1-2-3 mins @ [TEMPO] (Rec: 60s)", "[SET RECOVERY: 3 mins]", "SET 2: 1-2-3 mins @ [TEMPO] (Rec: 60s)", "[SET RECOVERY: 3 mins]", "SET 3: 1-2-3 mins @ [TEMPO] (Rec: 60s)", "1 Mile Cool Down @ [WARMUP]"],
-            steps_km: ["2km Warm Up @ [WARMUP]", "SET 1: 1-2-3 mins @ [TEMPO] (Rec: 60s)", "[SET RECOVERY: 3 mins]", "SET 2: 1-2-3 mins @ [TEMPO] (Rec: 60s)", "[SET RECOVERY: 3 mins]", "SET 3: 1-2-3 mins @ [TEMPO] (Rec: 60s)", "2km Cool Down @ [WARMUP]"],
-            pros: ["Broken up well", "Good total volume"], cons: ["Repetitive"]
-        },
-        {
-            id: 24, title: "5x5 Minute Fartlek", category: "Fartlek", bgClass: "grad-grey", diffColor: "#7f8fa6", difficulty: "Hard",
-            summary: "Long repetitions at Tempo pace.",
-            purpose: "Building aerobic engine.",
-            steps: ["1 Mile Warm Up @ [WARMUP]", "5 x 5 mins @ [TEMPO] (Rec: 2:30 Jog)", "1 Mile Cool Down @ [WARMUP]"],
-            steps_km: ["2km Warm Up @ [WARMUP]", "5 x 5 mins @ [TEMPO] (Rec: 2:30 Jog)", "2km Cool Down @ [WARMUP]"],
-            pros: ["Simple", "Effective"], cons: ["Mentally demanding"]
-        },
-        {
-            id: 25, title: "10x2 Minute Fartlek", category: "Fartlek", bgClass: "grad-grey", diffColor: "#7f8fa6", difficulty: "Medium",
-            summary: "10 reps of 2 minutes at Tempo pace.",
-            purpose: "Speed endurance and turnover.",
-            steps: ["1 Mile Warm Up @ [WARMUP]", "10 x 2 mins @ [TEMPO] (Rec: 1:30 Jog)", "1 Mile Cool Down @ [WARMUP]"],
-            steps_km: ["2km Warm Up @ [WARMUP]", "10 x 2 mins @ [TEMPO] (Rec: 1:30 Jog)", "2km Cool Down @ [WARMUP]"],
-            pros: ["Good rhythm builder", "Manageable pace"], cons: ["Repetitive"]
-        }
+        { id: 1, title: "5k Time Trial", simple: "Warm Up / 5k Max / Cool Down", category: "Time Trial", bgClass: "grad-gold", diffColor: "#d35400", difficulty: "Max Effort", distanceVal: 5, summary: "3.1 Mile Time Trial // 90-95% Intensity", purpose: "The ultimate benchmark. This session isn't about training; it's about testing. It forces you to manage your energy over 5km, giving you a concrete data point to calculate all other training paces.", steps: ["1 Mile Warm Up @ [WARMUP] (Includes Drills)", "3.1 Miles @ [MAX_EFFORT]", "1 Mile Cool Down @ [WARMUP]"], steps_km: ["2km Warm Up @ [WARMUP]", "5km @ [MAX_EFFORT]", "2km Cool Down @ [WARMUP]"], pros: ["Accurate fitness gauge", "Builds mental toughness"], cons: ["Physically taxing", "Requires high motivation"] },
+        
+        { id: 2, title: "7 Mile Alternating Tempo", simple: "1 Fast / 1 Float x 5", category: "Tempo", bgClass: "grad-teal", diffColor: "#16a085", difficulty: "Hard", distanceVal: 11, summary: "Alternating tempo miles with float recovery.", purpose: "Teaches your body to flush lactate while still running at a respectable pace (Float). Unlike standard intervals where you jog slowly to recover, here you must recover while running briskly. This creates massive aerobic strength.", steps: ["1 Mile Warm Up @ [WARMUP]", "1 Mile @ [TEMPO] (Rec: 1 Mile @ [FLOAT] Recovery)", "1 Mile @ [TEMPO] (Rec: 1 Mile @ [FLOAT] Recovery)", "1 Mile @ [TEMPO] (Rec: 0.5 Mile Jog)", "5 x 20sec Strides @ [INTERVAL]", "1 Mile Cool Down @ [WARMUP]"], steps_km: ["2km Warm Up @ [WARMUP]", "1km @ [TEMPO] (Rec: 1km @ [FLOAT] Recovery)", "1km @ [TEMPO] (Rec: 1km @ [FLOAT] Recovery)", "1km @ [TEMPO] (Rec: 1km @ [FLOAT] Recovery)", "1km @ [TEMPO] (Rec: 1km @ [FLOAT] Recovery)", "1km @ [TEMPO] (Rec: 1km @ [FLOAT] Recovery)", "1km @ [TEMPO] (Rec: 1km Jog)", "2km Cool Down @ [WARMUP]"], pros: ["Marathon specific strength", "Lactate clearance"], cons: ["High volume", "Easy to run recovery too fast"] },
+        
+        { id: 3, title: "Tempo & Threshold Mix", simple: "1mi / 2x800 / 4x400", category: "Interval", bgClass: "grad-red", diffColor: "#c0392b", difficulty: "Medium", distanceVal: 10, summary: "Tempo, Threshold and Speed mix.", purpose: "A full spectrum workout. You start with aerobic strength (Tempo), move into lactate threshold work, and finish with neuromuscular speed (Intervals). It forces your body to adapt to changing gears.", steps: ["1 Mile Warm Up @ [WARMUP]", "1 Mile @ [TEMPO] (Rec: 0.50 Mile Jog)", "2 x 0.50 Miles @ [THRESHOLD] (Rec: 0.25 Mile Jog Between Reps)", "4 x 0.25 Miles @ [INTERVAL] (Rec: 0.15 Mile Jog Between Reps)", "1 Mile Cool Down @ [WARMUP]"], steps_km: ["2km Warm Up @ [WARMUP]", "1.6km @ [TEMPO] (Rec: 800m Jog)", "2 x 800m @ [THRESHOLD] (Rec: 400m Jog Between Reps)", "4 x 400m @ [INTERVAL] (Rec: 200m Jog Between Reps)", "2km Cool Down @ [WARMUP]"], pros: ["Varied and fun", "Touches all energy systems"], cons: ["Complex structure to remember"] },
+        
+        { id: 4, title: "3-5-1 Threshold Ladder", simple: "3 / 4 / 5 / 3 / 2 / 1 Mins", category: "Fartlek", bgClass: "grad-grey", diffColor: "#7f8fa6", difficulty: "Hard", distanceVal: 10, summary: "Time-based intervals that go up and down.", purpose: "A classic ladder session designed to test your ability to hold Threshold pace over varying durations. The increasing duration tests mental focus, while the decreasing duration at the end allows you to pick up the pace as you fatigue.", steps: ["1 Mile Warm Up @ [WARMUP]", "3 mins @ [THRESHOLD] (Rec: 2 min Jog Between Reps)", "4 mins @ [THRESHOLD] (Rec: 2 min Jog Between Reps)", "5 mins @ [THRESHOLD] (Rec: 2 min Jog Between Reps)", "3 mins @ [THRESHOLD] (Rec: 2 min Jog Between Reps)", "2 mins @ [THRESHOLD] (Rec: 2 min Jog Between Reps)", "1 min @ [THRESHOLD]", "1 Mile Cool Down @ [WARMUP]"], pros: ["Time based (no track needed)", "Good volume"], cons: ["Hard to gauge pace without GPS"] },
+        
+        { id: 5, title: "5 Mile Progressive", simple: "Start Slow -> Finish Fast", category: "Tempo", bgClass: "grad-teal", diffColor: "#16a085", difficulty: "Hard", distanceVal: 8, summary: "Progressive tempo where each mile gets faster.", purpose: "The art of negative splitting. This session teaches discipline—holding back in the early miles so you have the strength to push hard in the final miles. Essential for race day execution.", steps: ["1 Mile Warm Up @ [WARMUP]", "Mile 1 @ [TEMPO_START]", "Mile 2 @ [TEMPO_STEADY]", "Mile 3 @ [TEMPO]", "Mile 4 @ [TEMPO_FAST]", "Mile 5 @ [TEMPO_HARD]", "1 Mile Cool Down @ [WARMUP]"], steps_km: ["2km Warm Up @ [WARMUP]", "1km @ [TEMPO_START]", "1km @ [TEMPO_START]", "1km @ [TEMPO_STEADY]", "1km @ [TEMPO_STEADY]", "1km @ [TEMPO]", "1km @ [TEMPO]", "1km @ [TEMPO_FAST]", "1km @ [TEMPO_HARD]", "2km Cool Down @ [WARMUP]"], pros: ["Builds aerobic stamina", "Teaches negative splitting"], cons: ["Easy to start too fast", "High sustained volume"] },
+        
+        { id: 6, title: "6 Mile Progressive", simple: "Long Progression Run", category: "Tempo", bgClass: "grad-teal", diffColor: "#16a085", difficulty: "Hard", distanceVal: 10, summary: "Longer progressive tempo run.", purpose: "Extended aerobic threshold work. By gradually increasing the pace over 6 miles (or 10km), you train your body to clear lactate efficiently even as fatigue accumulates.", steps: ["1 Mile Warm Up @ [WARMUP]", "Mile 1 @ [TEMPO_START]", "Mile 2 @ [TEMPO_STEADY]", "Mile 3 @ [TEMPO]", "Mile 4 @ [TEMPO_FAST]", "Mile 5 @ [TEMPO_HARD]", "Mile 6 @ [TEMPO_ELITE]", "1 Mile Cool Down @ [WARMUP]"], steps_km: ["2km Warm Up @ [WARMUP]", "1km @ [TEMPO_START]", "1km @ [TEMPO_START]", "1km @ [TEMPO_STEADY]", "1km @ [TEMPO_STEADY]", "1km @ [TEMPO]", "1km @ [TEMPO]", "1km @ [TEMPO_FAST]", "1km @ [TEMPO_FAST]", "1km @ [TEMPO_HARD]", "1km @ [TEMPO_ELITE]", "2km Cool Down @ [WARMUP]"], pros: ["Great for 10k/Half Marathon prep", "Mental endurance"], cons: ["Very demanding session"] },
+        
+        { id: 7, title: "1-4-1 Pyramid Fartlek", simple: "1 / 4 / 2 / 3 / 3 / 2 / 4 / 1", category: "Fartlek", bgClass: "grad-grey", diffColor: "#7f8fa6", difficulty: "Hard", distanceVal: 9, summary: "1-4-2-3-3-2-4-1 minutes.", purpose: "A mixed bag of time-based reps. The short 1-minute reps encourage speed, while the 4-minute reps require aerobic strength. The constant changing of duration keeps the mind engaged and prevents 'zone out'.", steps: ["1 Mile Warm Up @ [WARMUP]", "1 min @ [THRESHOLD] (Rec: 60s Jog Between Reps)", "4 mins @ [THRESHOLD] (Rec: 60s Jog Between Reps)", "2 mins @ [THRESHOLD] (Rec: 60s Jog Between Reps)", "3 mins @ [THRESHOLD] (Rec: 60s Jog Between Reps)", "3 mins @ [THRESHOLD] (Rec: 60s Jog Between Reps)", "2 mins @ [THRESHOLD] (Rec: 60s Jog Between Reps)", "4 mins @ [THRESHOLD] (Rec: 60s Jog Between Reps)", "1 min @ [THRESHOLD]", "1 Mile Cool Down @ [WARMUP]"], pros: ["Keeps mind engaged", "Time based (no GPS needed)"], cons: ["Hard to pace the 4 minute sections"] },
+        
+        { id: 8, title: "2-3-4-2-3 Fartlek", simple: "2/1 - 3/1 - 4/1 - 2/1 - 3/1", category: "Fartlek", bgClass: "grad-grey", diffColor: "#7f8fa6", difficulty: "Very Hard", distanceVal: 10, summary: "Blocks of Tempo -> Hard -> Recovery.", purpose: "Simulates the surges of racing. You run steady at Tempo, then surge hard for 1 minute (Interval pace), then recover. This teaches your body to recover from a surge without stopping completely.", steps: ["1 Mile Warm Up @ [WARMUP]", "2 min @ [TEMPO] -> 1 min @ [INTERVAL] (Rec: 1 min Jog Between Reps)", "3 min @ [TEMPO] -> 1 min @ [INTERVAL] (Rec: 1 min Jog Between Reps)", "4 min @ [TEMPO] -> 1 min @ [INTERVAL] (Rec: 1 min Jog Between Reps)", "2 min @ [TEMPO] -> 1 min @ [INTERVAL] (Rec: 1 min Jog Between Reps)", "3 min @ [TEMPO] -> 1 min @ [INTERVAL] (Rec: 1 min Jog Between Reps)", "300m @ [MAX_EFFORT]", "1 Mile Cool Down @ [WARMUP]"], pros: ["Simulates race finishes", "High intensity"], cons: ["Complex structure", "Physically exhausting"] },
+        
+        { id: 9, title: "4 Mile Progressive", simple: "Short Progression", category: "Tempo", bgClass: "grad-teal", diffColor: "#16a085", difficulty: "Medium", distanceVal: 7, summary: "Shorter continuous tempo run.", purpose: "A great confidence builder. It's short enough to not require days of recovery, but hard enough to stimulate aerobic adaptation. Perfect for a lighter workout week.", steps: ["1 Mile Warm Up @ [WARMUP]", "Mile 1 @ [TEMPO_START]", "Mile 2 @ [TEMPO_STEADY]", "Mile 3 @ [TEMPO]", "Mile 4 @ [TEMPO_FAST]", "1 Mile Cool Down @ [WARMUP]"], steps_km: ["2km Warm Up @ [WARMUP]", "1km @ [TEMPO_START]", "1km @ [TEMPO_START]", "1km @ [TEMPO_STEADY]", "1km @ [TEMPO_STEADY]", "1km @ [TEMPO]", "1km @ [TEMPO_FAST]", "2km Cool Down @ [WARMUP]"], pros: ["Manageable volume", "Good confidence builder"], cons: ["Can feel short for advanced runners"] },
+        
+        { id: 10, title: "2k-800-400 Track Pyramid", simple: "2k / 3x800 / 3x600 / 3x400", category: "Interval", bgClass: "grad-red", diffColor: "#c0392b", difficulty: "Hard", distanceVal: 10, summary: "2k Tempo buy-in + intervals.", purpose: "Fatigue resistance. You pre-fatigue the legs with a 2km Tempo run, then hit the track for faster intervals. This simulates the feeling of trying to kick hard at the end of a race.", steps: ["1 Mile Warm Up @ [WARMUP]", "2km @ [TEMPO]", "[SET RECOVERY: End of Set - 2 Mins Rest]", "3 x 800m @ [INTERVAL] (Rec: 60s Jog Between Reps)", "[SET RECOVERY: End of Set - 2 Mins Rest]", "3 x 600m @ [INTERVAL] (Rec: 60s Jog Between Reps)", "[SET RECOVERY: End of Set - 2 Mins Rest]", "3 x 400m @ [INTERVAL] (Rec: 60s Jog Between Reps)", "1 Mile Cool Down @ [WARMUP]"], pros: ["High volume quality", "Track specific"], cons: ["Need a track or GPS accuracy"] },
+        
+        { id: 11, title: "Mile Tempo & Track Ladder", simple: "1mi / 3x4 / 2x6 / 12 / 2x6", category: "Interval", bgClass: "grad-red", diffColor: "#c0392b", difficulty: "Very Hard", distanceVal: 12, summary: "Mile Tempo buy-in into a pyramid ladder.", purpose: "VO2 Max development. This is a high-volume track session designed to push your maximum aerobic capacity. The mile tempo acts as a primer, and the ladder tests your ability to hold pace.", steps: ["1 Mile Warm Up @ [WARMUP]", "1 Mile @ [TEMPO]", "[SET RECOVERY: End of Set - 3 Mins Rest]", "3 x 400m @ [INTERVAL] (Rec: 60s Jog Between Reps)", "[SET RECOVERY: End of Set - 3 Mins Rest]", "2 x 600m @ [INTERVAL] (Rec: 60s Jog Between Reps)", "[SET RECOVERY: End of Set - 3 Mins Rest]", "1200m @ [THRESHOLD]", "[SET RECOVERY: End of Set - 3 Mins Rest]", "2 x 600m @ [INTERVAL] (Rec: 60s Jog Between Reps)", "[SET RECOVERY: End of Set - 3 Mins Rest]", "3 x 400m @ [INTERVAL] (Rec: 60s Jog Between Reps)", "1 Mile Cool Down @ [WARMUP]"], steps_km: ["2km Warm Up @ [WARMUP]", "1600m @ [TEMPO]", "[SET RECOVERY: End of Set - 3 Mins Rest]", "3 x 400m @ [INTERVAL] (Rec: 60s Jog Between Reps)", "[SET RECOVERY: End of Set - 3 Mins Rest]", "2 x 600m @ [INTERVAL] (Rec: 60s Jog Between Reps)", "[SET RECOVERY: End of Set - 3 Mins Rest]", "1200m @ [THRESHOLD]", "[SET RECOVERY: End of Set - 3 Mins Rest]", "2 x 600m @ [INTERVAL] (Rec: 60s Jog Between Reps)", "[SET RECOVERY: End of Set - 3 Mins Rest]", "3 x 400m @ [INTERVAL] (Rec: 60s Jog Between Reps)", "2km Cool Down @ [WARMUP]"], pros: ["Classic track workout", "High calorie burn"], cons: ["Long duration", "Mentally tough"] },
+        
+        { id: 12, title: "12x90s Fartlek", simple: "12 x 90s On / 60s Off", category: "Fartlek", bgClass: "grad-grey", diffColor: "#7f8fa6", difficulty: "Medium", distanceVal: 8, summary: "Short sharp reps.", purpose: "Speed endurance and turnover. The 90-second duration is long enough to stress the aerobic system but short enough to run fast. The short recovery keeps the heart rate high.", steps: ["1 Mile Warm Up @ [WARMUP]", "12 x 90s @ [INTERVAL] (Rec: 60s Jog Between Reps)", "1 Mile Cool Down @ [WARMUP]"], pros: ["Simple structure", "Good for speed"], cons: ["Repetitive"] },
+        
+        { id: 13, title: "1-3-1 Pyramid & Tempo Miles", simple: "1mi / 1 / 2 / 3 / 2 / 1 / 1mi", category: "Fartlek", bgClass: "grad-grey", diffColor: "#7f8fa6", difficulty: "Hard", distanceVal: 11, summary: "Mix of everything.", purpose: "Total fitness test covering all zones. This session has it all: Tempo miles for strength, Threshold ladders for stamina, and sprints for speed.", steps: ["1 Mile Warm Up @ [WARMUP]", "1 Mile @ [TEMPO]", "[SET RECOVERY: End of Set - 2 Mins Jog]", "1 min @ [THRESHOLD] (Rec: 60s Jog Between Reps)", "2 min @ [THRESHOLD] (Rec: 60s Jog Between Reps)", "3 min @ [THRESHOLD] (Rec: 60s Jog Between Reps)", "2 min @ [THRESHOLD] (Rec: 60s Jog Between Reps)", "1 min @ [THRESHOLD] (Rec: 60s Jog Between Reps)", "[SET RECOVERY: End of Set - 2 Mins Jog]", "1 Mile @ [TEMPO]", "[SET RECOVERY: End of Set - 60s Jog]", "4 x 20s @ [MAX_EFFORT] (Rec: 30s Jog Between Reps)", "1 Mile Cool Down @ [WARMUP]"], steps_km: ["2km Warm Up @ [WARMUP]", "1.6km @ [TEMPO]", "[SET RECOVERY: End of Set - 2 Mins Jog]", "1 min @ [THRESHOLD] (Rec: 60s Jog Between Reps)", "2 min @ [THRESHOLD] (Rec: 60s Jog Between Reps)", "3 min @ [THRESHOLD] (Rec: 60s Jog Between Reps)", "2 min @ [THRESHOLD] (Rec: 60s Jog Between Reps)", "1 min @ [THRESHOLD] (Rec: 60s Jog Between Reps)", "[SET RECOVERY: End of Set - 2 Mins Jog]", "1.6km @ [TEMPO]", "[SET RECOVERY: End of Set - 60s Jog]", "4 x 20s @ [MAX_EFFORT] (Rec: 30s Jog Between Reps)", "2km Cool Down @ [WARMUP]"], pros: ["Covers all bases", "Engaging"], cons: ["Very long session", "Hard to remember"] },
+        
+        { id: 14, title: "3-2-1 Mixed Fartlek", simple: "1mi / 2x3 / 3x90 / 2x2 / 4x60", category: "Fartlek", bgClass: "grad-grey", diffColor: "#7f8fa6", difficulty: "Hard", distanceVal: 10, summary: "Tempo buy-in + varied reps.", purpose: "Changes of pace and fatigue resistance. By constantly changing the duration of the hard efforts, you force your body to recruit different muscle fibers.", steps: ["1 Mile Warm Up @ [WARMUP]", "1 Mile @ [TEMPO]", "[SET RECOVERY: End of Set - 2 Mins Jog]", "2 x 3 mins @ [THRESHOLD] (Rec: 60s Jog Between Reps)", "[SET RECOVERY: End of Set - 2 Mins Jog]", "3 x 90s @ [INTERVAL] (Rec: 60s Jog Between Reps)", "[SET RECOVERY: End of Set - 2 Mins Jog]", "2 x 2 mins @ [THRESHOLD] (Rec: 60s Jog Between Reps)", "4 x 60s @ [INTERVAL] (Rec: 60s Jog Between Reps)", "1 Mile Cool Down @ [WARMUP]"], steps_km: ["2km Warm Up @ [WARMUP]", "1.6km @ [TEMPO]", "[SET RECOVERY: End of Set - 2 Mins Jog]", "2 x 3 mins @ [THRESHOLD] (Rec: 60s Jog Between Reps)", "[SET RECOVERY: End of Set - 2 Mins Jog]", "3 x 90s @ [INTERVAL] (Rec: 60s Jog Between Reps)", "[SET RECOVERY: End of Set - 2 Mins Jog]", "2 x 2 mins @ [THRESHOLD] (Rec: 60s Jog Between Reps)", "4 x 60s @ [INTERVAL] (Rec: 60s Jog Between Reps)", "2km Cool Down @ [WARMUP]"], pros: ["Varied stimulus", "Good lactate clearance"], cons: ["Complex session structure"] },
+        
+        { id: 15, title: "8x800 & 8x400 Track", simple: "8x800 / 8x400", category: "Interval", bgClass: "grad-red", diffColor: "#c0392b", difficulty: "Very Hard", distanceVal: 14, summary: "High volume of 800s and 400s.", purpose: "Building massive aerobic capacity. This is about volume, not speed. The goal is to run a lot of meters at a controlled, uncomfortable pace.", steps: ["1 Mile Warm Up @ [WARMUP]", "8 x 800m @ [TEMPO] (Rec: 60s Jog Between Reps)", "[SET RECOVERY: End of Set - 2 Mins Rest]", "8 x 400m @ [TEMPO] (Rec: 60s Jog Between Reps)", "1 Mile Cool Down @ [WARMUP]"], pros: ["Mental grit", "Huge aerobic volume"], cons: ["Extremely repetitive", "Requires track"] },
+        
+        { id: 16, title: "800-400-600-300 Threshold", simple: "2x8 / 3x4 / 2x6 / 4x3", category: "Interval", bgClass: "grad-red", diffColor: "#c0392b", difficulty: "Hard", distanceVal: 9, summary: "Varied distances at Threshold.", purpose: "Lactate threshold improvement. By keeping the rest short and the pace controlled (Threshold), you improve your body's ability to run fast without accumulating acid.", steps: ["1 Mile Warm Up @ [WARMUP]", "2 x 800m @ [THRESHOLD] (Rec: 60s Jog Between Reps)", "[SET RECOVERY: End of Set - 2 Mins Rest]", "3 x 400m @ [THRESHOLD] (Rec: 60s Jog Between Reps)", "[SET RECOVERY: End of Set - 2 Mins Rest]", "2 x 600m @ [THRESHOLD] (Rec: 60s Jog Between Reps)", "[SET RECOVERY: End of Set - 2 Mins Rest]", "4 x 300m @ [THRESHOLD] (Rec: 60s Jog Between Reps)", "1 Mile Cool Down @ [WARMUP]"], pros: ["Keeps the legs guessing", "Threshold discipline"], cons: ["Track needed for distances"] },
+        
+        { id: 17, title: "Descending Threshold Track", simple: "800 / 2x1000 / 3x600 / 4x400", category: "Interval", bgClass: "grad-red", diffColor: "#c0392b", difficulty: "Hard", distanceVal: 9, summary: "Descending distances.", purpose: "Maintain form as fatigue sets in. As the session goes on, the reps get shorter, allowing you to maintain the pace even as your legs get tired.", steps: ["1 Mile Warm Up @ [WARMUP]", "800m @ [THRESHOLD]", "[SET RECOVERY: End of Set - 2 Mins Rest]", "2 x 1000m @ [THRESHOLD] (Rec: 60s Jog Between Reps)", "[SET RECOVERY: End of Set - 2 Mins Rest]", "3 x 600m @ [THRESHOLD] (Rec: 60s Jog Between Reps)", "[SET RECOVERY: End of Set - 2 Mins Rest]", "4 x 400m @ [THRESHOLD] (Rec: 60s Jog Between Reps)", "1 Mile Cool Down @ [WARMUP]"], pros: ["Gets mentally easier", "Good volume"], cons: ["Hard to gauge pace"] },
+        
+        { id: 18, title: "10 Mile Progressive", simple: "Long Progression", category: "Tempo", bgClass: "grad-teal", diffColor: "#16a085", difficulty: "Very Hard", distanceVal: 16, summary: "Long continuous run getting faster.", purpose: "Marathon simulation and elite endurance. This teaches you to run your fastest miles when your legs are the heaviest.", steps: ["1 Mile Warm Up @ [WARMUP]", "Mile 1 @ [TEMPO_START]", "Mile 2 @ [TEMPO_STEADY]", "Mile 3 @ [TEMPO_STEADY]", "Mile 4 @ [TEMPO]", "Mile 5 @ [TEMPO]", "Mile 6 @ [TEMPO]", "Mile 7 @ [TEMPO_FAST]", "Mile 8 @ [TEMPO_FAST]", "Mile 9 @ [TEMPO_HARD]", "Mile 10 @ [TEMPO_ELITE]", "1 Mile Cool Down @ [WARMUP]"], steps_km: ["2km Warm Up @ [WARMUP]", "1km @ [TEMPO_START]", "1km @ [TEMPO_START]", "1km @ [TEMPO_STEADY]", "1km @ [TEMPO_STEADY]", "1km @ [TEMPO]", "1km @ [TEMPO]", "1km @ [TEMPO]", "1km @ [TEMPO]", "1km @ [TEMPO_FAST]", "1km @ [TEMPO_FAST]", "1km @ [TEMPO_FAST]", "1km @ [TEMPO_HARD]", "1km @ [TEMPO_HARD]", "1km @ [TEMPO_ELITE]", "1km @ [TEMPO_ELITE]", "2km Cool Down @ [WARMUP]"], pros: ["Elite marathon prep", "Massive endurance gains"], cons: ["Extremely taxing"] },
+        
+        { id: 19, title: "3 & 3 Mile Broken Tempo", simple: "3 Miles / 3 Miles", category: "Tempo", bgClass: "grad-teal", diffColor: "#16a085", difficulty: "Hard", distanceVal: 12, summary: "Two 3-mile blocks.", purpose: "High volume quality. Breaking the tempo into two blocks allows you to reset mentally and physically, enabling you to run a higher total volume at tempo pace than you could continuously.", steps: ["1 Mile Warm Up @ [WARMUP]", "3 Miles @ [TEMPO]", "[RECOVERY: 5 mins walk/jog]", "3 Miles @ [TEMPO]", "1 Mile Cool Down @ [WARMUP]"], steps_km: ["2km Warm Up @ [WARMUP]", "5km @ [TEMPO]", "[RECOVERY: 5 mins walk/jog]", "5km @ [TEMPO]", "2km Cool Down @ [WARMUP]"], pros: ["Psychologically easier than continuous", "High quality"], cons: ["Long session"] },
+        
+        { id: 20, title: "10 Mile Alternating Tempo", simple: "1 Fast / 1 Float x 5", category: "Tempo", bgClass: "grad-teal", diffColor: "#16a085", difficulty: "Very Hard", distanceVal: 16, summary: "Alternating miles of Tempo/Float.", purpose: "Specific endurance. This is an elite marathon workout. You never fully rest; you just float. This teaches your body to recover while running at a moderate pace.", steps: ["1 Mile Warm Up @ [WARMUP]", "1 Mile @ [TEMPO]", "1 Mile @ [FLOAT]", "1 Mile @ [TEMPO]", "1 Mile @ [FLOAT]", "1 Mile @ [TEMPO]", "1 Mile @ [FLOAT]", "1 Mile @ [TEMPO]", "1 Mile @ [FLOAT]", "1 Mile @ [TEMPO]", "1 Mile @ [FLOAT]", "1 Mile Cool Down @ [WARMUP]"], steps_km: ["2km Warm Up @ [WARMUP]", "1km @ [TEMPO]", "1km @ [FLOAT]", "1km @ [TEMPO]", "1km @ [FLOAT]", "1km @ [TEMPO]", "1km @ [FLOAT]", "1km @ [TEMPO]", "1km @ [FLOAT]", "1km @ [TEMPO]", "1km @ [FLOAT]", "1km @ [TEMPO]", "1km @ [FLOAT]", "1km @ [TEMPO]", "1km @ [FLOAT]", "1km @ [TEMPO]", "1km @ [FLOAT]", "2km Cool Down @ [WARMUP]"], pros: ["Elite fitness"], cons: ["Brutal session"] },
+        
+        { id: 21, title: "1 Mile & 10x60s Fartlek", simple: "1 Mile / 10 x 60s", category: "Fartlek", bgClass: "grad-grey", diffColor: "#7f8fa6", difficulty: "Hard", distanceVal: 9, summary: "Mile tempo + 60s reps.", purpose: "Aerobic into speed. You fatigue the legs with a sustained tempo run, then force them to turnover quickly with short fartlek reps.", steps: ["1 Mile Warm Up @ [WARMUP]", "1 Mile @ [TEMPO]", "[SET RECOVERY: End of Set - 3 Mins Jog]", "10 x 60s @ [TEMPO] (Rec: 60s Jog Between Reps)", "1 Mile Cool Down @ [WARMUP]"], steps_km: ["2km Warm Up @ [WARMUP]", "1.6km @ [TEMPO]", "[SET RECOVERY: End of Set - 3 Mins Jog]", "10 x 60s @ [TEMPO] (Rec: 60s Jog Between Reps)", "2km Cool Down @ [WARMUP]"], pros: ["Good mix of speeds", "Not too long"], cons: ["Hard to control pace on short reps"] },
+        
+        { id: 22, title: "1-5-1 Tempo Pyramid", simple: "1 / 2 / 3 / 4 / 5 / 4 / 3 / 2 / 1", category: "Fartlek", bgClass: "grad-grey", diffColor: "#7f8fa6", difficulty: "Hard", distanceVal: 10, summary: "1-5-1 minutes pyramid.", purpose: "Controlled volume. A long fartlek session where the intensity is controlled (Tempo pace). Great for building volume without the stress of interval pace.", steps: ["1 Mile Warm Up @ [WARMUP]", "1 min @ [TEMPO] (Rec: 60s Jog Between Reps)", "2 min @ [TEMPO] (Rec: 60s Jog Between Reps)", "3 min @ [TEMPO] (Rec: 60s Jog Between Reps)", "4 min @ [TEMPO] (Rec: 60s Jog Between Reps)", "5 min @ [TEMPO] (Rec: 60s Jog Between Reps)", "4 min @ [TEMPO] (Rec: 60s Jog Between Reps)", "3 min @ [TEMPO] (Rec: 60s Jog Between Reps)", "2 min @ [TEMPO] (Rec: 60s Jog Between Reps)", "1 min @ [TEMPO] (Rec: 60s Jog Between Reps)", "1 Mile Cool Down @ [WARMUP]"], pros: ["Mental focus", "High volume"], cons: ["Long session"] },
+        
+        { id: 23, title: "3 Sets of 1-2-3 Fartlek", simple: "3 Sets of 1/2/3 Mins", category: "Fartlek", bgClass: "grad-grey", diffColor: "#7f8fa6", difficulty: "Medium", distanceVal: 8, summary: "3 sets of 1, 2, 3 minutes.", purpose: "Manageable chunks. Breaking the session into three distinct sets makes the total volume feel much achievable. Good for runners new to fartlek.", steps: ["1 Mile Warm Up @ [WARMUP]", "SET 1: 1-2-3 mins @ [TEMPO] (Rec: 60s Jog Between Reps)", "[SET RECOVERY: End of Set - 3 Mins Jog]", "SET 2: 1-2-3 mins @ [TEMPO] (Rec: 60s Jog Between Reps)", "[SET RECOVERY: End of Set - 3 Mins Jog]", "SET 3: 1-2-3 mins @ [TEMPO] (Rec: 60s Jog Between Reps)", "1 Mile Cool Down @ [WARMUP]"], pros: ["Broken up well", "Good total volume"], cons: ["Repetitive"] },
+        
+        { id: 24, title: "5x5 Minute Tempo Fartlek", simple: "5 x 5 Mins", category: "Fartlek", bgClass: "grad-grey", diffColor: "#7f8fa6", difficulty: "Hard", distanceVal: 10, summary: "Long repetitions.", purpose: "Building aerobic engine. Long repetitions at tempo pace build the specific strength needed for 10k and Half Marathon racing.", steps: ["1 Mile Warm Up @ [WARMUP]", "5 x 5 mins @ [TEMPO] (Rec: 2:30 Jog Between Reps)", "1 Mile Cool Down @ [WARMUP]"], pros: ["Simple", "Effective"], cons: ["Mentally demanding"] },
+        
+        { id: 25, title: "10x2 Minute Fartlek", simple: "10 x 2 Mins", category: "Fartlek", bgClass: "grad-grey", diffColor: "#7f8fa6", difficulty: "Medium", distanceVal: 8, summary: "10 reps of 2 minutes.", purpose: "Speed endurance. 2 minutes is the sweet spot for interval training. It's long enough to hurt, but short enough to run fast.", steps: ["1 Mile Warm Up @ [WARMUP]", "10 x 2 mins @ [TEMPO] (Rec: 1:30 Jog Between Reps)", "1 Mile Cool Down @ [WARMUP]"], pros: ["Good rhythm builder", "Manageable pace"], cons: ["Repetitive"] }
     ];
 
-    // --- 3. LOGIC ---
+    // --- LOGIC ---
     function saveData() { localStorage.setItem('11thMilePrefs', JSON.stringify({ time: timeInput.value, gender: currentGender, unit: currentUnit })); }
     function loadData() { 
         const s = JSON.parse(localStorage.getItem('11thMilePrefs'));
         if(s){ if(s.gender) setGender(s.gender,false); if(s.unit){currentUnit=s.unit; updateUnitUI();} if(s.time){timeInput.value=s.time; if(s.time.length===5) calculatePaces();} }
     }
 
-    // --- TEXT CONVERSION (HOME SCREEN) ---
     function formatTextForUnit(text) {
         if (currentUnit === 'miles') return text;
         let t = text;
@@ -528,12 +354,8 @@
         let avgPace = (currentUnit === 'miles') ? totalSeconds / 3.10686 : totalSeconds / 5.0; 
         let f = (currentUnit === 'miles') ? 1 : 0.621371;
 
-        pInterval = avgPace - (10 * f);
-        pThreshold = avgPace + (20 * f);
-        pTempo = avgPace + (40 * f);
-        pFloat = avgPace + (70 * f);
-        pEasy = avgPace + (105 * f);
-        pWarmUp = pEasy + (30 * f); 
+        pInterval = avgPace - (10 * f); pThreshold = avgPace + (20 * f); pTempo = avgPace + (40 * f);
+        pFloat = avgPace + (70 * f); pEasy = avgPace + (105 * f); pWarmUp = pEasy + (30 * f); 
         pRecovery = avgPace + (130 * f);
 
         prog1 = pTempo + (15 * f); prog2 = pTempo + (10 * f); prog3 = pTempo; prog4 = pTempo - (5 * f); prog5 = pTempo - (10 * f);
@@ -546,8 +368,7 @@
         document.getElementById('tempoPace').innerText = formatTime(pTempo) + s;
         document.getElementById('intervalPace').innerText = formatTime(pInterval) + s;
 
-        let m = totalSeconds / 60;
-        let l = "Beginner";
+        let m = totalSeconds / 60; let l = "Beginner";
         if(currentGender === 'male') { if(m < 16) l="Elite"; else if(m<20) l="Advanced"; else if(m<25) l="Intermediate"; } 
         else { if(m < 18) l="Elite"; else if(m<23) l="Advanced"; else if(m<28) l="Intermediate"; }
         document.getElementById('levelBadge').innerText = l;
@@ -556,8 +377,13 @@
     function renderSessions() {
         const container = document.getElementById('sessionContainer');
         container.innerHTML = '';
+        
+        let displayList = [...sessions];
+        if(sortMode === 1) displayList.sort((a,b) => a.distanceVal - b.distanceVal);
+        if(sortMode === 2) displayList.sort((a,b) => b.distanceVal - a.distanceVal);
+
         let count = 0;
-        sessions.forEach(session => {
+        displayList.forEach(session => {
             if (activeFilter !== 'all' && session.category !== activeFilter) return;
             count++;
             
@@ -565,7 +391,6 @@
             if(session.difficulty.includes("Hard") || session.difficulty.includes("Max")) diffClass += " diff-hard";
             else if(session.difficulty.includes("Medium")) diffClass += " diff-med";
 
-            // APPLY DYNAMIC TEXT CONVERSION HERE
             let displayTitle = formatTextForUnit(session.title);
             let displaySummary = formatTextForUnit(session.summary);
 
@@ -589,53 +414,83 @@
 
     function openModal(id) {
         const session = sessions.find(s => s.id === id);
-        // Also apply conversion to Modal Title
         document.getElementById('modalTitle').innerText = formatTextForUnit(session.title);
+        document.getElementById('modalSimple').innerText = session.simple || "";
         document.getElementById('modalPurpose').innerText = session.purpose;
-        
         const stepContainer = document.getElementById('modalSteps');
         stepContainer.innerHTML = '';
         
-        // SWITCH LOGIC FOR KM STRUCTURE
         const stepsToUse = (currentUnit === 'km' && session.steps_km) ? session.steps_km : session.steps;
 
         stepsToUse.forEach((step, index) => {
             let text = step;
+            let runText = "";
+            let recText = "";
             let extraClass = "";
-            if(text.includes("[SET RECOVERY") || text.includes("[RECOVERY")) extraClass = "set-recovery";
-            if(text.includes("Warm Up") || text.includes("Cool Down")) extraClass = "step-warmup";
+
+            if(text.includes("[SET RECOVERY") || text.includes("[RECOVERY")) {
+                extraClass = "set-recovery";
+                runText = text.replace(/\[.*?RECOVERY:?/, "").replace("]", "").trim();
+                if(runText === "") runText = "RECOVERY"; 
+                recText = ""; 
+            } else if(text.includes("Rec:") || text.includes("Recovery:")) {
+                let split = text.split(/\(Rec:|\(Recovery:/);
+                runText = split[0].trim();
+                recText = split[1].replace(")", "").trim();
+            } else {
+                runText = text;
+            }
+
+            if(runText.includes("Warm Up") || runText.includes("Cool Down")) extraClass = "step-warmup";
 
             if(pEasy > 0) { 
-                text = text.replace("[WARMUP]", `<span class='pace-highlight'>${formatTime(pWarmUp)}</span>`);
-                text = text.replace("[EASY]", `<span class='pace-highlight'>${formatTime(pEasy)}</span>`);
-                text = text.replace("[TEMPO]", `<span class='pace-highlight'>${formatTime(pTempo)}</span>`);
-                text = text.replace("[THRESHOLD]", `<span class='pace-highlight'>${formatTime(pThreshold)}</span>`);
-                text = text.replace("[INTERVAL]", `<span class='pace-highlight'>${formatTime(pInterval)}</span>`);
-                text = text.replace("[FLOAT]", `<span class='pace-highlight'>${formatTime(pFloat)}</span>`);
-                text = text.replace("[RECOVERY]", `<span class='pace-highlight'>${formatTime(pRecovery)}</span>`);
-                text = text.replace("[MAX_EFFORT]", `<span class='pace-highlight'>Best Effort</span>`);
-                text = text.replace("[TEMPO_START]", `<span class='pace-highlight'>${formatTime(prog1)}</span>`);
-                text = text.replace("[TEMPO_STEADY]", `<span class='pace-highlight'>${formatTime(prog2)}</span>`);
-                text = text.replace("[TEMPO_FAST]", `<span class='pace-highlight'>${formatTime(prog4)}</span>`);
-                text = text.replace("[TEMPO_HARD]", `<span class='pace-highlight'>${formatTime(prog5)}</span>`);
-                text = text.replace("[TEMPO_ELITE]", `<span class='pace-highlight'>${formatTime(prog5-5)}</span>`);
+                runText = runText.replace("[WARMUP]", `<span class='pace-highlight'>${formatTime(pWarmUp)}</span>`);
+                runText = runText.replace("[EASY]", `<span class='pace-highlight'>${formatTime(pEasy)}</span>`);
+                runText = runText.replace("[TEMPO]", `<span class='pace-highlight'>${formatTime(pTempo)}</span>`);
+                runText = runText.replace("[THRESHOLD]", `<span class='pace-highlight'>${formatTime(pThreshold)}</span>`);
+                runText = runText.replace("[INTERVAL]", `<span class='pace-highlight'>${formatTime(pInterval)}</span>`);
+                runText = runText.replace("[FLOAT]", `<span class='pace-highlight'>${formatTime(pFloat)}</span>`);
+                runText = runText.replace("[RECOVERY]", `<span class='pace-highlight'>${formatTime(pRecovery)}</span>`);
+                runText = runText.replace("[MAX_EFFORT]", `<span class='pace-highlight'>Best Effort</span>`);
+                runText = runText.replace("[TEMPO_START]", `<span class='pace-highlight'>${formatTime(prog1)}</span>`);
+                runText = runText.replace("[TEMPO_STEADY]", `<span class='pace-highlight'>${formatTime(prog2)}</span>`);
+                runText = runText.replace("[TEMPO_FAST]", `<span class='pace-highlight'>${formatTime(prog4)}</span>`);
+                runText = runText.replace("[TEMPO_HARD]", `<span class='pace-highlight'>${formatTime(prog5)}</span>`);
+                runText = runText.replace("[TEMPO_ELITE]", `<span class='pace-highlight'>${formatTime(prog5-5)}</span>`);
             } else {
-                text = text.replace("[WARMUP]", "Warm Up").replace("[EASY]", "Easy").replace("[TEMPO]", "Tempo").replace("[THRESHOLD]", "Threshold").replace("[INTERVAL]", "Interval").replace("[FLOAT]", "Tempo + 30s").replace("[RECOVERY]", "Recovery").replace("[MAX_EFFORT]", "Max Effort").replace(/\[TEMPO_.*?\]/g, "Tempo (Prog)");
+                runText = runText.replace(/\[.*?\]/g, " ... ");
             }
 
             if(currentUnit === 'km' && !session.steps_km) {
-                // FALLBACK FOR SESSIONS WITHOUT CUSTOM KM STEPS (TIME BASED FARTLEKS ETC)
-                text = text.replace(/3.1 Miles/g, "5km").replace(/1 Mile/g, "1.6km").replace(/4 Mile/g, "6.5km").replace(/5 Mile/g, "8km").replace(/5 Miles/g, "8km").replace(/6 Mile/g, "10km").replace(/6 Miles/g, "10km").replace(/7 Mile/g, "11km").replace(/10 Mile/g, "16km").replace(/10 Miles/g, "16km").replace(/3 Miles/g, "5km").replace(/0.50 Mile/g, "800m").replace(/0.25 Mile/g, "400m").replace(/0.5 Mile/g, "800m").replace(/0.15 Mile/g, "250m").replace(/Miles/g, "km");
+                runText = runText.replace(/3.1 Miles/g, "5km").replace(/1 Mile/g, "1.6km").replace(/0.50 Mile/g, "800m").replace(/0.25 Mile/g, "400m").replace(/0.5 Mile/g, "800m").replace(/0.15 Mile/g, "250m").replace(/Miles/g, "km");
             }
 
-            stepContainer.innerHTML += `
-                <div class="step ${extraClass}">
-                    <div class="step-content">
-                        ${!extraClass ? `<div class="step-num">${index + 1}</div>` : ''}
-                        <div class="step-text">${text}</div>
+            let html = ``;
+            
+            if(extraClass === "set-recovery") {
+                html = `
+                    <div class="set-recovery-block">
+                        ${runText}
                     </div>
-                </div>
-            `;
+                `;
+            } else {
+                html = `
+                    <div class="step-block ${extraClass}">
+                        <div class="run-segment">
+                            ${!extraClass ? `<div class="step-num">${index + 1}</div>` : ''}
+                            <div class="step-text">${runText}</div>
+                        </div>
+                `;
+                if(recText) {
+                    html += `
+                        <div class="rec-segment">
+                            <span class="rec-label">REC</span> ${recText}
+                        </div>
+                    `;
+                }
+                html += `</div>`;
+            }
+            stepContainer.innerHTML += html;
         });
 
         const prosList = document.getElementById('modalPros');
@@ -644,8 +499,28 @@
         session.pros.forEach(i => prosList.innerHTML += `<li>${i}</li>`);
         session.cons.forEach(i => consList.innerHTML += `<li>${i}</li>`);
 
+        const modalContent = document.getElementById('modalContent');
+        let touchStartY = 0;
+        modalContent.addEventListener('touchstart', e => { touchStartY = e.touches[0].clientY; });
+        modalContent.addEventListener('touchend', e => {
+            let touchEndY = e.changedTouches[0].clientY;
+            if(touchEndY - touchStartY > 100) closeModal(); 
+        });
+
         document.getElementById('infoModal').style.display = "flex";
         document.body.style.overflow = 'hidden'; 
+    }
+
+    function toggleSort() {
+        sortMode = (sortMode + 1) % 3;
+        const btnText = document.getElementById('sortText');
+        const btnIcon = document.getElementById('sortIcon');
+        
+        if(sortMode === 0) { btnText.innerText = "Sort"; btnIcon.innerText = "↕"; }
+        else if(sortMode === 1) { btnText.innerText = "Shortest"; btnIcon.innerText = "⬆"; }
+        else { btnText.innerText = "Longest"; btnIcon.innerText = "⬇"; }
+        
+        renderSessions();
     }
 
     function setGender(gender, shouldSave = true) {
@@ -660,12 +535,12 @@
         const btn = document.getElementById('unitBtn');
         btn.innerText = currentUnit === 'miles' ? 'SWITCH TO KM' : 'SWITCH TO MILES';
         renderSessions();
+        calculatePaces();
     }
 
     function toggleUnit() {
         currentUnit = (currentUnit === 'miles') ? 'km' : 'miles';
         updateUnitUI();
-        if(timeInput.value.length === 5) calculatePaces();
         saveData(); 
     }
 
@@ -685,10 +560,11 @@
     function closeModal() { document.getElementById('infoModal').style.display = "none"; document.body.style.overflow = 'auto'; }
     function parseTime(timeStr) { if(!timeStr.includes(":")) return 0; const parts = timeStr.split(":"); return (parseInt(parts[0]) * 60) + parseInt(parts[1]); }
     function formatTime(totalSeconds) { const m = Math.floor(totalSeconds / 60); const s = Math.round(totalSeconds % 60); return `${m}:${s < 10 ? '0' : ''}${s}`; }
-    window.onclick = function(event) { if (event.target == document.getElementById('infoModal')) closeModal(); }
-
-    loadData();
-    if(document.getElementById('sessionContainer').innerHTML === "") { renderSessions(); }
+    window.onload = function(event) { 
+        if (event.target == document.getElementById('infoModal')) closeModal(); 
+        loadData(); // Ensure data loads on window load
+        if(document.getElementById('sessionContainer').innerHTML === "") { renderSessions(); }
+    }
 
 </script>
 
